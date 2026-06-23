@@ -110,6 +110,7 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
     <div class="logo">IME<em>·</em>TRACKER <span style="font-family:inherit;font-size:10px;color:#94a3b8;font-weight:400">v16</span></div>
     <div class="nav">
       <button class="nb on" onclick="sv('pipeline')">Pipeline</button>
+      <button class="nb" onclick="sv('evidence')">Evidence</button>
       <button class="nb" onclick="sv('scan')">Scan</button>
       <button class="nb" onclick="sv('briefing')">Briefing</button>
       <button class="nb" onclick="sv('adp')">ADP / COI</button>
@@ -158,6 +159,12 @@ const T_AKTIV = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
 // Field names (used directly — no IDs needed)
 const FIRMA_FIELDS = ['Firma','Therapiegebiet(e)','Produkte / Brands','IME-Fit','Status Beziehung','Notizen'];
 const AKTIV_FIELDS = ['Aktivität','Datum','Auslöser (PR / Symposium)','Status','Ergebnis / Notizen'];
+
+// ═══ EVIDENCE TYPE + SIGNAL STYLES ═══
+const EV_TYPE_CSS={'Phase 3':'background:#fef2f2;color:#c53030;border:0.5px solid #fecaca','Phase 2':'background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa','Regulatory':'background:#ecfdf5;color:#065f46;border:0.5px solid #6ee7b7','Wiley Pub':'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac','Congress':'background:#eff6ff;color:#1d4ed8;border:0.5px solid #bfdbfe','RWE':'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff','IIT':'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a'};
+const SIG_CSS={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+function TB(type){const c=EV_TYPE_CSS[type]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0';return`<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;${c}">${esc(type)}</span>`;}
+function SB(sig){const c=SIG_CSS[sig]||'background:#f1f5f9;color:#64748b';return`<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${c}">${esc(sig)}</span>`;}
 
 // ═══ STAGES ═══
 const STAGES = [
@@ -356,7 +363,8 @@ function drawMain() {
   if (view==='pipeline') {
     if (selId) { const a=accs.find(x=>x.id===selId); if(a){m.innerHTML=renderDetail(a);return;} }
     m.innerHTML = renderPL();
-  } else if (view==='scan')     { m.innerHTML = renderScan(); }
+  } else if (view==='evidence') { m.innerHTML = renderEvidence(); }
+  else if (view==='scan')     { m.innerHTML = renderScan(); }
   else if (view==='briefing')   { m.innerHTML = renderBriefing(); }
   else if (view==='adp')        { m.innerHTML = renderADP(); }
 }
@@ -404,6 +412,61 @@ function renderDetail(a) {
 }
 
 // ═══ SCAN ═══
+// ═══ EVIDENCE ═══
+const EV_ITEMS=[
+  {firma:"Takeda",drug:"Zasocitinib (TAK-279)",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE Atlas — H2H vs deucravacitinib",status:"Topline Jun 11 2026 — SUPERIORITY",congress:"Upcoming congresses 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — expected",nct:"NCT06973291"},
+  {firma:"Takeda",drug:"Zasocitinib",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE-PsO-3001/3002 — vs placebo + apremilast",status:"Published AAD Mar 28 2026",congress:"AAD 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — imminent",nct:"NCT06088043"},
+  {firma:"Janssen",drug:"Talvey + Darzalex Faspro",typ:"Phase 3",signal:"Act Now",titel:"MonumenTAL-3 — GPRC5D bispecific RRMM",status:"NEJM published Jun 13 2026 — sBLA+EMA filed",congress:"EHA 2026 Stockholm",pi:"Roberto Mina / Maria-Victoria Mateos",doi:"NEJM DOI:10.1056/NEJMoa2604657",nct:"NCT05455320"},
+  {firma:"Janssen",drug:"Imaavy (nipocalimab)",typ:"Phase 3",signal:"Act Now",titel:"ENERGY Phase II/III — wAIHA",status:"Phase II/III positive — FDA Priority Review granted",congress:"EHA 2026 Stockholm",pi:"Bruno Fattizzo, Universita di Milano",doi:"",nct:"NCT04119050"},
+  {firma:"Janssen",drug:"Icotrokinra",typ:"Regulatory",signal:"Act Now",titel:"EMA MAA filed — first oral IL-23R blocker",status:"EMA MAA filed — EU approval H2 2026",congress:"EADV 2026",pi:"Ya-Wen (Betty) Yang",doi:"JEADV DOI:10.1111/jdv.70471",nct:""},
+  {firma:"Janssen",drug:"Erleada (apalutamide)",typ:"Phase 3",signal:"Act Now",titel:"PROTEUS — perioperative high-risk PCa",status:"Published NEJM Jun 3 2026",congress:"ASCO 2026 LBA1",pi:"Mary-Ellen Taplin (Dana-Farber)",doi:"NEJM DOI:10.1056/NEJMoa2603878",nct:"NCT03767244"},
+  {firma:"AstraZeneca",drug:"Camizestrant",typ:"Regulatory",signal:"Act Now",titel:"CHMP positive — ER+/HER2- advanced BC (ESR1+)",status:"CHMP positive May 26 2026 — EC approval imminent",congress:"ASCO 2026",pi:"Francois-Clement Bidard",doi:"",nct:"SERENA-6"},
+  {firma:"AstraZeneca",drug:"Truqap + Abiraterone",typ:"Regulatory",signal:"Hot",titel:"FDA approved — PTEN-deficient mHSPC (CAPItello-281)",status:"FDA approved Jun 15 2026 — EU application running",congress:"ESMO 2025",pi:"Karim Fizazi",doi:"Annals of Oncology",nct:"CAPItello-281"},
+  {firma:"AstraZeneca",drug:"Ultomiris (ravulizumab)",typ:"Regulatory",signal:"Hot",titel:"FDA Priority Review — IgAN (I CAN Phase III)",status:"FDA Priority Review Jun 15 2026 — PDUFA Q4 2026",congress:"ERA 2026",pi:"",doi:"",nct:"ALXN1210-IgAN-320"},
+  {firma:"Novartis",drug:"Cosentyx (secukinumab)",typ:"Phase 3",signal:"Act Now",titel:"REPLENISH — Polymyalgia Rheumatica",status:"Published NEJM Jun 3 2026",congress:"EULAR 2026",pi:"Prof. John Stone (Harvard/MGH)",doi:"",nct:"NCT05767034"},
+  {firma:"Novartis",drug:"Vanrafia (atrasentan)",typ:"Phase 3",signal:"Act Now",titel:"ALIGN — IgAN final 2.5yr data",status:"Published Lancet Jun 4 2026",congress:"ERA Jun 2026",pi:"Prof. Hiddo Heerspink",doi:"",nct:"NCT04573478"},
+  {firma:"Novartis",drug:"Rhapsido (remibrutinib)",typ:"Phase 3",signal:"Hot",titel:"RemIND Phase III — CIndU (3 subtypes) EAACI Jun 15",status:"Phase III positive — sNDA FDA filed",congress:"EAACI 2026",pi:"Prof. Dr. Martin Metz, Charite Berlin",doi:"JEADV / JDDG",nct:"NCT05976243"},
+  {firma:"Novartis",drug:"Fabhalta (iptacopan)",typ:"Phase 3",signal:"Hot",titel:"APPLAUSE-IgAN Phase III eGFR positive + FDA priority review",status:"Phase III positive — FDA priority review",congress:"ERA / ASN 2026",pi:"",doi:"",nct:""},
+  {firma:"UCB",drug:"Dapirolizumab pegol (DZP)",typ:"Phase 3",signal:"Hot",titel:"PHOENYCS GO — SLE Phase III",status:"Published Lancet May 29 2026",congress:"EULAR 2026",pi:"Megan Clowse (Duke)",doi:"",nct:"NCT04294667"},
+  {firma:"AbbVie",drug:"Skyrizi (risankizumab)",typ:"Regulatory",signal:"Hot",titel:"EC approved — paediatric plaque psoriasis 6+ years",status:"EC approved Jun 23 2026",congress:"EADV 2026",pi:"Prof. Dr. Nina Magnolo, Univ.klinikum Muenster",doi:"JEADV / JDDG",nct:"NCT04435600"},
+  {firma:"Incyte",drug:"Monjuvi/Minjuvi + Lenalidomid + R-CHOP",typ:"Phase 3",signal:"Warm",titel:"frontMIND Phase III — 1L DLBCL/HGBL (EHA Plenary + Lancet)",status:"Phase III positive — EHA Plenary + Lancet Jun 13 2026",congress:"EHA 2026 Stockholm Plenary",pi:"Dr. Georg Lenz, Univ.klinikum Muenster",doi:"The Lancet Jun 2026",nct:"NCT04824092"},
+  {firma:"Boehringer Ingelheim",drug:"Nerandomilast (Jascayd)",typ:"Regulatory",signal:"Warm",titel:"FIBRONEER Survival Modeling — +5.4yr IPF, 59% Mortalitaetsreduktion",status:"ATS + EULAR 2026 praesentiert — CHMP positiv Mai 2026",congress:"ATS / EULAR 2026",pi:"Prof. Toby Maher (USC Los Angeles)",doi:"",nct:""},
+  {firma:"Roche/Genentech",drug:"Lunsumio VELO + Polivy",typ:"Regulatory",signal:"Hot",titel:"sBLA FDA akzeptiert — R/R LBCL (SUNMO Phase III)",status:"sBLA FDA akzeptiert Jun 18 2026 — PDUFA Feb 9 2027",congress:"ASCO / EHA 2026",pi:"",doi:"",nct:"NCT05171647"},
+  {firma:"Merck/MSD",drug:"Tulisokibart (MK-7240)",typ:"Phase 3",signal:"Warm",titel:"ATLAS-UC Phase III positiv — erster Anti-TL1A Biologic",status:"Phase III ATLAS-UC positiv Jun 22 2026",congress:"Upcoming congress 2026",pi:"",doi:"",nct:"NCT06052059"},
+];
+let evFilter='All';
+const EV_TYPES_LIST=['All','Phase 3','Phase 2','Regulatory','Wiley Pub','Congress'];
+
+function renderEvidence(){
+  const q=(document.getElementById('srch')||{value:''}).value.toLowerCase();
+  let filtered=evFilter==='All'?EV_ITEMS:EV_ITEMS.filter(e=>e.typ===evFilter);
+  if(q) filtered=filtered.filter(e=>[e.firma,e.drug,e.titel,e.pi,e.status].some(f=>(f||'').toLowerCase().includes(q)));
+  filtered=[...filtered].sort((a,b)=>{const so={'Act Now':0,'Hot':1,'Warm':2,'Watch':3};return(so[a.signal]??4)-(so[b.signal]??4);});
+  const fBtns=EV_TYPES_LIST.map(f=>`<span onclick="setEvFilter('${f}')" style="padding:4px 10px;border-radius:12px;font-size:10px;cursor:pointer;border:0.5px solid ${evFilter===f?'#bfdbfe':'#e2e8f0'};background:${evFilter===f?'#eff6ff':'#f8f9fb'};color:${evFilter===f?'#2563eb':'#64748b'}">${f} (${f==='All'?EV_ITEMS.length:EV_ITEMS.filter(e=>e.typ===f).length})</span>`).join('');
+  const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8','RWE':'background:#faf5ff;color:#7c3aed','IIT':'background:#fffbeb;color:#d97706'};
+  const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+  const rows=filtered.map(e=>`<tr>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:700;color:#0f172a">${esc(e.firma)}</div><div style="font-size:10px;color:#94a3b8">${esc(e.drug)}</div></td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;${ETC[e.typ]||''}">${esc(e.typ)}</span></td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:600;color:#0f172a;margin-bottom:2px">${esc(e.titel)}</div>${e.nct?`<div style="font-size:10px;color:#64748b;font-family:monospace">${esc(e.nct)}</div>`:''}${e.doi?`<div style="font-size:10px;color:#15803d">📄 ${esc(e.doi)}</div>`:''}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="color:#475569">${esc(e.status)}</div>${e.congress?`<div style="font-size:10px;color:#94a3b8">📅 ${esc(e.congress)}</div>`:''}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top">${e.pi?`<div>👤 ${esc(e.pi)}</div>`:'<span style="color:#94a3b8">—</span>'}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${ESC2[e.signal]||''}">${esc(e.signal)}</span></td>
+  </tr>`).join('');
+  return`<div style="max-width:900px">
+    <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Evidence Generation</div>
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${EV_ITEMS.length} Items · Klinische Studien, Regulatory Events, Wiley Publikationen · Jun 23 2026</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">${fBtns}</div>
+    <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px #0000000a">
+      <thead><tr style="background:#f8f9fb">
+        ${['Firma','Typ','Titel / NCT','Status / Kongress','PI / KOL','Signal'].map(h=>`<th style="padding:8px 10px;border-bottom:0.5px solid #e2e8f0;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#94a3b8;text-align:left">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+function setEvFilter(f){evFilter=f;drawMain();}
+
 function renderScan() {
   const logHtml = scanLog.slice(0,12).map(e => {
     const isHot = (e.status||'').toLowerCase().includes('hot') || (e.status||'').toLowerCase().includes('act');
@@ -601,7 +664,7 @@ async function diagnose() {
 // ═══ NAVIGATION ═══
 function sv(v) {
   view = v; selId = null;
-  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','scan','briefing','adp'][i]===v));
+  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','scan','briefing','adp'][i]===v));
   draw();
 }
 function sel(id) { selId=id; view='pipeline'; document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0)); draw(); }
