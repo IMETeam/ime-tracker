@@ -111,6 +111,7 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
     <div class="nav">
       <button class="nb on" onclick="sv('pipeline')">Pipeline</button>
       <button class="nb" onclick="sv('evidence')">Evidence</button>
+      <button class="nb" onclick="sv('contacts')">Kontakte</button>
       <button class="nb" onclick="sv('scan')">Scan</button>
       <button class="nb" onclick="sv('briefing')">Briefing</button>
       <button class="nb" onclick="sv('adp')">ADP / COI</button>
@@ -154,7 +155,9 @@ const SONNET = 'claude-sonnet-4-6';
 // ═══ AIRTABLE — OB_IME ═══
 const BASE    = 'appACnCQAtFmXXSzn';
 const T_FIRMA = 'tbl0dO2h94ApvdNEo';  // 🏢 Firmen
-const T_AKTIV = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
+const T_AKTIV    = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
+const T_KONTAKT  = 'tblxd0NuIglt5uQzW';  // 👤 Kontakte
+const KONTAKT_FIELDS = ['Name','Rolle','Therapiegebiet','E-Mail','Telefon','IME-Fit Kontakt','Bereits kontaktiert','Notizen'];
 
 // Field names (used directly — no IDs needed)
 const FIRMA_FIELDS = ['Firma','Therapiegebiet(e)','Produkte / Brands','IME-Fit','Status Beziehung','Notizen'];
@@ -248,7 +251,7 @@ function fn(rec, name) {
 }
 
 // ═══ STATE ═══
-let accs = [], scanLog = [], selId = null, view = 'pipeline';
+let accs = [], scanLog = [], allContacts = [], selId = null, view = 'pipeline', contactFilter = '';
 let briefTxt = '', briefLoad = false;
 let adpInput = '', adpResult = null, adpLoad = false;
 let scanInput = '', scanResult = '', scanLoad = false;
@@ -267,9 +270,10 @@ async function loadFromAirtable() {
 
   setKc('⟳ Lade OB_IME…');
   try {
-    const [firmenRecs, aktivRecs] = await Promise.all([
+    const [firmenRecs, aktivRecs, kontaktRecs] = await Promise.all([
       atFetch(T_FIRMA, FIRMA_FIELDS),
       atFetch(T_AKTIV, AKTIV_FIELDS),
+      atFetch(T_KONTAKT, KONTAKT_FIELDS),
     ]);
 
     accs = firmenRecs.map(r => ({
@@ -291,6 +295,19 @@ async function loadFromAirtable() {
       status:  fn(r, 'Status'),
       result:  fn(r, 'Ergebnis / Notizen'),
     })).sort((a,b) => new Date(b.datum||0) - new Date(a.datum||0));
+
+    allContacts = kontaktRecs.map(r => ({
+      id: r.id,
+      name: fn(r, 'Name') || '(kein Name)',
+      rolle: fn(r, 'Rolle') || '',
+      ta: fn(r, 'Therapiegebiet') || '',
+      email: fn(r, 'E-Mail') || '',
+      telefon: fn(r, 'Telefon') || '',
+      imeFit: fn(r, 'IME-Fit Kontakt') || '',
+      kontaktiert: fn(r, 'Bereits kontaktiert') === 'true' || fn(r, 'Bereits kontaktiert') === '1',
+      notizen: fn(r, 'Notizen') || '',
+      firmaIds: r.fields['Firma'] ? r.fields['Firma'].map(f => f.id || f) : [],
+    }));
 
     const ts = new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
     setKc(`${accs.length} Firmen · ${aktivRecs.length} Aktivitäten · ${ts}`);
@@ -364,6 +381,7 @@ function drawMain() {
     if (selId) { const a=accs.find(x=>x.id===selId); if(a){m.innerHTML=renderDetail(a);return;} }
     m.innerHTML = renderPL();
   } else if (view==='evidence') { m.innerHTML = renderEvidence(); }
+  else if (view==='contacts') { m.innerHTML = renderContacts(); }
   else if (view==='scan')     { m.innerHTML = renderScan(); }
   else if (view==='briefing')   { m.innerHTML = renderBriefing(); }
   else if (view==='adp')        { m.innerHTML = renderADP(); }
@@ -426,7 +444,10 @@ function renderDetail(a) {
           '<div style=\"font-size:10px;color:#475569;margin-top:2px\">' + esc(e.status) + '</div></div>'
         ).join('') + '</div>';
     })()}
-    <div class="ar"><button class="btn" onclick="sel(null)">← Zurück</button></div>
+    <div class="ar">
+      <button class="btn" onclick="sel(null)">← Zurück</button>
+      <button class="btn btnp" onclick="contactFilter='${a.id}';sv('contacts')">👤 Kontakte dieser Firma</button>
+    </div>
   </div>`;
 }
 
@@ -485,6 +506,83 @@ function renderEvidence(){
   </div>`;
 }
 function setEvFilter(f){evFilter=f;drawMain();}
+
+// ═══ KONTAKTE ═══
+function renderContacts(firmaFilter) {
+  const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
+  let contacts = allContacts;
+
+  // Filter by firma if called from detail view
+  if (firmaFilter) {
+    contacts = contacts.filter(c => c.firmaIds.includes(firmaFilter));
+  } else if (contactFilter) {
+    contacts = contacts.filter(c => c.firmaIds.includes(contactFilter));
+  }
+
+  // Search filter
+  if (q) contacts = contacts.filter(c =>
+    [c.name, c.rolle, c.ta, c.email, c.notizen].some(f => f.toLowerCase().includes(q))
+  );
+
+  const ROLLE_CSS = {
+    'Medical Affairs': 'background:#eff6ff;color:#2563eb;border:0.5px solid #bfdbfe',
+    'KOL': 'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac',
+    'Brand Manager': 'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff',
+    'Market Access': 'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a',
+    'Medical Director': 'background:#fef2f2;color:#dc2626;border:0.5px solid #fecaca',
+  };
+  const FIT_CSS = {
+    'Hoch': 'background:#f0fdf4;color:#15803d',
+    'Mittel': 'background:#fffbeb;color:#d97706',
+    'Niedrig': 'background:#f8f9fb;color:#64748b',
+  };
+
+  if (!contacts.length) {
+    return `<div style="max-width:860px">
+      <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Kontakte</div>
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${allContacts.length} Kontakte gesamt · ${firmaFilter||contactFilter?'gefiltert nach Firma':'alle Firmen'}</div>
+      <div style="color:#94a3b8;font-size:11px;padding:20px 0">Keine Kontakte gefunden${firmaFilter?` für diese Firma`:''}. Kontakte in Airtable unter 👤 Kontakte anlegen.</div>
+    </div>`;
+  }
+
+  // Group by firma if showing all
+  const grouped = {};
+  contacts.forEach(c => {
+    const firmaName = accs.find(a => c.firmaIds.includes(a.id))?.name || 'Unbekannte Firma';
+    if (!grouped[firmaName]) grouped[firmaName] = [];
+    grouped[firmaName].push(c);
+  });
+
+  const cards = Object.entries(grouped).map(([firma, cs]) => `
+    <div style="margin-bottom:20px">
+      ${!firmaFilter && !contactFilter ? `<div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:#64748b;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">${esc(firma)} · ${cs.length} Kontakt${cs.length!==1?'e':''}</div>` : ''}
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+        ${cs.map(c => `<div style="background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:14px;box-shadow:0 1px 2px #0000000a">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#0f172a">${esc(c.name)}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:1px">${esc(c.ta)||'—'}</div>
+            </div>
+            ${c.kontaktiert ? `<span style="font-size:9px;background:#f0fdf4;color:#15803d;border:0.5px solid #86efac;padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap">✓ Kontaktiert</span>` : '<span style="font-size:9px;background:#f8f9fb;color:#94a3b8;border:0.5px solid #e2e8f0;padding:2px 7px;border-radius:10px;font-weight:700">Neu</span>'}
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
+            ${c.rolle ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;${ROLLE_CSS[c.rolle]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0'}">${esc(c.rolle)}</span>` : ''}
+            ${c.imeFit ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;${FIT_CSS[c.imeFit]||'background:#f1f5f9;color:#64748b'}">${esc(c.imeFit)}</span>` : ''}
+          </div>
+          ${c.email ? `<div style="font-size:11px;color:#2563eb;margin-bottom:4px">✉ <a href="mailto:${esc(c.email)}" style="color:#2563eb;text-decoration:none">${esc(c.email)}</a></div>` : ''}
+          ${c.telefon ? `<div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 ${esc(c.telefon)}</div>` : ''}
+          ${c.notizen ? `<div style="font-size:10px;color:#64748b;margin-top:6px;line-height:1.5;padding-top:6px;border-top:0.5px solid #f1f5f9">${esc(c.notizen.slice(0,120))}${c.notizen.length>120?'…':''}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  return `<div style="max-width:860px">
+    <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Kontakte</div>
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${contacts.length} von ${allContacts.length} Kontakten · Live aus Airtable</div>
+    ${contactFilter||firmaFilter ? `<button class="btn btnsm" onclick="contactFilter='';sv('contacts')" style="margin-bottom:12px">← Alle Kontakte</button>` : ''}
+    ${cards}
+  </div>`;
+}
 
 function renderScan() {
   const logHtml = scanLog.slice(0,12).map(e => {
@@ -683,7 +781,7 @@ async function diagnose() {
 // ═══ NAVIGATION ═══
 function sv(v) {
   view = v; selId = null;
-  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','scan','briefing','adp'][i]===v));
+  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','contacts','scan','briefing','adp'][i]===v));
   draw();
 }
 function sel(id) { selId=id; view='pipeline'; document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0)); draw(); }
