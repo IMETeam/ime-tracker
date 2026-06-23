@@ -16,10 +16,10 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
 .nb:hover{background:#f1f5f9;color:#475569}
 .nb.on{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
 .sp{flex:1}
-.kc{font-size:10px;color:#94a3b8}
-.model-badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
-.badge-opus{background:#f3e8ff;color:#7c3aed;border:0.5px solid #d8b4fe}
-.badge-sonnet{background:#e0f2fe;color:#0369a1;border:0.5px solid #bae6fd}
+.kc{font-size:10px;color:#94a3b8;cursor:pointer}
+.badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+.opus{background:#f3e8ff;color:#7c3aed;border:0.5px solid #d8b4fe}
+.sonnet{background:#e0f2fe;color:#0369a1;border:0.5px solid #bae6fd}
 .abar{background:#fef2f2;border-bottom:0.5px solid #fecaca;padding:6px 16px;font-size:11px;color:#dc2626;display:none;align-items:center;gap:8px;flex-shrink:0}
 .abar.on{display:flex}
 .pulse{width:7px;height:7px;border-radius:50%;background:#e53e3e;animation:pulse 1.5s infinite;flex-shrink:0}
@@ -53,14 +53,13 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
 .pib{background:#f0fdf4;border:0.5px solid #86efac;border-radius:8px;padding:10px;margin-bottom:10px}
 .nb2{background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:10px;box-shadow:0 1px 2px #0000000a}
 .scb{background:#fffbeb;border:0.5px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:10px}
-.evb{background:#faf5ff;border:0.5px solid #e9d5ff;border-radius:8px;padding:10px;margin-bottom:10px}
 .ar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .btn{padding:6px 12px;border-radius:6px;border:0.5px solid #e2e8f0;background:#fff;color:#0f172a;font-family:inherit;font-size:11px;cursor:pointer;transition:all .12s}
 .btn:hover{background:#f8f9fb}
-.btnp{background:#2563eb;color:#fff;border-color:#2563eb}.btnp:hover{background:#1d4ed8}
-.btna{background:#f0fdf4;color:#16a34a;border-color:#86efac}
-.btnd{background:#fee2e2;color:#dc2626;border-color:#fecaca}
+.btnp{background:#2563eb;color:#fff;border-color:#2563eb}
 .btnv{background:#f3e8ff;color:#7c3aed;border-color:#d8b4fe}
+.btnd{background:#fee2e2;color:#dc2626;border-color:#fecaca}
+.btna{background:#f0fdf4;color:#16a34a;border-color:#86efac}
 .btnsm{padding:4px 9px;font-size:10px}
 .fg{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
 .fg label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
@@ -69,7 +68,7 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
 .fgr{display:flex;gap:8px}.fgr .fg{flex:1}
 .es{color:#94a3b8;font-size:11px;padding:14px 0;text-align:center}
 .mo{position:absolute;inset:0;background:#00000045;z-index:50;display:flex;align-items:center;justify-content:center;border-radius:12px}
-.md{background:#fff;border:0.5px solid #e2e8f0;border-radius:12px;padding:20px;width:460px;max-height:540px;overflow-y:auto;box-shadow:0 20px 50px #0000001f}
+.md{background:#fff;border:0.5px solid #e2e8f0;border-radius:12px;padding:20px;width:480px;max-height:540px;overflow-y:auto;box-shadow:0 20px 50px #0000001f}
 .mt{font-family:Georgia,serif;font-size:16px;color:#0f172a;margin-bottom:14px;font-weight:700}
 .stage-group{margin-bottom:20px}
 .stage-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0}
@@ -82,43 +81,26 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
 .pd{font-size:10px;color:#94a3b8;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pf{display:flex;justify-content:space-between;align-items:center}
 .pt{font-size:9px;color:#cbd5e0}
-.type-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
-.sig-badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;white-space:nowrap}
-.ev-view{max-width:880px}
-.ev-title{font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700}
-.ev-desc{font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.6}
-.ev-filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
-.ev-fi{padding:4px 10px;border-radius:12px;font-size:10px;cursor:pointer;border:0.5px solid #e2e8f0;background:#f8f9fb;color:#64748b}
-.ev-fi.on{border-color:#bfdbfe;background:#eff6ff;color:#2563eb}
-.ev-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px #0000000a}
-.ev-table th{padding:8px 10px;background:#f8f9fb;border-bottom:0.5px solid #e2e8f0;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#94a3b8;text-align:left}
-.ev-table td{padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top}
-.ev-table tr:last-child td{border-bottom:none}
-.ev-table tr:hover td{background:#f8f9fb}
-.ev-acc{font-weight:700;color:#0f172a;cursor:pointer;text-decoration:underline}
-.ev-nct{font-size:10px;color:#64748b;font-family:monospace}
 .ai-view{max-width:760px}
 .ai-title{font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700}
 .ai-desc{font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.6}
-.ai-input-area{width:100%;padding:10px 12px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:11px;color:#0f172a;resize:vertical;min-height:100px;outline:none;margin-bottom:10px}
-.ai-input-area:focus{border-color:#93c5fd}
+.ai-input{width:100%;padding:10px 12px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:11px;color:#0f172a;resize:vertical;min-height:100px;outline:none;margin-bottom:10px}
+.ai-input:focus{border-color:#93c5fd}
 .ai-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-.ai-out{background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:16px;font-size:12px;color:#475569;line-height:1.9;white-space:pre-wrap;box-shadow:0 1px 3px #0000000a;min-height:120px}
-.ai-status{background:#f0fdf4;border:0.5px solid #86efac;border-radius:6px;padding:8px 12px;font-size:11px;color:#15803d;margin-bottom:10px;display:none}
-.ai-status.on{display:block}
-.ai-loading{color:#94a3b8;font-size:11px;padding:14px 0;animation:fd 1s infinite alternate}
+.ai-out{background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:16px;font-size:12px;color:#475569;line-height:1.9;white-space:pre-wrap;box-shadow:0 1px 3px #0000000a;min-height:80px}
+.ai-load{color:#94a3b8;font-size:11px;padding:10px 0;animation:fd 1s infinite alternate}
 @keyframes fd{from{opacity:.4}to{opacity:1}}
-.slog{display:flex;flex-direction:column;gap:4px}
+.slog{display:flex;flex-direction:column;gap:4px;margin-top:10px}
 .le{padding:8px 11px;border-radius:5px;border-left:3px solid;font-size:11px;line-height:1.55}
-.adp-result{margin-top:14px}
 .adp-verdict{display:inline-block;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
-.adp-adp{background:#f0fdf4;color:#15803d;border:0.5px solid #86efac}
+.adp-ok{background:#f0fdf4;color:#15803d;border:0.5px solid #86efac}
 .adp-skip{background:#f8f9fb;color:#64748b;border:0.5px solid #e2e8f0}
-.adp-section{margin-bottom:12px}
-.adp-label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.adp-section{margin-bottom:10px}
+.adp-label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
 .adp-val{font-size:11.5px;color:#0f172a;line-height:1.6;background:#fff;border:0.5px solid #e2e8f0;border-radius:6px;padding:8px 10px}
+.diag{background:#0f172a;color:#86efac;border-radius:8px;padding:14px;font-size:11px;font-family:monospace;white-space:pre-wrap;margin-top:10px;max-height:300px;overflow-y:auto}
 .fab-row{display:flex;justify-content:space-between;padding:8px 16px;background:#fff;border-top:0.5px solid #e2e8f0;flex-shrink:0;align-items:center}
-.spinner{display:inline-block;width:11px;height:11px;border:2px solid #ddd;border-top-color:#2563eb;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid #ddd;border-top-color:#7c3aed;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -128,41 +110,29 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
     <div class="logo">IME<em>·</em>TRACKER <span style="font-family:inherit;font-size:10px;color:#94a3b8;font-weight:400">v16</span></div>
     <div class="nav">
       <button class="nb on" onclick="sv('pipeline')">Pipeline</button>
-      <button class="nb" onclick="sv('evidence')">Evidence</button>
-      <button class="nb" onclick="sv('scan')">Scan Log</button>
+      <button class="nb" onclick="sv('scan')">Scan</button>
       <button class="nb" onclick="sv('briefing')">Briefing</button>
       <button class="nb" onclick="sv('adp')">ADP / COI</button>
     </div>
     <div class="sp"></div>
-    <span class="model-badge badge-opus" style="margin-right:4px">Opus 4.8 ✦ Briefing + ADP</span>
-    <span class="model-badge badge-sonnet">Sonnet 4.6 ✦ Scan</span>
-    <span class="kc" id="kc" style="margin-left:8px"></span>
+    <span class="badge opus" style="margin-right:4px">Opus 4.8 ✦ Briefing+ADP</span>
+    <span class="badge sonnet">Sonnet 4.6 ✦ Scan</span>
+    <span class="kc" id="kc" style="margin-left:8px" onclick="resetToken()"></span>
   </div>
   <div class="abar" id="abar">
-    <div class="pulse"></div>
-    <strong>ACT NOW:</strong>
+    <div class="pulse"></div><strong>ACT NOW:</strong>
     <span id="abar-names"></span>
   </div>
   <div class="body">
     <div class="sb">
       <div class="fi">
-        <input class="si" id="srch" placeholder="Search accounts, drugs, PI…" oninput="draw()"/>
-        <div class="fr">
-          <select class="si" id="ft" onchange="draw()">
-            <option value="All">All Tiers</option>
-            <option value="1">T1</option><option value="2">T2</option><option value="3">T3</option>
-          </select>
-          <select class="si" id="fs" onchange="draw()">
-            <option value="All">All Stages</option>
-            <option value="act_now">Act Now</option><option value="hot">Hot</option>
-            <option value="warm">Warm</option><option value="active">Active</option><option value="watch">Watch</option>
-          </select>
-        </div>
-        <select class="si" id="fta" onchange="draw()">
-          <option value="All">All TAs</option>
-          <option>Dermatology</option><option>Gastroenterology</option><option>Immunology</option>
-          <option>Rheumatology</option><option>Oncology</option><option>Hepatology</option>
-          <option>Rare Disease</option><option>Cardiology</option><option>Neurology</option><option>Other</option>
+        <input class="si" id="srch" placeholder="Suche Firma, Drug, Notizen…" oninput="draw()"/>
+        <select class="si" id="fs" onchange="draw()">
+          <option value="All">Alle Stages</option>
+          <option value="act_now">Act Now</option>
+          <option value="hot">Hot</option>
+          <option value="warm">Warm</option>
+          <option value="watch">Watch</option>
         </select>
       </div>
       <div class="alist" id="alist"></div>
@@ -170,715 +140,469 @@ body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;backgroun
     <div class="main" id="main" style="position:relative"></div>
   </div>
   <div class="fab-row">
-    <button class="btn btnsm btnp" id="fab-ev" style="display:none" onclick="showAddEv()">+ Add Evidence</button>
-    <div></div>
-    <button class="btn btnsm btnp" onclick="showAddAcc()">+ Add Account</button>
+    <button class="btn btnsm" onclick="diagnose()" style="color:#64748b">🔍 Diagnose</button>
+    <button class="btn btnsm btnp" onclick="loadFromAirtable()">↻ Reload</button>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// MODELS
-// ═══════════════════════════════════════════════════════
+// ═══ MODELS ═══
 const OPUS   = 'claude-opus-4-8';
 const SONNET = 'claude-sonnet-4-6';
 
-// ═══════════════════════════════════════════════════════
-// AIRTABLE CONFIG
-// ═══════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════
-// AIRTABLE CONFIG — OB_IME base (your active working base)
-// ═══════════════════════════════════════════════════════
-const BASE_ID = 'appACnCQAtFmXXSzn';
-const TABLES  = {
-  accounts : 'tbl0dO2h94ApvdNEo',   // 🏢 Firmen
-  contacts : 'tblxd0NuIglt5uQzW',   // 👤 Kontakte
-  activities: 'tbljU3lzcWqlCWtbg',  // 📋 Aktivitäten
-};
+// ═══ AIRTABLE — OB_IME ═══
+const BASE    = 'appACnCQAtFmXXSzn';
+const T_FIRMA = 'tbl0dO2h94ApvdNEo';  // 🏢 Firmen
+const T_AKTIV = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
 
-// Firmen (Accounts) field IDs
-const AF = {
-  company : 'fldToE9qbX1BwyG80',   // Firma (primary)
-  ta      : 'fldFKHRW7pZmlvjoP',   // Therapiegebiet(e) — multipleSelects
-  drug    : 'fldgNFwrDmyWAbRwB',   // Produkte / Brands
-  imeFit  : 'fld2eusGAQ7fvnNlM',   // IME-Fit — singleSelect
-  status  : 'fldEm2Kta3KyIv65S',   // Status Beziehung — singleSelect
-  notes   : 'fldSUIHGSrXeuETJW',   // Notizen
-};
+// Field names (used directly — no IDs needed)
+const FIRMA_FIELDS = ['Firma','Therapiegebiet(e)','Produkte / Brands','IME-Fit','Status Beziehung','Notizen'];
+const AKTIV_FIELDS = ['Aktivität','Datum','Auslöser (PR / Symposium)','Status','Ergebnis / Notizen'];
 
-// Kontakte field IDs
-const CF = {
-  name    : 'fld1Nug0yMl3w3LAD',
-  firma   : 'fldPT18Pi9doDxw8w',
-  rolle   : 'fldYowNGwp3TSqZXT',
-  ta      : 'flduonc5aFEI81VCb',
-  email   : 'fldDyRMrH9ltnikku',
-  imeFit  : 'fld1eZkDIhVCutgHT',
-  notes   : 'fldJjRM3nWQj9Hul1',
-};
+// ═══ STAGES ═══
+const STAGES = [
+  {id:'act_now', label:'Act Now', color:'#dc2626'},
+  {id:'hot',     label:'Hot',     color:'#ea580c'},
+  {id:'warm',    label:'Warm',    color:'#d97706'},
+  {id:'active',  label:'Active',  color:'#2563eb'},
+  {id:'watch',   label:'Watch',   color:'#94a3b8'},
+];
+const SM = Object.fromEntries(STAGES.map(s=>[s.id,s]));
+const SO = {act_now:4,hot:3,warm:2,active:1,watch:0};
 
-// Aktivitäten field IDs
-const ACF = {
-  title     : 'fldxo6X7DLz5RBURT',
-  kontakt   : 'fldK9Qn44Lzgm9P3T',
-  firma     : 'fldmRo2eZSBqh5J6R',
-  datum     : 'fldac9pKqsWpWw8TR',
-  ausloser  : 'fldn16MsXRf99vCdm',
-  loesungen : 'fldA8GP85R28qg8jB',
-  statusAkt : 'fldQHNn27SubQ4FJO',
-  followup  : 'fldCfs2SpA4lR7XJy',
-  ergebnis  : 'fldK2ao5zukTLErhw',
-};
-
-// Stage mapping from IME-Fit / Status Beziehung values
-function stageFromRecord(imeFit, statusBez) {
-  const f = (imeFit||'').toLowerCase();
-  const s = (statusBez||'').toLowerCase();
-  if (f.includes('act now') || f.includes('sofort') || s.includes('act now')) return 'act_now';
-  if (f.includes('hot') || s.includes('hot')) return 'hot';
-  if (f.includes('warm') || s.includes('warm') || s.includes('aktiv')) return 'warm';
-  if (f.includes('active') || f.includes('aktiv') || s.includes('laufend')) return 'active';
+function stageFrom(imeFit, statusBez) {
+  const combined = ((imeFit||'')+(statusBez||'')).toLowerCase();
+  if (combined.includes('act now') || combined.includes('sofort'))  return 'act_now';
+  if (combined.includes('hot'))                                       return 'hot';
+  if (combined.includes('warm') || combined.includes('aktiv'))       return 'warm';
   return 'watch';
 }
 
-const STAGE_ORDER = {'Act Now':0,'Hot':1,'Warm':2,'Active':3,'Watch':4,'Done':5};
+// ═══ TOKEN ═══
+function getToken()  { return localStorage.getItem('at_key_ime')||''; }
+function saveToken(t){ localStorage.setItem('at_key_ime', t); }
+function resetToken(){ localStorage.removeItem('at_key_ime'); location.reload(); }
 
-// ═══════════════════════════════════════════════════════
-// AIRTABLE API
-// ═══════════════════════════════════════════════════════
-function getToken(){ return localStorage.getItem('at_key_ime')||''; }
+// ═══ AIRTABLE FETCH — uses field NAMES, not IDs ═══
+async function atFetch(tableId, fieldNames) {
+  const token = getToken();
+  if (!token) throw new Error('NO_TOKEN');
 
-function fv(rec, fid){
-  const v = rec.fields?.[fid];
-  if(v===undefined||v===null||v==='') return '';
-  if(typeof v==='object'&&!Array.isArray(v)&&v.name) return v.name;
-  if(Array.isArray(v)) return v.map(x=>(x&&x.name)?x.name:x).join(', ');
+  // Build URL with explicit field names
+  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
+  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}`;
+
+  let r;
+  try { r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } }); }
+  catch(e) { throw new Error('NETWORK_ERROR: ' + e.message); }
+
+  if (r.status === 401) throw new Error('TOKEN_INVALID');
+  if (r.status === 403) throw new Error('TOKEN_NO_ACCESS — Token hat keinen Zugriff auf OB_IME. Gehe zu airtable.com/create/tokens und füge OB_IME unter Access hinzu.');
+  if (!r.ok) { const t = await r.text(); throw new Error('HTTP ' + r.status + ': ' + t.slice(0,200)); }
+
+  const d = await r.json();
+  if (d.error) throw new Error('Airtable error: ' + JSON.stringify(d.error));
+
+  let records = d.records || [];
+  if (d.offset) {
+    // paginate
+    const more = await atFetchPage(tableId, fieldNames, d.offset);
+    records = [...records, ...more];
+  }
+  return records;
+}
+
+async function atFetchPage(tableId, fieldNames, offset) {
+  const token = getToken();
+  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
+  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}&offset=${offset}`;
+  const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+  const d = await r.json();
+  let records = d.records || [];
+  if (d.offset) {
+    const more = await atFetchPage(tableId, fieldNames, d.offset);
+    records = [...records, ...more];
+  }
+  return records;
+}
+
+// Get field value by name
+function fn(rec, name) {
+  if (!rec || !rec.fields) return '';
+  const v = rec.fields[name];
+  if (v === undefined || v === null || v === '') return '';
+  if (typeof v === 'object' && !Array.isArray(v) && v.name) return v.name;
+  if (Array.isArray(v)) return v.map(x => x && x.name ? x.name : String(x)).filter(Boolean).join(', ');
   return String(v);
 }
 
-async function atFetch(tableId, offset=''){
-  const token = getToken();
-  if(!token) throw new Error('NO_TOKEN');
-  // Explicitly request all known fields per table so Airtable returns them even if empty
-  const fieldMap = {
-    [TABLES.accounts]:  Object.values(AF),
-    [TABLES.contacts]:  Object.values(CF),
-    [TABLES.activities]:Object.values(ACF),
-  };
-  const fields = fieldMap[tableId] || [];
-  const fieldParams = fields.map(f=>'fields[]='+f).join('&');
-  const url = `https://api.airtable.com/v0/${BASE_ID}/${tableId}?pageSize=100${fieldParams?'&'+fieldParams:''}${offset?'&offset='+offset:''}`;
-  let r;
-  try{ r = await fetch(url,{headers:{'Authorization':'Bearer '+token},mode:'cors'}); }
-  catch(e){ throw new Error('CORS_OR_NETWORK'); }
-  if(r.status===401) throw new Error('401_UNAUTHORIZED');
-  if(!r.ok) throw new Error('Airtable '+r.status);
-  const d = await r.json();
-  if(d.offset){
-    const more = await atFetch(tableId, d.offset);
-    return [...d.records, ...more];
-  }
-  return d.records;
-}
+// ═══ STATE ═══
+let accs = [], scanLog = [], selId = null, view = 'pipeline';
+let briefTxt = '', briefLoad = false;
+let adpInput = '', adpResult = null, adpLoad = false;
+let scanInput = '', scanResult = '', scanLoad = false;
 
-// Fetch all three tables and return structured context
-async function fetchLiveContext(statusEl){
-  if(statusEl){ statusEl.textContent='⟳ Lade Daten aus Airtable (OB_IME)…'; statusEl.classList.add('on'); }
-
-  const [accRecs, actRecs] = await Promise.all([
-    atFetch(TABLES.accounts),
-    atFetch(TABLES.activities),
-  ]);
-
-  if(statusEl) statusEl.textContent=`✓ ${accRecs.length} Firmen, ${actRecs.length} Aktivitäten geladen`;
-
-  const accounts = accRecs.map(r=>({
-    id: r.id,
-    company: fv(r,AF.company),
-    ta: fv(r,AF.ta),       // multipleSelects — fv joins with ', '
-    drug: fv(r,AF.drug),
-    imeFit: fv(r,AF.imeFit),
-    status: fv(r,AF.status),
-    notes: fv(r,AF.notes),
-    stage: stageFromRecord(fv(r,AF.imeFit), fv(r,AF.status)),
-    tier: 1,               // OB_IME has no tier field — default T1
-    owner: 'Osman',
-    pi: '',
-    entry: '',
-    badge: fv(r,AF.imeFit) ? '⚡ IME-Fit: '+fv(r,AF.imeFit) : '',
-  }));
-
-  accounts.sort((a,b)=>(STAGE_ORDER[a.stage]??9)-(STAGE_ORDER[b.stage]??9));
-
-  const activities = actRecs.map(r=>({
-    title: fv(r,ACF.title),
-    firma: fv(r,ACF.firma),
-    datum: fv(r,ACF.datum),
-    ausloser: fv(r,ACF.ausloser),
-    status: fv(r,ACF.statusAkt),
-    followup: fv(r,ACF.followup),
-    ergebnis: fv(r,ACF.ergebnis),
-  }));
-
-  // Use activities as scan log
-  const scanLog = activities
-    .sort((a,b)=>new Date(b.datum||0)-new Date(a.datum||0))
-    .slice(0,15)
-    .map(a=>({
-      type: a.status||'',
-      account: a.firma,
-      entry: `${a.title}${a.ausloser?' — '+a.ausloser:''}${a.ergebnis?' | '+a.ergebnis:''}`,
-      date: a.datum||'',
-    }));
-
-  return {accounts, evidence:[], scanLog, loadedAt: new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
-}
-
-// ═══════════════════════════════════════════════════════
-// CLAUDE API
-// ═══════════════════════════════════════════════════════
-async function callClaude(model, systemPrompt, userContent, maxTokens=1200){
-  const body = {model, max_tokens:maxTokens, messages:[{role:'user',content:userContent}]};
-  if(systemPrompt) body.system = systemPrompt;
-  const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
-  });
-  const d = await r.json();
-  return (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('')||'';
-}
-
-// ═══════════════════════════════════════════════════════
-// STATIC DATA (fallback + sidebar)
-// ═══════════════════════════════════════════════════════
-const STAGES=[{id:'watch',label:'Watch',color:'#94a3b8'},{id:'warm',label:'Warm',color:'#d97706'},{id:'hot',label:'Hot',color:'#ea580c'},{id:'act_now',label:'Act Now',color:'#dc2626'},{id:'active',label:'Active',color:'#2563eb'},{id:'done',label:'Done',color:'#059669'}];
-const SM=Object.fromEntries(STAGES.map(s=>[s.id,s]));
-const SO={watch:0,warm:1,hot:2,act_now:3,active:4,done:5};
-const TAS=['Dermatology','Gastroenterology','Immunology','Rheumatology','Oncology','Hepatology','Rare Disease','Cardiology','Neurology','Other'];
-const EV_TYPES=['Phase 3','Phase 2','Congress','Wiley Pub','RWE','IIT','Regulatory'];
-const IME_SIGNALS=['Act Now','Hot','Warm','Watch'];
-const EV_TYPE_CSS={'Phase 3':'background:#fef2f2;color:#c53030;border:0.5px solid #fecaca','Phase 2':'background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa','Congress':'background:#eff6ff;color:#1d4ed8;border:0.5px solid #bfdbfe','Wiley Pub':'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac','RWE':'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff','IIT':'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a','Regulatory':'background:#ecfdf5;color:#065f46;border:0.5px solid #6ee7b7'};
-const IME_SIG_CSS={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
-
-// Live data from Airtable (populated on load)
-let liveAccounts=[], liveEvidence=[], liveScanLog=[], liveLoadedAt='';
-
-// Local editable copies for pipeline board
-let accs=[], evs=[];
-let selId=null, view='pipeline', evFilter='All', editing=null;
-let briefTxt='', briefLoad=false;
-let adpInput='', adpResult=null, adpLoad=false;
-let scanInput='', scanResult='', scanLoad=false;
-
-// ═══════════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════════
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function TODAY(){return new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
-function stageId(stageName){
-  const m={'Act Now':'act_now','Hot':'hot','Warm':'warm','Active':'active','Watch':'watch','Done':'done'};
-  return m[stageName]||'watch';
-}
-function sord(id){return SO[id]??0;}
-function TB(type){const c=EV_TYPE_CSS[type]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0';return`<span class="type-badge" style="${c}">${esc(type)}</span>`;}
-function SB(sig){const c=IME_SIG_CSS[sig]||'background:#f1f5f9;color:#64748b';return`<span class="sig-badge" style="${c}">${esc(sig)}</span>`;}
-
-function gf(){
-  const q=(document.getElementById('srch')||{value:''}).value.toLowerCase();
-  const t=(document.getElementById('ft')||{value:'All'}).value;
-  const s=(document.getElementById('fs')||{value:'All'}).value;
-  const ta=(document.getElementById('fta')||{value:'All'}).value;
-  return accs.filter(a=>{
-    const mq=!q||[a.name,a.drug,a.pi,a.ta,a.notes].some(f=>String(f||'').toLowerCase().includes(q));
-    const stId=stageId(a.stage||'Watch');
-    return mq&&(t==='All'||String(a.tier||'').includes(t))&&(s==='All'||stId===s)&&(ta==='All'||a.ta===ta);
-  }).sort((a,b)=>sord(stageId(b.stage||'Watch'))-sord(stageId(a.stage||'Watch')));
-}
-
-// ═══════════════════════════════════════════════════════
-// LOAD FROM AIRTABLE ON STARTUP
-// ═══════════════════════════════════════════════════════
-async function loadFromAirtable(){
-  if(!getToken()){
-    const token=prompt('Enter your Airtable Personal Access Token to load live data (token is saved locally):');
-    if(token&&token.startsWith('pat')){
-      localStorage.setItem('at_key_ime',token.trim());
+// ═══ LOAD FROM AIRTABLE ═══
+async function loadFromAirtable() {
+  if (!getToken()) {
+    const t = prompt('Airtable Personal Access Token eingeben (wird lokal gespeichert):');
+    if (t && t.trim().startsWith('pat')) {
+      saveToken(t.trim());
     } else {
-      document.getElementById('kc').textContent='No token — showing empty pipeline';
+      setKc('Kein Token — Pipeline leer');
       return;
     }
   }
-  document.getElementById('kc').textContent='⟳ Loading from Airtable…';
-  try{
-    const ctx = await fetchLiveContext(null);
-    liveAccounts  = ctx.accounts;
-    liveEvidence  = ctx.evidence;
-    liveScanLog   = ctx.scanLog;
-    liveLoadedAt  = ctx.loadedAt;
 
-    // Map to local format for pipeline board
-    accs = liveAccounts.map(a=>({
-      id: a.id,
-      name: a.company || '(kein Name)',
-      tier: a.tier || 1,
-      ta: a.ta || 'Other',
-      stage: a.stage || 'watch',
-      owner: a.owner || 'Osman',
-      pi: a.pi || '',
-      piRoute: a.entry || '',
-      drug: a.drug || '',
-      notes: a.notes || '',
-      scanBadge: a.badge || ''
-    }));
+  setKc('⟳ Lade OB_IME…');
+  try {
+    const [firmenRecs, aktivRecs] = await Promise.all([
+      atFetch(T_FIRMA, FIRMA_FIELDS),
+      atFetch(T_AKTIV, AKTIV_FIELDS),
+    ]);
 
-    evs = liveEvidence.map((e,i)=>({
-      id: 'ev_'+i,
-      accountId: accs.find(a=>a.name===e.account)?.id||'',
-      account: e.account,
-      drug: e.drug,
-      type: e.type||'Regulatory',
-      imeSignal: e.signal||'Watch',
-      title: e.title,
-      nct: '',
-      status: e.status,
-      congress: e.congress,
-      pi: e.pi,
-      wileyLink: e.doi,
-      notes: ''
-    }));
+    accs = firmenRecs.map(r => ({
+      id:    r.id,
+      name:  fn(r, 'Firma') || '(kein Name)',
+      ta:    fn(r, 'Therapiegebiet(e)') || 'Other',
+      drug:  fn(r, 'Produkte / Brands') || '',
+      imeFit:fn(r, 'IME-Fit') || '',
+      status:fn(r, 'Status Beziehung') || '',
+      notes: fn(r, 'Notizen') || '',
+      stage: stageFrom(fn(r,'IME-Fit'), fn(r,'Status Beziehung')),
+      badge: fn(r,'IME-Fit') ? fn(r,'IME-Fit') : '',
+    })).sort((a,b) => (SO[b.stage]||0) - (SO[a.stage]||0));
 
-    document.getElementById('kc').textContent=`${accs.length} accts · ${evs.length} ev · Live from Airtable · ${liveLoadedAt}`;
+    scanLog = aktivRecs.map(r => ({
+      title:   fn(r, 'Aktivität'),
+      datum:   fn(r, 'Datum'),
+      trigger: fn(r, 'Auslöser (PR / Symposium)'),
+      status:  fn(r, 'Status'),
+      result:  fn(r, 'Ergebnis / Notizen'),
+    })).sort((a,b) => new Date(b.datum||0) - new Date(a.datum||0));
+
+    const ts = new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    setKc(`${accs.length} Firmen · ${aktivRecs.length} Aktivitäten · ${ts}`);
     draw();
-  }catch(e){
-    if(e.message==='401_UNAUTHORIZED'){
-      localStorage.removeItem('at_key_ime');
-      document.getElementById('kc').textContent='Token rejected — click to re-enter';
-      document.getElementById('kc').style.cursor='pointer';
-      document.getElementById('kc').onclick=()=>{ localStorage.removeItem('at_key_ime'); location.reload(); };
-    } else if(e.message==='CORS_OR_NETWORK'){
-      document.getElementById('kc').textContent='Open via GitHub Pages or Netlify (not local file)';
-    } else {
-      document.getElementById('kc').textContent='Airtable error: '+e.message;
-    }
+
+  } catch(e) {
+    setKc('⚠ ' + e.message);
+    console.error('Airtable error:', e);
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// DRAW
-// ═══════════════════════════════════════════════════════
-function draw(){
-  const an=accs.filter(a=>a.stage==='act_now');
-  const bar=document.getElementById('abar'),nm=document.getElementById('abar-names');
-  if(an.length){bar.classList.add('on');nm.innerHTML=an.map(a=>`<span class="alink" onclick="sel('${a.id}')">${esc(a.name)}</span>`).join('');}
-  else bar.classList.remove('on');
-  const fa=gf();
-  document.getElementById('alist').innerHTML=fa.length?fa.map(a=>{
-    const st=SM[a.stage]||STAGES[0];
-    const ec=evs.filter(e=>e.accountId===a.id).length;
-    return`<div class="ac${selId===a.id?' sel':''}" onclick="sel('${a.id}')">
-      <div class="acr"><div class="dot" style="background:${st.color}"></div><div class="an">${esc(a.name)}</div><div class="tier">T${a.tier}${ec?` ·${ec}ev`:''}</div></div>
-      <div class="ata">${esc(a.ta)}${a.drug?' · '+esc(a.drug.slice(0,14)):''}</div>
-      ${a.scanBadge?`<div class="sbg" title="${esc(a.scanBadge)}">⚡ ${esc(a.scanBadge.slice(0,52))}${a.scanBadge.length>52?'…':''}</div>`:''}
-    </div>`;
-  }).join(''):`<div class="es">No accounts match.</div>`;
-  document.getElementById('fab-ev').style.display=view==='evidence'?'inline-block':'none';
+function setKc(txt) { document.getElementById('kc').textContent = txt; }
+
+// ═══ CLAUDE API ═══
+async function callClaude(model, system, user, maxTokens=1100) {
+  const body = { model, max_tokens: maxTokens, messages: [{role:'user', content:user}] };
+  if (system) body.system = system;
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const d = await r.json();
+  return (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('') || '';
+}
+
+// ═══ HELPERS ═══
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function TODAY(){ return new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}); }
+
+function gf() {
+  const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
+  const s = (document.getElementById('fs')||{value:'All'}).value;
+  return accs.filter(a => {
+    const mq = !q || [a.name,a.drug,a.ta,a.notes,a.imeFit].some(f=>f.toLowerCase().includes(q));
+    return mq && (s==='All' || a.stage===s);
+  });
+}
+
+// ═══ DRAW ═══
+function draw() {
+  const an = accs.filter(a=>a.stage==='act_now');
+  const bar = document.getElementById('abar');
+  const nm  = document.getElementById('abar-names');
+  if (an.length) {
+    bar.classList.add('on');
+    nm.innerHTML = an.map(a=>`<span class="alink" onclick="sel('${a.id}')">${esc(a.name)}</span>`).join('');
+  } else {
+    bar.classList.remove('on');
+  }
+
+  const fa = gf();
+  document.getElementById('alist').innerHTML = fa.length
+    ? fa.map(a => {
+        const st = SM[a.stage] || STAGES[4];
+        return `<div class="ac${selId===a.id?' sel':''}" onclick="sel('${a.id}')">
+          <div class="acr"><div class="dot" style="background:${st.color}"></div>
+          <div class="an">${esc(a.name)}</div></div>
+          <div class="ata">${esc(a.ta)}${a.drug?' · '+esc(a.drug.slice(0,18)):''}</div>
+          ${a.badge?`<div class="sbg">⚡ ${esc(a.badge.slice(0,55))}</div>`:''}
+        </div>`;
+      }).join('')
+    : `<div class="es">${accs.length===0?'Keine Daten — Token prüfen':'Keine Treffer'}</div>`;
+
   drawMain();
 }
 
-function drawMain(){
-  const m=document.getElementById('main');
-  if(view==='pipeline'){
-    if(editing){m.innerHTML=renderEdit();return;}
-    if(selId){const a=accs.find(x=>x.id===selId);if(a){m.innerHTML=renderDetail(a);return;}}
-    m.innerHTML=renderPL();
-  }else if(view==='evidence'){m.innerHTML=renderEvidence();}
-  else if(view==='scan'){m.innerHTML=renderScanView();}
-  else if(view==='briefing'){m.innerHTML=renderBriefing();}
-  else if(view==='adp'){m.innerHTML=renderADP();}
+function drawMain() {
+  const m = document.getElementById('main');
+  if (view==='pipeline') {
+    if (selId) { const a=accs.find(x=>x.id===selId); if(a){m.innerHTML=renderDetail(a);return;} }
+    m.innerHTML = renderPL();
+  } else if (view==='scan')     { m.innerHTML = renderScan(); }
+  else if (view==='briefing')   { m.innerHTML = renderBriefing(); }
+  else if (view==='adp')        { m.innerHTML = renderADP(); }
 }
 
-// ═══════════════════════════════════════════════════════
-// PIPELINE VIEWS
-// ═══════════════════════════════════════════════════════
-function renderPL(){
-  const fa=gf();let h='';
-  for(const st of STAGES){
-    if(st.id==='done') continue;
-    const sa=fa.filter(a=>a.stage===st.id);if(!sa.length) continue;
-    h+=`<div class="stage-group">
-      <div class="stage-hdr"><div class="dot" style="background:${st.color};width:8px;height:8px;border-radius:50%"></div><div class="stage-lbl" style="color:${st.color}">${st.label}</div><div class="stage-cnt">${sa.length} accounts</div></div>
+// ═══ PIPELINE ═══
+function renderPL() {
+  const fa = gf();
+  if (!fa.length) return `<div class="es">Keine Daten. <button class="btn btnsm btnp" onclick="loadFromAirtable()" style="margin-left:8px">↻ Reload</button></div>`;
+  let h = '';
+  for (const st of STAGES) {
+    const sa = fa.filter(a=>a.stage===st.id);
+    if (!sa.length) continue;
+    h += `<div class="stage-group" style="margin-bottom:20px">
+      <div class="stage-hdr" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">
+        <div class="dot" style="background:${st.color};width:8px;height:8px;border-radius:50%"></div>
+        <span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:${st.color}">${st.label}</span>
+        <span style="font-size:10px;color:#94a3b8">${sa.length} Firmen</span>
+      </div>
       <div class="pg">${sa.map(a=>`<div class="pc" onclick="sel('${a.id}')">
         <div class="pn">${esc(a.name)}</div>
-        <div class="pd">${esc((a.drug||a.ta).slice(0,26))}</div>
-        <div class="pf"><div class="pt">${esc(a.ta)}</div>${a.scanBadge?`<span style="font-size:10px;color:#d97706">⚡</span>`:''}</div>
+        <div class="pd">${esc((a.drug||a.ta).slice(0,28))}</div>
+        <div class="pf"><span style="font-size:9px;color:#cbd5e0">${esc(a.ta.slice(0,20))}</span>${a.badge?`<span style="color:#d97706;font-size:10px">⚡</span>`:''}</div>
       </div>`).join('')}</div>
     </div>`;
   }
-  return h||`<div class="es">No accounts. <a href="#" onclick="loadFromAirtable()" style="color:#2563eb">Reload from Airtable</a></div>`;
+  return h;
 }
 
-function renderDetail(a){
-  const st=SM[a.stage]||STAGES[0];
-  const accEvs=evs.filter(e=>e.accountId===a.id);
-  return`<div style="max-width:740px">
+function renderDetail(a) {
+  const st = SM[a.stage] || STAGES[4];
+  return `<div style="max-width:680px">
     <div class="d-name">${esc(a.name)}</div>
     <div class="chips">
       <span class="chip" style="color:${st.color};border-color:${st.color}40;background:${st.color}12">${st.label}</span>
-      <span class="chip" style="color:#64748b;border-color:#e2e8f0;background:#f8f9fb">Tier ${a.tier}</span>
       <span class="chip" style="color:#64748b;border-color:#e2e8f0;background:#f8f9fb">${esc(a.ta)}</span>
-      <span class="chip" style="color:#64748b;border-color:#e2e8f0;background:#f8f9fb">${esc(a.owner)}</span>
-      ${accEvs.length?`<span class="chip" style="color:#7c3aed;border-color:#e9d5ff;background:#faf5ff">${accEvs.length} evidence</span>`:''}
     </div>
     <div class="dg">
-      <div class="df"><div class="dl">Drug / Programme</div><div class="dv hi">${esc(a.drug)||'—'}</div></div>
-      <div class="df"><div class="dl">Stage</div><div class="dv hi" style="color:${st.color}">${st.label}</div></div>
+      <div class="df"><div class="dl">Produkte / Brands</div><div class="dv hi">${esc(a.drug)||'—'}</div></div>
+      <div class="df"><div class="dl">IME-Fit</div><div class="dv hi" style="color:${st.color}">${esc(a.imeFit)||'—'}</div></div>
+      <div class="df"><div class="dl">Status Beziehung</div><div class="dv hi">${esc(a.status)||'—'}</div></div>
     </div>
-    ${(a.pi||a.piRoute)?`<div class="pib" style="margin-bottom:10px"><div class="dl">PI / Entry Route</div><div class="dv hi" style="margin-top:4px;color:#15803d">${esc(a.pi)||'—'}</div>${a.piRoute?`<div class="dv" style="margin-top:3px;font-size:11px;color:#15803d">Entry: ${esc(a.piRoute)}</div>`:''}</div>`:''}
-    ${a.scanBadge?`<div class="scb" style="margin-bottom:10px"><div class="dl">⚡ Scan finding</div><div class="dv" style="margin-top:4px;color:#92400e">${esc(a.scanBadge)}</div></div>`:''}
-    ${a.notes?`<div class="nb2" style="margin-bottom:10px"><div class="dl">Notes</div><div class="dv" style="margin-top:4px">${esc(a.notes)}</div></div>`:''}
-    ${accEvs.length?`<div class="evb" style="margin-bottom:10px"><div class="dl" style="margin-bottom:8px">🔬 Evidence (${accEvs.length})</div>${accEvs.map(e=>`<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid #e9d5ff"><div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">${TB(e.type)} ${SB(e.imeSignal)}</div><div style="font-size:11px;color:#0f172a;font-weight:600">${esc(e.title)}</div>${e.congress?`<div style="font-size:10px;color:#64748b">📅 ${esc(e.congress)}</div>`:''}${e.pi?`<div style="font-size:10px;color:#15803d">👤 ${esc(e.pi)}</div>`:''}</div>`).join('')}</div>`:''}
-    <div class="ar">
-      <button class="btn btna" onclick="advance('${a.id}')">Advance →</button>
-      <button class="btn btnp" onclick="startEdit('${a.id}')">Edit</button>
-      <button class="btn" onclick="sel(null)">← Back</button>
-      <button class="btn btnd" onclick="delAcc('${a.id}')">Delete</button>
-    </div>
+    ${a.notes?`<div class="nb2"><div class="dl">Notizen</div><div class="dv" style="margin-top:4px">${esc(a.notes)}</div></div>`:''}
+    <div class="ar"><button class="btn" onclick="sel(null)">← Zurück</button></div>
   </div>`;
 }
 
-function renderEdit(){
-  const a=editing;
-  const sO=STAGES.map(s=>`<option value="${s.id}"${a.stage===s.id?' selected':''}>${s.label}</option>`).join('');
-  const tO=TAS.map(t=>`<option${a.ta===t?' selected':''}>${t}</option>`).join('');
-  return`<div style="max-width:480px"><div style="font-family:Georgia,serif;font-size:18px;margin-bottom:12px;font-weight:700">Edit — ${esc(a.name)}</div>
-    <div class="fg"><label>Name</label><input id="en" value="${esc(a.name)}"/></div>
-    <div class="fg"><label>Drug</label><input id="ed" value="${esc(a.drug)}"/></div>
-    <div class="fg"><label>PI</label><input id="ep" value="${esc(a.pi)}"/></div>
-    <div class="fg"><label>Entry Route</label><input id="er" value="${esc(a.piRoute)}"/></div>
-    <div class="fgr"><div class="fg"><label>Stage</label><select id="es">${sO}</select></div><div class="fg"><label>TA</label><select id="et">${tO}</select></div></div>
-    <div class="fg"><label>Notes</label><textarea id="eno">${esc(a.notes)}</textarea></div>
-    <div class="ar" style="margin-top:6px"><button class="btn btnp" onclick="saveEdit()">Save</button><button class="btn" onclick="cancelEdit()">Cancel</button></div>
-  </div>`;
-}
+// ═══ SCAN ═══
+function renderScan() {
+  const logHtml = scanLog.slice(0,12).map(e => {
+    const isHot = (e.status||'').toLowerCase().includes('hot') || (e.status||'').toLowerCase().includes('act');
+    return `<div class="le" style="background:${isHot?'#fef2f2':'#f0fdf4'};border-left-color:${isHot?'#ef4444':'#22c55e'};color:${isHot?'#dc2626':'#15803d'}">
+      <strong>${esc(e.title)}</strong>${e.datum?' · '+esc(e.datum):''}${e.trigger?'<br>'+esc(e.trigger.slice(0,120)):''}
+    </div>`;
+  }).join('') || `<div class="es">Noch keine Aktivitäten.</div>`;
 
-// ═══════════════════════════════════════════════════════
-// EVIDENCE
-// ═══════════════════════════════════════════════════════
-function renderEvidence(){
-  const q=(document.getElementById('srch')||{value:''}).value.toLowerCase();
-  let filtered=evFilter==='All'?evs:evs.filter(e=>e.type===evFilter);
-  if(q) filtered=filtered.filter(e=>[e.account,e.drug,e.title,e.pi].some(f=>String(f||'').toLowerCase().includes(q)));
-  filtered=[...filtered].sort((a,b)=>{const so={'Act Now':0,'Hot':1,'Warm':2,'Watch':3};return(so[a.imeSignal]??4)-(so[b.imeSignal]??4);});
-  const fBtns=['All',...EV_TYPES].map(f=>`<span class="ev-fi${evFilter===f?' on':''}" onclick="setEvFilter('${f}')">${f} (${f==='All'?evs.length:evs.filter(e=>e.type===f).length})</span>`).join('');
-  const rows=filtered.map(e=>`<tr>
-    <td><span class="ev-acc" onclick="selByName('${esc(e.account)}')">${esc(e.account)}</span><div style="font-size:10px;color:#94a3b8">${esc(e.drug)}</div></td>
-    <td>${TB(e.type)}</td>
-    <td><div style="font-size:11px;color:#0f172a;font-weight:600">${esc(e.title)}</div>${e.wileyLink?`<div style="font-size:10px;color:#15803d">📄 ${esc(e.wileyLink)}</div>`:''}</td>
-    <td><div style="font-size:11px;color:#475569">${esc(e.status)}</div>${e.congress?`<div style="font-size:10px;color:#94a3b8">📅 ${esc(e.congress)}</div>`:''}</td>
-    <td>${e.pi?`<div style="font-size:11px">👤 ${esc(e.pi)}</div>`:`<span style="color:#94a3b8">—</span>`}</td>
-    <td>${SB(e.imeSignal)}</td>
-  </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:20px;color:#94a3b8">No items.</td></tr>`;
-  return`<div class="ev-view">
-    <div class="ev-title">Evidence Generation</div>
-    <div class="ev-desc">${evs.length} items · Live from Airtable</div>
-    <div class="ev-filters">${fBtns}</div>
-    <table class="ev-table"><thead><tr><th>Account</th><th>Type</th><th>Title</th><th>Status</th><th>PI</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table>
-  </div>`;
-}
-
-// ═══════════════════════════════════════════════════════
-// SCAN VIEW — Sonnet 4.6 + live Airtable context
-// ═══════════════════════════════════════════════════════
-function renderScanView(){
-  const logHtml=liveScanLog.slice(0,10).map(e=>{
-    const t=e.type||'';
-    const bg=t.includes('Act')?"#fef2f2":t.includes('Hot')?"#fef5ed":t.includes('OK')?"#f0fdf4":"#f8f9fb";
-    const bc=t.includes('Act')?"#ef4444":t.includes('Hot')?"#d4580a":t.includes('OK')?"#22c55e":"#cbd5e0";
-    const tc=t.includes('Act')?"#dc2626":t.includes('Hot')?"#d4580a":t.includes('OK')?"#15803d":"#94a3b8";
-    return`<div class="le" style="background:${bg};border-left-color:${bc};color:${tc}">${esc(e.entry)}<span style="font-size:9px;color:#cbd5e0;margin-left:6px">${esc(e.date)}</span></div>`;
-  }).join('')||`<div class="es">No scan log entries yet.</div>`;
-
-  return`<div class="ai-view">
+  return `<div class="ai-view">
     <div class="ai-title">Daily Scan</div>
-    <div class="ai-desc">Paste your feed below. <span class="model-badge badge-sonnet">Sonnet 4.6</span> automatically loads your live account portfolio from Airtable, then extracts triggers and matches to your accounts.</div>
-    <div id="scan-status" class="ai-status"></div>
-    <textarea class="ai-input-area" id="scan-input" placeholder="Paste your Pharmawand / regulatory / M&A / congress feed here…" oninput="scanInput=this.value">${esc(scanInput)}</textarea>
+    <div class="ai-desc">Feed einfügen. <span class="badge sonnet">Sonnet 4.6</span> lädt Live-Daten aus Airtable und matcht gegen dein Portfolio.</div>
+    <textarea class="ai-input" id="scan-input" placeholder="Pharmawand / Regulatory / M&A Feed hier einfügen…" oninput="scanInput=this.value">${esc(scanInput)}</textarea>
     <div class="ai-actions">
-      <button class="btn btnp" onclick="runScan()" id="scan-btn">
-        ${scanLoad?`<span class="spinner"></span>Running Sonnet 4.6…`:'⚡ Run Scan (Sonnet 4.6)'}
+      <button class="btn btnp" onclick="runScan()" ${scanLoad?'disabled':''}>
+        ${scanLoad?`<span class="spin"></span>Sonnet 4.6 läuft…`:'⚡ Scan starten (Sonnet 4.6)'}
       </button>
-      ${scanResult?`<button class="btn" onclick="scanResult='';drawMain()">Clear result</button>`:''}
-      <span style="font-size:10px;color:#94a3b8">Loads live Airtable data · matches to your portfolio · classifies Act Now / Hot / Warm / Watch</span>
+      ${scanResult?`<button class="btn btnd btnsm" onclick="scanResult='';drawMain()">Clear</button>`:''}
     </div>
-    ${scanLoad?`<div class="ai-loading">⟳ Fetching live Airtable data, then running Sonnet 4.6…</div>`:''}
+    ${scanLoad?`<div class="ai-load">⟳ Lade Airtable-Daten, dann Sonnet 4.6…</div>`:''}
     ${scanResult?`<div class="ai-out">${esc(scanResult)}</div>`:''}
-    <div style="margin-top:20px;font-family:Georgia,serif;font-size:15px;font-weight:700;margin-bottom:8px;color:#0f172a">Scan Log <span style="font-size:11px;color:#94a3b8;font-family:inherit;font-weight:400">— live from Airtable</span></div>
+    <div style="margin-top:16px;font-weight:700;font-family:Georgia,serif;font-size:15px;margin-bottom:8px">Aktivitäten-Log</div>
     <div class="slog">${logHtml}</div>
   </div>`;
 }
 
-async function runScan(){
-  if(!scanInput.trim()) return;
-  scanLoad=true; drawMain();
-  const statusEl=document.getElementById('scan-status');
-  try{
-    // Step 1: fetch live Airtable context
-    const ctx = await fetchLiveContext(statusEl);
-
-    // Step 2: build compact portfolio summary for Sonnet
-    const actNow = ctx.accounts.filter(a=>a.stage==='Act Now');
-    const hot    = ctx.accounts.filter(a=>a.stage==='Hot');
-    const warm   = ctx.accounts.filter(a=>a.stage==='Warm');
-    const allAccounts = ctx.accounts.map(a=>`${a.company} (T${(a.tier||'2').replace(/\D/g,'')} · ${a.ta} · ${a.stage}${a.drug?' · '+a.drug.slice(0,40):''})`).join('\n');
-    const recentScan = ctx.scanLog.slice(0,5).map(e=>e.entry).join('\n');
-
-    if(statusEl){ statusEl.textContent=`✓ ${ctx.accounts.length} accounts loaded — running Sonnet 4.6 extraction…`; statusEl.classList.add('on'); }
-
-    const systemPrompt=`You are a pharma intelligence analyst for Osman Bal, Senior Account Manager IME at Wiley-VCH GmbH, DACH+France. Journals: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Today: ${TODAY()}.
-
-Your job: Extract IME-relevant signals from the pasted feed and match to the portfolio accounts below.
-
-For each relevant item found:
-1. Company + drug name
-2. Match to portfolio account (exact name from list) or "Not in portfolio"
-3. Signal level: ACT NOW / HOT / WARM / WATCH / SKIP
-4. Classification reason (what type of event)
-5. IME angle (what education gap does this create for HCPs?)
-6. Recommended next action (specific, named if possible)
-
-Portfolio (${ctx.accounts.length} accounts):
-${allAccounts}
-
-Recent scan context:
-${recentScan}
-
-Format as a clean report grouped by signal level. Be direct. No filler.`;
-
-    const userContent=`Feed to scan (today: ${TODAY()}):\n\n${scanInput}`;
-    scanResult = await callClaude(SONNET, systemPrompt, userContent, 1200);
-    if(statusEl){ statusEl.textContent=`✓ Scan complete — ${ctx.accounts.length} accounts checked against feed`; }
-
-  }catch(e){
-    if(e.message==='NO_TOKEN'||e.message==='401_UNAUTHORIZED'){
-      scanResult='Token issue — please re-enter your Airtable token (click the kc indicator in the topbar).';
-    } else if(e.message==='CORS_OR_NETWORK'){
-      scanResult='Cannot reach Airtable — make sure you are opening this file via GitHub Pages or Netlify, not directly from your computer.';
-    } else {
-      scanResult='Error: '+e.message;
-    }
-  }
-  scanLoad=false; drawMain();
-  if(statusEl) statusEl.classList.remove('on');
+async function runScan() {
+  if (!scanInput.trim()) return;
+  scanLoad = true; drawMain();
+  try {
+    const portfolio = accs.map(a=>`${a.name} (${a.ta}${a.drug?' · '+a.drug.slice(0,30):''})`).join('\n');
+    const sys = `Du bist IME-Intelligence-Analyst für Osman Bal, Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
+Portfolio (${accs.length} Firmen aus Airtable OB_IME):
+${portfolio}
+Extrahiere IME-relevante Signale aus dem Feed. Klassifiziere: ACT NOW / HOT / WARM / WATCH / SKIP. Für jeden Treffer: Firma, Drug, Signalstufe, IME-Winkel, nächste Aktion. Klar und direkt, kein Fülltext.`;
+    scanResult = await callClaude(SONNET, sys, `Feed (${TODAY()}):\n\n${scanInput}`, 1000);
+  } catch(e) { scanResult = 'Fehler: ' + e.message; }
+  scanLoad = false; drawMain();
 }
 
-// ═══════════════════════════════════════════════════════
-// BRIEFING — Opus 4.8 + live Airtable context
-// ═══════════════════════════════════════════════════════
-function renderBriefing(){
-  return`<div class="ai-view">
+// ═══ BRIEFING ═══
+function renderBriefing() {
+  return `<div class="ai-view">
     <div class="ai-title">Daily Briefing</div>
-    <div class="ai-desc">Strategic pipeline analysis powered by <span class="model-badge badge-opus">Opus 4.8</span>. Automatically loads your live Airtable data — accounts, evidence and scan log — then generates today's priorities.</div>
-    <div id="brief-status" class="ai-status"></div>
+    <div class="ai-desc">Strategische Analyse deines Portfolios. <span class="badge opus">Opus 4.8</span> liest Live-Daten aus Airtable und generiert Prioritäten für heute.</div>
     <div class="ai-actions">
-      <button class="btn btnv" onclick="genBriefing()" id="brief-btn">
-        ${briefLoad?`<span class="spinner" style="border-top-color:#7c3aed"></span>Fetching Airtable + running Opus 4.8…`:'✦ Generate Briefing (Opus 4.8)'}
+      <button class="btn btnv" onclick="genBriefing()" ${briefLoad?'disabled':''}>
+        ${briefLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ Briefing generieren (Opus 4.8)'}
       </button>
-      ${briefTxt?`<button class="btn" onclick="briefTxt='';drawMain()">Clear</button>`:''}
+      ${briefTxt?`<button class="btn btnd btnsm" onclick="briefTxt='';drawMain()">Clear</button>`:''}
     </div>
-    ${briefLoad?`<div class="ai-loading">⟳ Step 1: Loading live data from Airtable… Step 2: Opus 4.8 strategic analysis…</div>`:`<div class="ai-out">${briefTxt||'Click to generate your strategic daily briefing. Opus 4.8 will automatically load your current pipeline from Airtable before analysing.'}</div>`}
+    ${briefLoad?`<div class="ai-load">⟳ Opus 4.8 analysiert dein komplettes Portfolio…</div>`:`<div class="ai-out">${briefTxt||'Klick zum Generieren. Opus 4.8 lädt automatisch die aktuellen Daten aus Airtable.'}</div>`}
   </div>`;
 }
 
-async function genBriefing(){
-  briefLoad=true; briefTxt=''; drawMain();
-  const statusEl=document.getElementById('brief-status');
-  try{
-    // Step 1: fetch live Airtable data
-    const ctx = await fetchLiveContext(statusEl);
+async function genBriefing() {
+  briefLoad = true; briefTxt = ''; drawMain();
+  try {
+    const an   = accs.filter(a=>a.stage==='act_now');
+    const hot  = accs.filter(a=>a.stage==='hot');
+    const warm = accs.filter(a=>a.stage==='warm');
+    const sys = `Du bist der strategische IME-Berater von Osman Bal, Senior Account Manager bei Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
+Constraints:
+- Grants NGC54513/NGC54512 (Novartis) ABGELEHNT — nie erwähnen
+- Josefin Snellman (Novartis) — nicht erneut kontaktieren (5 unbeantwortete Kontakte)
+- Gilead/Roche Onkologie → Kurt (nicht Osman)
+Gib ein präzises, actionable Briefing. Keine Füllsätze.`;
+    const user = `LIVE PIPELINE aus Airtable OB_IME — ${TODAY()}
 
-    const actNow = ctx.accounts.filter(a=>a.stage==='Act Now');
-    const hot    = ctx.accounts.filter(a=>a.stage==='Hot');
-    const warm   = ctx.accounts.filter(a=>a.stage==='Warm');
-    const actNowEv = ctx.evidence.filter(e=>e.signal==='Act Now'||e.signal==='Hot').slice(0,8);
-    const recentScans = ctx.scanLog.slice(0,8).map(e=>e.entry).join('\n');
+ACT NOW (${an.length}): ${an.map(a=>`${a.name} | ${a.drug||a.ta} | IME-Fit: ${a.imeFit} | ${a.notes.slice(0,120)}`).join('\n')||'Keine'}
 
-    if(statusEl){ statusEl.textContent=`✓ ${ctx.accounts.length} accounts loaded — running Opus 4.8 analysis…`; statusEl.classList.add('on'); }
+HOT (${hot.length}): ${hot.map(a=>`${a.name} | ${a.imeFit||a.status}`).join(', ')||'Keine'}
 
-    // Step 2: Opus 4.8 strategic synthesis
-    const systemPrompt=`You are the senior strategic IME advisor for Osman Bal, Senior Account Manager IME at Wiley-VCH GmbH, DACH+France. Journals: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Today: ${TODAY()}.
+WARM (${warm.length}): ${warm.map(a=>a.name).join(', ')||'Keine'}
 
-You have been given the live pipeline data fetched directly from Airtable moments ago. Produce a tight, actionable daily briefing. No fluff. No hedging. Specific names, specific actions.
+Letzte Aktivitäten: ${scanLog.slice(0,5).map(e=>e.title+' ('+e.datum+')').join('; ')||'Keine'}
 
-Key constraints (always apply):
-- Grants NGC54513/NGC54512 (Novartis) DECLINED — never reference in outreach
-- Josefin Snellman (Novartis) — do not re-approach (5 unanswered contacts)
-- Jessica Hernández Brichis — moved to AZ Spain, removed from DACH tracking
-- Prior JEADV Chronic Pruritus supplement with Aman Matharoo did not proceed — do not reference with Ivan Nikolaev
-- Gilead and Roche oncology angles belong to Kurt — flag, do not pitch yourself`;
-
-    const userContent=`LIVE AIRTABLE DATA — loaded ${ctx.loadedAt}
-
-ACT NOW (${actNow.length} accounts):
-${actNow.map(a=>`• ${a.company} | ${a.drug||a.ta} | PI: ${a.pi||'—'} | Entry: ${a.entry||'—'}
-  Badge: ${a.badge||'—'}
-  Notes: ${(a.notes||'').slice(0,200)}`).join('\n\n')||'None'}
-
-HOT (${hot.length} accounts):
-${hot.map(a=>`• ${a.company} | ${a.drug||a.ta} | ${a.badge||a.notes.slice(0,100)}`).join('\n')||'None'}
-
-WARM (${warm.length} accounts):
-${warm.map(a=>`• ${a.company} | ${a.drug||a.ta}`).join(', ')||'None'}
-
-EVIDENCE — Act Now + Hot signals:
-${actNowEv.map(e=>`• ${e.account}: ${e.title} (${e.type}, ${e.signal}) — ${e.status}`).join('\n')||'None'}
-
-RECENT SCAN LOG:
-${recentScans||'No recent entries'}
-
-Provide exactly:
-1. PIPELINE HEALTH (2-3 sentences — momentum, biggest opportunities, any risks)
-2. TOP 3 ACTIONS TODAY (for each: who exactly, what hook, what to send/say, why now)
-3. KURT FLAG (Gilead/Roche items to pass — be specific)
-4. STRATEGIC INSIGHT (one paragraph — what pattern across accounts should Osman position on?)
-5. WATCH NEXT 4 WEEKS (imminent triggers that will require action)`;
-
-    briefTxt = await callClaude(OPUS, systemPrompt, userContent, 1100);
-    if(statusEl){ statusEl.textContent=`✓ Briefing generated — data from Airtable loaded ${ctx.loadedAt}`; }
-
-  }catch(e){
-    if(e.message==='NO_TOKEN'||e.message==='401_UNAUTHORIZED'){
-      briefTxt='Airtable token issue — please re-enter your token. Click the status indicator in the topbar.';
-    } else if(e.message==='CORS_OR_NETWORK'){
-      briefTxt='Cannot reach Airtable from a local file. Open this tracker via your GitHub Pages URL or Netlify to enable live data.';
-    } else {
-      briefTxt='Error loading data: '+e.message;
-    }
-  }
-  briefLoad=false; drawMain();
-  if(statusEl) statusEl.classList.remove('on');
+Liefere:
+1. PIPELINE STATUS (2-3 Sätze)
+2. TOP 3 AKTIONEN HEUTE (konkrete Person, Hook, was senden)
+3. KURT FLAG (was geht zu Kurt heute)
+4. STRATEGISCHER INSIGHT (1 Absatz)
+5. NÄCHSTE 4 WOCHEN (bevorstehende Trigger)`;
+    briefTxt = await callClaude(OPUS, sys, user, 1000);
+  } catch(e) { briefTxt = 'Fehler: ' + e.message; }
+  briefLoad = false; drawMain();
 }
 
-// ═══════════════════════════════════════════════════════
-// ADP / COI — Opus 4.8
-// ═══════════════════════════════════════════════════════
-function renderADP(){
-  return`<div class="ai-view">
-    <div class="ai-title">ADP / COI Analysis</div>
-    <div class="ai-desc">Paste article metadata. <span class="model-badge badge-opus">Opus 4.8</span> runs full COI analysis, pharma author identification, ORCID verification, and IME angle generation.</div>
-    <textarea class="ai-input-area" id="adp-input" placeholder="Title: ...&#10;Journal: ...&#10;Category: Full Length / Case Report / Review / Editorial&#10;Drug: ...&#10;Account: ...&#10;Corresponding author: ...&#10;Country: ...&#10;Email: ..." style="min-height:140px" oninput="adpInput=this.value">${esc(adpInput)}</textarea>
+// ═══ ADP / COI ═══
+function renderADP() {
+  return `<div class="ai-view">
+    <div class="ai-title">ADP / COI Analyse</div>
+    <div class="ai-desc">Artikel-Metadaten einfügen. <span class="badge opus">Opus 4.8</span> führt vollständige COI-Analyse durch.</div>
+    <textarea class="ai-input" id="adp-input" placeholder="Title: ...&#10;Journal: ...&#10;Category: Full Length / Case Report&#10;Drug: ...&#10;Account: ...&#10;Corresponding author: ...&#10;Email: ..." style="min-height:140px" oninput="adpInput=this.value">${esc(adpInput)}</textarea>
     <div class="ai-actions">
       <button class="btn btnv" onclick="runADP()" ${adpLoad?'disabled':''}>
-        ${adpLoad?`<span class="spinner" style="border-top-color:#7c3aed"></span>Running Opus 4.8…`:'✦ Run ADP/COI Analysis (Opus 4.8)'}
+        ${adpLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ ADP/COI Analyse (Opus 4.8)'}
       </button>
-      ${adpResult?`<button class="btn" onclick="adpResult=null;drawMain()">Clear</button>`:''}
+      ${adpResult?`<button class="btn btnd btnsm" onclick="adpResult=null;drawMain()">Clear</button>`:''}
     </div>
-    ${adpLoad?`<div class="ai-loading">Opus 4.8 running COI analysis, ORCID verification, and IME positioning…</div>`:''}
+    ${adpLoad?`<div class="ai-load">Opus 4.8: COI-Analyse, ORCID-Verifikation, IME-Positionierung…</div>`:''}
     ${adpResult?renderADPResult(adpResult):''}
   </div>`;
 }
 
-function renderADPResult(r){
-  if(!r) return '';
+function renderADPResult(r) {
   const isADP = r.coiResult==='ADP';
-  const verdictClass = isADP?'adp-adp':'adp-skip';
-  const fields=[
+  const fields = [
     ['Account / Tier', r.tier],
     ['Hook Drug', r.hookDrug],
-    ['Clinical Problem', r.hookProblem],
-    ['Study Type & IME Relevance', r.hookStudyType],
-    ['Rare Disease', r.hookRareDisease===true?'Yes':r.hookRareDisease===false?'No':r.hookRareDisease],
+    ['Klinisches Problem', r.hookProblem],
+    ['Study Type', r.hookStudyType],
     ['IME Angle', r.adpAngle],
     ['Positioning', r.positioning],
     ['Knowledge Gap', r.gap],
-    ['COI Reason', r.coiReason],
+    ['COI Begründung', r.coiReason],
   ];
-  return`<div class="adp-result">
-    <div class="adp-verdict ${verdictClass}">${isADP?'✓ ADP — Proceed':'✕ SKIP'}</div>
-    ${fields.map(([l,v])=>v!=null&&v!==''?`<div class="adp-section"><div class="adp-label">${l}</div><div class="adp-val">${esc(String(v))}</div></div>`:'').join('')}
+  return `<div style="margin-top:14px">
+    <div class="adp-verdict ${isADP?'adp-ok':'adp-skip'}">${isADP?'✓ ADP — Weiterverfolgen':'✕ SKIP'}</div>
+    ${fields.map(([l,v])=>v?`<div class="adp-section"><div class="adp-label">${l}</div><div class="adp-val">${esc(String(v))}</div></div>`:'').join('')}
     ${r.outreachTargets?.length?`<div class="adp-section"><div class="adp-label">Outreach Targets</div><div class="adp-val">${r.outreachTargets.map(t=>`• ${esc(t)}`).join('\n')}</div></div>`:''}
-    ${r.pharmaAuthors?.length?`<div class="adp-section"><div class="adp-label">Pharma Authors</div><div class="adp-val">${r.pharmaAuthors.map(a=>`• ${esc(a.name)} — ${esc(a.affiliation)}${a.email?' — '+esc(a.email):''}`).join('\n')}</div></div>`:''}
-    ${r.kolAuthors?.length?`<div class="adp-section"><div class="adp-label">KOL Authors</div><div class="adp-val">${r.kolAuthors.map(a=>`• ${esc(a.name)} — ${esc(a.affiliation)} | Ambassador: ${esc(a.ambassadorPotential||'—')}`).join('\n')}</div></div>`:''}
-    ${r.hcpVerification?.length?`<div class="adp-section"><div class="adp-label">HCP Verification</div><div class="adp-val">${r.hcpVerification.map(h=>`• ${esc(h.name)}: ${esc(h.verificationStatus)}${h.orcidId?' | ORCID: '+esc(h.orcidId):''} | ${esc(h.verificationNote||'')}`).join('\n')}</div></div>`:''}
+    ${r.pharmaAuthors?.length?`<div class="adp-section"><div class="adp-label">Pharma Authors</div><div class="adp-val">${r.pharmaAuthors.map(a=>`• ${esc(a.name)} — ${esc(a.affiliation)}`).join('\n')}</div></div>`:''}
   </div>`;
 }
 
-async function runADP(){
-  if(!adpInput.trim()) return;
-  adpLoad=true; adpResult=null; drawMain();
-  const systemPrompt=`You are a Wiley IME conflict-of-interest and academic publishing expert. Today: ${TODAY()}. Respond with ONLY a valid JSON object — no markdown, no backticks, no explanation.
-
-Rules:
-- pharmaAuthors: ONLY authors with pharma company affiliation (not academics receiving grants)
-- kolAuthors: senior academics (Prof/MD level) with documented pharma publication history — must include ambassadorPotential
-- coiResult=SKIP if: all authors academic with no pharma employment, OR Case Report/Letter/Editorial/Viewpoint, OR <20 patients, OR non-EU population with no DACH/France angle
-- coiResult=ADP if: at least one confirmed pharma company co-author, OR strong clinical hook with DACH/France author relevance
-- hookProblem: SPECIFIC — name the exact drug, indication, and precise clinical challenge
-- adpAngle: concrete IME format
-- outreachTargets: 3 SPECIFIC Medical Affairs roles with company names
-- gap: PRECISE HCP knowledge/decision gap
-
-Required keys: tier, coiResult, coiReason, hookDrug, hookProblem, hookStudyType, hookRareDisease (bool), adpAngle, positioning, outreachTargets (array), gap, pharmaAuthors (array of {name,affiliation,email}), kolAuthors (array of {name,affiliation,email,pharmaLink,ambassadorPotential}), hcpVerification (array of {name,orcidFound,orcidId,orcidUrl,kbvFound,verificationStatus,verificationNote})`;
-
-  try{
-    const raw = await callClaude(OPUS, systemPrompt, `Analyse this article:\n\n${adpInput}`, 1500);
-    const clean = raw.replace(/```json|```/g,'').trim();
-    adpResult = JSON.parse(clean);
-  }catch(e){
-    adpResult={coiResult:'ERROR',coiReason:'Parse error: '+e.message,tier:'—',hookDrug:'—',hookProblem:'—',hookStudyType:'—',hookRareDisease:false,adpAngle:'—',positioning:'—',outreachTargets:[],gap:'—',pharmaAuthors:[],kolAuthors:[],hcpVerification:[]};
+async function runADP() {
+  if (!adpInput.trim()) return;
+  adpLoad = true; adpResult = null; drawMain();
+  const sys = `Wiley IME COI-Experte. Heute: ${TODAY()}. Antworte NUR mit einem gültigen JSON-Objekt — kein Markdown, keine Backticks.
+Keys: tier, coiResult (ADP/SKIP), coiReason, hookDrug, hookProblem, hookStudyType, hookRareDisease (bool), adpAngle, positioning, outreachTargets (array), gap, pharmaAuthors (array {name,affiliation,email}), kolAuthors (array {name,affiliation,ambassadorPotential}), hcpVerification (array {name,orcidFound,orcidId,verificationStatus,verificationNote})`;
+  try {
+    const raw = await callClaude(OPUS, sys, `Analysiere diesen Artikel:\n\n${adpInput}`, 1500);
+    adpResult = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    adpResult = {coiResult:'ERROR',coiReason:'Parse-Fehler: '+e.message,tier:'—',hookDrug:'—',hookProblem:'—',hookStudyType:'—',hookRareDisease:false,adpAngle:'—',positioning:'—',outreachTargets:[],gap:'—',pharmaAuthors:[],kolAuthors:[]};
   }
-  adpLoad=false; drawMain();
+  adpLoad = false; drawMain();
 }
 
-// ═══════════════════════════════════════════════════════
-// NAVIGATION + CRUD
-// ═══════════════════════════════════════════════════════
-function sv(v){
-  view=v;selId=null;editing=null;
-  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','scan','briefing','adp'][i]===v));
-  document.getElementById('fab-ev').style.display=v==='evidence'?'inline-block':'none';
+// ═══ DIAGNOSE ═══
+async function diagnose() {
+  const m = document.getElementById('main');
+  m.innerHTML = `<div style="max-width:700px"><div class="ai-title">🔍 Diagnose</div><div id="diag-out" class="diag">Teste Verbindung…</div></div>`;
+  const out = document.getElementById('diag-out');
+  const token = getToken();
+
+  let log = '';
+  log += `Token: ${token ? token.slice(0,20)+'…' : 'KEIN TOKEN'}\n`;
+  log += `Base: ${BASE}\n`;
+  log += `Tabelle: ${T_FIRMA}\n\n`;
+
+  if (!token) { out.textContent = log + 'FEHLER: Kein Token gespeichert.'; return; }
+
+  try {
+    log += `Sende Request zu Airtable…\n`;
+    out.textContent = log;
+    const url = `https://api.airtable.com/v0/${BASE}/${T_FIRMA}?pageSize=3&fields[]=Firma&fields[]=IME-Fit`;
+    const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+    log += `HTTP Status: ${r.status}\n`;
+
+    if (r.status === 403) {
+      log += '\n⚠ 403 FORBIDDEN\nDein Token hat KEINEN Zugriff auf die Base OB_IME.\n\nFix:\n1. Gehe zu airtable.com/create/tokens\n2. Bearbeite deinen Token\n3. Unter "Access" → füge "OB_IME" hinzu\n4. Speichere → lade Tracker neu';
+      out.textContent = log; return;
+    }
+    if (r.status === 401) {
+      log += '\n⚠ 401 UNAUTHORIZED\nToken ungültig oder abgelaufen.\nKlicke auf den Token-Text oben rechts zum Zurücksetzen.';
+      out.textContent = log; return;
+    }
+
+    const d = await r.json();
+    log += `Records erhalten: ${(d.records||[]).length}\n\n`;
+
+    if ((d.records||[]).length === 0) {
+      log += '⚠ Keine Records — Tabelle ist leer oder Token hat keine Leserechte für Felder.\n';
+    } else {
+      log += 'Erste 3 Records:\n';
+      d.records.slice(0,3).forEach((rec,i) => {
+        log += `\n[${i+1}] ID: ${rec.id}\n`;
+        log += `    Fields: ${JSON.stringify(rec.fields)}\n`;
+      });
+    }
+    out.textContent = log;
+    // Now try loading everything
+    log += '\n\nLade alle Firmen…\n';
+    out.textContent = log;
+    await loadFromAirtable();
+    log += `✓ Fertig — ${accs.length} Firmen geladen.`;
+    out.textContent = log;
+
+  } catch(e) {
+    log += `\nFEHLER: ${e.message}`;
+    out.textContent = log;
+  }
+}
+
+// ═══ NAVIGATION ═══
+function sv(v) {
+  view = v; selId = null;
+  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','scan','briefing','adp'][i]===v));
   draw();
 }
-function sel(id){selId=id;editing=null;view='pipeline';document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0));document.getElementById('fab-ev').style.display='none';draw();}
-function selByName(name){const a=accs.find(x=>x.name===name);if(a)sel(a.id);}
-function setEvFilter(f){evFilter=f;drawMain();}
-function advance(id){const ord=['watch','warm','hot','act_now','active','done'];accs=accs.map(a=>{if(a.id!==id)return a;const i=ord.indexOf(a.stage);return{...a,stage:ord[Math.min(i+1,ord.length-1)]};});draw();}
-function startEdit(id){editing={...accs.find(a=>a.id===id)};draw();}
-function cancelEdit(){editing=null;draw();}
-function saveEdit(){
-  const a=editing;
-  a.name=document.getElementById('en').value;a.drug=document.getElementById('ed').value;
-  a.pi=document.getElementById('ep').value;a.piRoute=document.getElementById('er').value;
-  a.stage=document.getElementById('es').value;a.ta=document.getElementById('et').value;
-  a.notes=document.getElementById('eno').value;
-  accs=accs.map(x=>x.id===a.id?a:x);selId=a.id;editing=null;draw();
-}
-function delAcc(id){if(!confirm('Delete account?'))return;accs=accs.filter(a=>a.id!==id);selId=null;draw();}
+function sel(id) { selId=id; view='pipeline'; document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0)); draw(); }
 
-function showAddAcc(){
-  const sO=STAGES.map(s=>`<option value="${s.id}"${s.id==='watch'?' selected':''}>${s.label}</option>`).join('');
-  const tO=TAS.map(t=>`<option>${t}</option>`).join('');
-  const m=document.getElementById('main');
-  const ov=document.createElement('div');ov.className='mo';
-  ov.innerHTML=`<div class="md" onclick="event.stopPropagation()"><div class="mt">Add Account</div>
-    <div class="fg"><label>Name</label><input id="mn"/></div>
-    <div class="fg"><label>Drug</label><input id="mdr"/></div>
-    <div class="fg"><label>PI</label><input id="mp"/></div>
-    <div class="fg"><label>Entry Route</label><input id="mro"/></div>
-    <div class="fgr"><div class="fg"><label>Tier</label><select id="mti"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option></select></div><div class="fg"><label>Stage</label><select id="mst">${sO}</select></div></div>
-    <div class="fg"><label>TA</label><select id="mta">${tO}</select></div>
-    <div class="fg"><label>Notes</label><textarea id="mno"></textarea></div>
-    <div class="ar" style="margin-top:8px"><button class="btn btnp" onclick="doAddAcc()">Add</button><button class="btn" onclick="this.closest('.mo').remove()">Cancel</button></div>
-  </div>`;
-  ov.onclick=()=>ov.remove();m.appendChild(ov);
-}
-function doAddAcc(){
-  accs.push({id:'c_'+Date.now(),name:document.getElementById('mn').value||'New',drug:document.getElementById('mdr').value,pi:document.getElementById('mp').value,piRoute:document.getElementById('mro').value,tier:Number(document.getElementById('mti').value),stage:document.getElementById('mst').value,ta:document.getElementById('mta').value,notes:document.getElementById('mno').value,owner:'Osman',scanBadge:''});
-  document.querySelector('.mo')?.remove();draw();
-}
-function showAddEv(){}
-
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
+// ═══ INIT ═══
 loadFromAirtable();
 </script>
 </body>
