@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IME Milestone Tracker v16 — Wiley-VCH</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;background:#f0f2f5;min-height:100vh;padding:16px}
+#app{display:flex;flex-direction:column;height:calc(100vh - 32px);min-height:580px;border:0.5px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#f8f9fb;box-shadow:0 4px 24px #0000000f}
+.topbar{display:flex;align-items:center;gap:10px;padding:9px 16px;background:#fff;border-bottom:0.5px solid #e2e8f0;flex-shrink:0}
+.logo{font-family:Georgia,serif;font-size:16px;color:#0f172a;font-weight:700}
+.logo em{color:#c53030;font-style:italic}
+.nav{display:flex;gap:3px;margin-left:10px}
+.nb{padding:4px 11px;border-radius:6px;border:0.5px solid transparent;background:transparent;color:#94a3b8;font-size:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:all .12s}
+.nb:hover{background:#f1f5f9;color:#475569}
+.nb.on{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
+.sp{flex:1}
+.kc{font-size:10px;color:#94a3b8;cursor:pointer}
+.badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+.opus{background:#f3e8ff;color:#7c3aed;border:0.5px solid #d8b4fe}
+.sonnet{background:#e0f2fe;color:#0369a1;border:0.5px solid #bae6fd}
+.abar{background:#fef2f2;border-bottom:0.5px solid #fecaca;padding:6px 16px;font-size:11px;color:#dc2626;display:none;align-items:center;gap:8px;flex-shrink:0}
+.abar.on{display:flex}
+.pulse{width:7px;height:7px;border-radius:50%;background:#e53e3e;animation:pulse 1.5s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.alink{cursor:pointer;text-decoration:underline;margin-right:8px;font-weight:700}
+.body{display:flex;flex:1;overflow:hidden}
+.sb{width:252px;flex-shrink:0;overflow-y:auto;border-right:0.5px solid #e2e8f0;padding:10px;background:#fff}
+.fi{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.si{width:100%;padding:6px 9px;background:#f8f9fb;border:0.5px solid #e2e8f0;border-radius:6px;color:#0f172a;font-family:inherit;font-size:11px;outline:none}
+.si:focus{border-color:#93c5fd}
+.fr{display:flex;gap:4px}
+.alist{display:flex;flex-direction:column;gap:3px}
+.ac{padding:8px 10px;border-radius:6px;border:0.5px solid #e2e8f0;background:#f8f9fb;cursor:pointer;transition:all .12s}
+.ac:hover{background:#f1f5f9;border-color:#cbd5e0}
+.ac.sel{background:#eff6ff;border-color:#93c5fd}
+.acr{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.an{font-size:11px;color:#0f172a;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tier{font-size:9px;color:#94a3b8;letter-spacing:.8px}
+.ata{font-size:10px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbg{display:inline-block;margin-top:3px;font-size:9px;color:#744210;background:#fffbeb;padding:1px 5px;border-radius:3px;border:0.5px solid #fde68a;line-height:1.4;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{flex:1;overflow-y:auto;padding:18px;background:#f8f9fb}
+.d-name{font-family:Georgia,serif;font-size:22px;color:#0f172a;margin-bottom:8px;font-weight:700}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:2px 8px;border-radius:12px;font-size:9px;letter-spacing:.4px;text-transform:uppercase;border:0.5px solid}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.df{background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;padding:10px;box-shadow:0 1px 2px #0000000a}
+.dl{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.dv{font-size:12px;color:#475569;line-height:1.5}
+.dv.hi{color:#0f172a;font-weight:500}
+.pib{background:#f0fdf4;border:0.5px solid #86efac;border-radius:8px;padding:10px;margin-bottom:10px}
+.nb2{background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:10px;box-shadow:0 1px 2px #0000000a}
+.scb{background:#fffbeb;border:0.5px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:10px}
+.ar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.btn{padding:6px 12px;border-radius:6px;border:0.5px solid #e2e8f0;background:#fff;color:#0f172a;font-family:inherit;font-size:11px;cursor:pointer;transition:all .12s}
+.btn:hover{background:#f8f9fb}
+.btnp{background:#2563eb;color:#fff;border-color:#2563eb}
+.btnv{background:#f3e8ff;color:#7c3aed;border-color:#d8b4fe}
+.btnd{background:#fee2e2;color:#dc2626;border-color:#fecaca}
+.btna{background:#f0fdf4;color:#16a34a;border-color:#86efac}
+.btnsm{padding:4px 9px;font-size:10px}
+.fg{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.fg label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{padding:6px 8px;background:#f8f9fb;border:0.5px solid #e2e8f0;border-radius:5px;color:#0f172a;font-family:inherit;font-size:11px;outline:none}
+.fg textarea{resize:vertical;min-height:55px}
+.fgr{display:flex;gap:8px}.fgr .fg{flex:1}
+.es{color:#94a3b8;font-size:11px;padding:14px 0;text-align:center}
+.mo{position:absolute;inset:0;background:#00000045;z-index:50;display:flex;align-items:center;justify-content:center;border-radius:12px}
+.md{background:#fff;border:0.5px solid #e2e8f0;border-radius:12px;padding:20px;width:480px;max-height:540px;overflow-y:auto;box-shadow:0 20px 50px #0000001f}
+.mt{font-family:Georgia,serif;font-size:16px;color:#0f172a;margin-bottom:14px;font-weight:700}
+.stage-group{margin-bottom:20px}
+.stage-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0}
+.stage-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+.stage-cnt{font-size:10px;color:#94a3b8}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px}
+.pc{padding:10px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;cursor:pointer;transition:all .12s;box-shadow:0 1px 2px #0000000a}
+.pc:hover{border-color:#cbd5e0;transform:translateY(-1px);box-shadow:0 4px 10px #0000001a}
+.pn{font-size:11px;color:#0f172a;font-weight:700;margin-bottom:3px}
+.pd{font-size:10px;color:#94a3b8;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf{display:flex;justify-content:space-between;align-items:center}
+.pt{font-size:9px;color:#cbd5e0}
+.ai-view{max-width:760px}
+.ai-title{font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700}
+.ai-desc{font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.6}
+.ai-input{width:100%;padding:10px 12px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:11px;color:#0f172a;resize:vertical;min-height:100px;outline:none;margin-bottom:10px}
+.ai-input:focus{border-color:#93c5fd}
+.ai-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.ai-out{background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:16px;font-size:12px;color:#475569;line-height:1.9;white-space:pre-wrap;box-shadow:0 1px 3px #0000000a;min-height:80px}
+.ai-load{color:#94a3b8;font-size:11px;padding:10px 0;animation:fd 1s infinite alternate}
+@keyframes fd{from{opacity:.4}to{opacity:1}}
+.slog{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.le{padding:8px 11px;border-radius:5px;border-left:3px solid;font-size:11px;line-height:1.55}
+.adp-verdict{display:inline-block;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.adp-ok{background:#f0fdf4;color:#15803d;border:0.5px solid #86efac}
+.adp-skip{background:#f8f9fb;color:#64748b;border:0.5px solid #e2e8f0}
+.adp-section{margin-bottom:10px}
+.adp-label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.adp-val{font-size:11.5px;color:#0f172a;line-height:1.6;background:#fff;border:0.5px solid #e2e8f0;border-radius:6px;padding:8px 10px}
+.diag{background:#0f172a;color:#86efac;border-radius:8px;padding:14px;font-size:11px;font-family:monospace;white-space:pre-wrap;margin-top:10px;max-height:300px;overflow-y:auto}
+.fab-row{display:flex;justify-content:space-between;padding:8px 16px;background:#fff;border-top:0.5px solid #e2e8f0;flex-shrink:0;align-items:center}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid #ddd;border-top-color:#7c3aed;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="logo">IME<em>·</em>TRACKER <span style="font-family:inherit;font-size:10px;color:#94a3b8;font-weight:400">v16</span></div>
+    <div class="nav">
+      <button class="nb on" onclick="sv('pipeline')">Pipeline</button>
+      <button class="nb" onclick="sv('evidence')">Evidence</button>
+      <button class="nb" onclick="sv('scan')">Scan</button>
+      <button class="nb" onclick="sv('briefing')">Briefing</button>
+      <button class="nb" onclick="sv('adp')">ADP / COI</button>
+    </div>
+    <div class="sp"></div>
+    <span class="badge opus" style="margin-right:4px">Opus 4.8 ✦ Briefing+ADP</span>
+    <span class="badge sonnet">Sonnet 4.6 ✦ Scan</span>
+    <span class="kc" id="kc" style="margin-left:8px" onclick="resetToken()"></span>
+  </div>
+  <div class="abar" id="abar">
+    <div class="pulse"></div><strong>ACT NOW:</strong>
+    <span id="abar-names"></span>
+  </div>
+  <div class="body">
+    <div class="sb">
+      <div class="fi">
+        <input class="si" id="srch" placeholder="Suche Firma, Drug, Notizen…" oninput="draw()"/>
+        <select class="si" id="fs" onchange="draw()">
+          <option value="All">Alle Stages</option>
+          <option value="act_now">Act Now</option>
+          <option value="hot">Hot</option>
+          <option value="warm">Warm</option>
+          <option value="watch">Watch</option>
+        </select>
+      </div>
+      <div class="alist" id="alist"></div>
+    </div>
+    <div class="main" id="main" style="position:relative"></div>
+  </div>
+  <div class="fab-row">
+    <button class="btn btnsm" onclick="diagnose()" style="color:#64748b">🔍 Diagnose</button>
+    <button class="btn btnsm btnp" onclick="loadFromAirtable()">↻ Reload</button>
+  </div>
+</div>
+
+<script>
+// ═══ MODELS ═══
+const OPUS   = 'claude-opus-4-8';
+const SONNET = 'claude-sonnet-4-6';
+
+// ═══ AIRTABLE — OB_IME ═══
+const BASE    = 'appACnCQAtFmXXSzn';
+const T_FIRMA = 'tbl0dO2h94ApvdNEo';  // 🏢 Firmen
+const T_AKTIV = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
+
+// Field names (used directly — no IDs needed)
+const FIRMA_FIELDS = ['Firma','Therapiegebiet(e)','Produkte / Brands','IME-Fit','Status Beziehung','Notizen'];
+const AKTIV_FIELDS = ['Aktivität','Datum','Auslöser (PR / Symposium)','Status','Ergebnis / Notizen'];
+
+// ═══ EVIDENCE TYPE + SIGNAL STYLES ═══
+const EV_TYPE_CSS={'Phase 3':'background:#fef2f2;color:#c53030;border:0.5px solid #fecaca','Phase 2':'background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa','Regulatory':'background:#ecfdf5;color:#065f46;border:0.5px solid #6ee7b7','Wiley Pub':'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac','Congress':'background:#eff6ff;color:#1d4ed8;border:0.5px solid #bfdbfe','RWE':'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff','IIT':'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a'};
+const SIG_CSS={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+function TB(type){const c=EV_TYPE_CSS[type]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0';return`<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;${c}">${esc(type)}</span>`;}
+function SB(sig){const c=SIG_CSS[sig]||'background:#f1f5f9;color:#64748b';return`<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${c}">${esc(sig)}</span>`;}
+
+// ═══ STAGES ═══
+const STAGES = [
+  {id:'act_now', label:'Act Now', color:'#dc2626'},
+  {id:'hot',     label:'Hot',     color:'#ea580c'},
+  {id:'warm',    label:'Warm',    color:'#d97706'},
+  {id:'active',  label:'Active',  color:'#2563eb'},
+  {id:'watch',   label:'Watch',   color:'#94a3b8'},
+];
+const SM = Object.fromEntries(STAGES.map(s=>[s.id,s]));
+const SO = {act_now:4,hot:3,warm:2,active:1,watch:0};
+
+function stageFrom(imeFit, statusBez) {
+  const f = (imeFit||'').replace(/[^a-zA-ZäöüÄÖÜß ]/g,'').toLowerCase().trim();
+  const s = (statusBez||'').toLowerCase().trim();
+  // Exact values from OB_IME Airtable base
+  // IME-Fit: "🟢 Hoch" | "🟡 Mittel" | "⚪ Beobachten"
+  // Status Beziehung: "Neu — kein Kontakt" | "Erstkontakt gesendet" | "In Gespräch" | "Proposal eingereicht" | "Aktiver Partner"
+  if (s === 'aktiver partner' || s === 'proposal eingereicht')  return 'active';
+  if (f.includes('hoch'))                                        return 'hot';
+  if (f.includes('mittel') || s === 'in gespräch')              return 'warm';
+  return 'watch';
+}
+
+// ═══ TOKEN ═══
+function getToken()  { return localStorage.getItem('at_key_ime')||''; }
+function saveToken(t){ localStorage.setItem('at_key_ime', t); }
+function resetToken(){ localStorage.removeItem('at_key_ime'); location.reload(); }
+
+// ═══ AIRTABLE FETCH — uses field NAMES, not IDs ═══
+async function atFetch(tableId, fieldNames) {
+  const token = getToken();
+  if (!token) throw new Error('NO_TOKEN');
+
+  // Build URL with explicit field names
+  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
+  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}`;
+
+  let r;
+  try { r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } }); }
+  catch(e) { throw new Error('NETWORK_ERROR: ' + e.message); }
+
+  if (r.status === 401) throw new Error('TOKEN_INVALID');
+  if (r.status === 403) throw new Error('TOKEN_NO_ACCESS — Token hat keinen Zugriff auf OB_IME. Gehe zu airtable.com/create/tokens und füge OB_IME unter Access hinzu.');
+  if (!r.ok) { const t = await r.text(); throw new Error('HTTP ' + r.status + ': ' + t.slice(0,200)); }
+
+  const d = await r.json();
+  if (d.error) throw new Error('Airtable error: ' + JSON.stringify(d.error));
+
+  let records = d.records || [];
+  if (d.offset) {
+    // paginate
+    const more = await atFetchPage(tableId, fieldNames, d.offset);
+    records = [...records, ...more];
+  }
+  return records;
+}
+
+async function atFetchPage(tableId, fieldNames, offset) {
+  const token = getToken();
+  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
+  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}&offset=${offset}`;
+  const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+  const d = await r.json();
+  let records = d.records || [];
+  if (d.offset) {
+    const more = await atFetchPage(tableId, fieldNames, d.offset);
+    records = [...records, ...more];
+  }
+  return records;
+}
+
+// Get field value by name
+function fn(rec, name) {
+  if (!rec || !rec.fields) return '';
+  const v = rec.fields[name];
+  if (v === undefined || v === null || v === '') return '';
+  if (typeof v === 'object' && !Array.isArray(v) && v.name) return v.name;
+  if (Array.isArray(v)) return v.map(x => x && x.name ? x.name : String(x)).filter(Boolean).join(', ');
+  return String(v);
+}
+
+// ═══ STATE ═══
+let accs = [], scanLog = [], selId = null, view = 'pipeline';
+let briefTxt = '', briefLoad = false;
+let adpInput = '', adpResult = null, adpLoad = false;
+let scanInput = '', scanResult = '', scanLoad = false;
+
+// ═══ LOAD FROM AIRTABLE ═══
+async function loadFromAirtable() {
+  if (!getToken()) {
+    const t = prompt('Airtable Personal Access Token eingeben (wird lokal gespeichert):');
+    if (t && t.trim().startsWith('pat')) {
+      saveToken(t.trim());
+    } else {
+      setKc('Kein Token — Pipeline leer');
+      return;
+    }
+  }
+
+  setKc('⟳ Lade OB_IME…');
+  try {
+    const [firmenRecs, aktivRecs] = await Promise.all([
+      atFetch(T_FIRMA, FIRMA_FIELDS),
+      atFetch(T_AKTIV, AKTIV_FIELDS),
+    ]);
+
+    accs = firmenRecs.map(r => ({
+      id:    r.id,
+      name:  fn(r, 'Firma') || '(kein Name)',
+      ta:    fn(r, 'Therapiegebiet(e)') || 'Other',
+      drug:  fn(r, 'Produkte / Brands') || '',
+      imeFit:fn(r, 'IME-Fit') || '',
+      status:fn(r, 'Status Beziehung') || '',
+      notes: fn(r, 'Notizen') || '',
+      stage: stageFrom(fn(r,'IME-Fit'), fn(r,'Status Beziehung')),
+      badge: fn(r,'IME-Fit') ? fn(r,'IME-Fit') : '',
+    })).sort((a,b) => (SO[b.stage]||0) - (SO[a.stage]||0));
+
+    scanLog = aktivRecs.map(r => ({
+      title:   fn(r, 'Aktivität'),
+      datum:   fn(r, 'Datum'),
+      trigger: fn(r, 'Auslöser (PR / Symposium)'),
+      status:  fn(r, 'Status'),
+      result:  fn(r, 'Ergebnis / Notizen'),
+    })).sort((a,b) => new Date(b.datum||0) - new Date(a.datum||0));
+
+    const ts = new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+    setKc(`${accs.length} Firmen · ${aktivRecs.length} Aktivitäten · ${ts}`);
+    draw();
+
+  } catch(e) {
+    setKc('⚠ ' + e.message);
+    console.error('Airtable error:', e);
+  }
+}
+
+function setKc(txt) { document.getElementById('kc').textContent = txt; }
+
+// ═══ CLAUDE API ═══
+async function callClaude(model, system, user, maxTokens=1100) {
+  const body = { model, max_tokens: maxTokens, messages: [{role:'user', content:user}] };
+  if (system) body.system = system;
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const d = await r.json();
+  return (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('') || '';
+}
+
+// ═══ HELPERS ═══
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function TODAY(){ return new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}); }
+
+function gf() {
+  const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
+  const s = (document.getElementById('fs')||{value:'All'}).value;
+  return accs.filter(a => {
+    const mq = !q || [a.name,a.drug,a.ta,a.notes,a.imeFit].some(f=>f.toLowerCase().includes(q));
+    return mq && (s==='All' || a.stage===s);
+  });
+}
+
+// ═══ DRAW ═══
+function draw() {
+  const an = accs.filter(a=>a.stage==='act_now');
+  const bar = document.getElementById('abar');
+  const nm  = document.getElementById('abar-names');
+  if (an.length) {
+    bar.classList.add('on');
+    nm.innerHTML = an.map(a=>`<span class="alink" onclick="sel('${a.id}')">${esc(a.name)}</span>`).join('');
+  } else {
+    bar.classList.remove('on');
+  }
+
+  const fa = gf();
+  document.getElementById('alist').innerHTML = fa.length
+    ? fa.map(a => {
+        const st = SM[a.stage] || STAGES[4];
+        return `<div class="ac${selId===a.id?' sel':''}" onclick="sel('${a.id}')">
+          <div class="acr"><div class="dot" style="background:${st.color}"></div>
+          <div class="an">${esc(a.name)}</div></div>
+          <div class="ata">${esc(a.ta)}${a.drug?' · '+esc(a.drug.slice(0,18)):''}</div>
+          ${a.badge?`<div class="sbg">⚡ ${esc(a.badge.slice(0,55))}</div>`:''}
+        </div>`;
+      }).join('')
+    : `<div class="es">${accs.length===0?'Keine Daten — Token prüfen':'Keine Treffer'}</div>`;
+
+  drawMain();
+}
+
+function drawMain() {
+  const m = document.getElementById('main');
+  if (view==='pipeline') {
+    if (selId) { const a=accs.find(x=>x.id===selId); if(a){m.innerHTML=renderDetail(a);return;} }
+    m.innerHTML = renderPL();
+  } else if (view==='evidence') { m.innerHTML = renderEvidence(); }
+  else if (view==='scan')     { m.innerHTML = renderScan(); }
+  else if (view==='briefing')   { m.innerHTML = renderBriefing(); }
+  else if (view==='adp')        { m.innerHTML = renderADP(); }
+}
+
+// ═══ PIPELINE ═══
+function renderPL() {
+  const fa = gf();
+  if (!fa.length) return `<div class="es">Keine Daten. <button class="btn btnsm btnp" onclick="loadFromAirtable()" style="margin-left:8px">↻ Reload</button></div>`;
+  let h = '';
+  for (const st of STAGES) {
+    const sa = fa.filter(a=>a.stage===st.id);
+    if (!sa.length) continue;
+    h += `<div class="stage-group" style="margin-bottom:20px">
+      <div class="stage-hdr" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">
+        <div class="dot" style="background:${st.color};width:8px;height:8px;border-radius:50%"></div>
+        <span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:${st.color}">${st.label}</span>
+        <span style="font-size:10px;color:#94a3b8">${sa.length} Firmen</span>
+      </div>
+      <div class="pg">${sa.map(a=>`<div class="pc" onclick="sel('${a.id}')">
+        <div class="pn">${esc(a.name)}</div>
+        <div class="pd">${esc((a.drug||a.ta).slice(0,28))}</div>
+        <div class="pf"><span style="font-size:9px;color:#cbd5e0">${esc(a.ta.slice(0,20))}</span>${a.badge?`<span style="color:#d97706;font-size:10px">⚡</span>`:''}</div>
+      </div>`).join('')}</div>
+    </div>`;
+  }
+  return h;
+}
+
+function renderDetail(a) {
+  const st = SM[a.stage] || STAGES[4];
+  return `<div style="max-width:680px">
+    <div class="d-name">${esc(a.name)}</div>
+    <div class="chips">
+      <span class="chip" style="color:${st.color};border-color:${st.color}40;background:${st.color}12">${st.label}</span>
+      <span class="chip" style="color:#64748b;border-color:#e2e8f0;background:#f8f9fb">${esc(a.ta)}</span>
+    </div>
+    <div class="dg">
+      <div class="df"><div class="dl">Produkte / Brands</div><div class="dv hi">${esc(a.drug)||'—'}</div></div>
+      <div class="df"><div class="dl">IME-Fit</div><div class="dv hi" style="color:${st.color}">${esc(a.imeFit)||'—'}</div></div>
+      <div class="df"><div class="dl">Status Beziehung</div><div class="dv hi">${esc(a.status)||'—'}</div></div>
+    </div>
+    ${a.notes?`<div class="nb2"><div class="dl">Notizen</div><div class="dv" style="margin-top:4px">${esc(a.notes)}</div></div>`:''}
+    ${(()=>{
+      const nm = a.name.toLowerCase().split(' ')[0];
+      const evItems = EV_ITEMS ? EV_ITEMS.filter(e => e.firma.toLowerCase().includes(nm) || nm.includes(e.firma.toLowerCase().split(' ')[0])) : [];
+      if(!evItems.length) return '';
+      const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8'};
+      const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+      return '<div style="background:#faf5ff;border:0.5px solid #e9d5ff;border-radius:8px;padding:10px;margin-bottom:10px"><div class=\"dl\" style=\"margin-bottom:8px\">🔬 Evidence Generation (' + evItems.length + ')</div>' +
+        evItems.map(e=>'<div style=\"margin-top:8px;padding-top:8px;border-top:0.5px solid #e9d5ff\">' +
+          '<div style=\"display:flex;gap:6px;align-items:center;margin-bottom:4px\">' +
+          '<span style=\"display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;' + (ETC[e.typ]||'background:#f1f5f9;color:#64748b') + '\">' + esc(e.typ) + '</span>' +
+          '<span style=\"display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;' + (ESC2[e.signal]||'') + '\">' + esc(e.signal) + '</span></div>' +
+          '<div style=\"font-size:11px;color:#0f172a;font-weight:600\">' + esc(e.titel) + '</div>' +
+          (e.nct ? '<div style=\"font-size:10px;color:#64748b;font-family:monospace\">' + esc(e.nct) + '</div>' : '') +
+          (e.congress ? '<div style=\"font-size:10px;color:#64748b\">📅 ' + esc(e.congress) + '</div>' : '') +
+          (e.pi ? '<div style=\"font-size:10px;color:#15803d\">👤 ' + esc(e.pi) + '</div>' : '') +
+          (e.doi ? '<div style=\"font-size:10px;color:#15803d\">📄 ' + esc(e.doi) + '</div>' : '') +
+          '<div style=\"font-size:10px;color:#475569;margin-top:2px\">' + esc(e.status) + '</div></div>'
+        ).join('') + '</div>';
+    })()}
+    <div class="ar"><button class="btn" onclick="sel(null)">← Zurück</button></div>
+  </div>`;
+}
+
+// ═══ SCAN ═══
+// ═══ EVIDENCE ═══
+const EV_ITEMS=[
+  {firma:"Takeda",drug:"Zasocitinib (TAK-279)",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE Atlas — H2H vs deucravacitinib",status:"Topline Jun 11 2026 — SUPERIORITY",congress:"Upcoming congresses 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — expected",nct:"NCT06973291"},
+  {firma:"Takeda",drug:"Zasocitinib",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE-PsO-3001/3002 — vs placebo + apremilast",status:"Published AAD Mar 28 2026",congress:"AAD 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — imminent",nct:"NCT06088043"},
+  {firma:"Janssen",drug:"Talvey + Darzalex Faspro",typ:"Phase 3",signal:"Act Now",titel:"MonumenTAL-3 — GPRC5D bispecific RRMM",status:"NEJM published Jun 13 2026 — sBLA+EMA filed",congress:"EHA 2026 Stockholm",pi:"Roberto Mina / Maria-Victoria Mateos",doi:"NEJM DOI:10.1056/NEJMoa2604657",nct:"NCT05455320"},
+  {firma:"Janssen",drug:"Imaavy (nipocalimab)",typ:"Phase 3",signal:"Act Now",titel:"ENERGY Phase II/III — wAIHA",status:"Phase II/III positive — FDA Priority Review granted",congress:"EHA 2026 Stockholm",pi:"Bruno Fattizzo, Universita di Milano",doi:"",nct:"NCT04119050"},
+  {firma:"Janssen",drug:"Icotrokinra",typ:"Regulatory",signal:"Act Now",titel:"EMA MAA filed — first oral IL-23R blocker",status:"EMA MAA filed — EU approval H2 2026",congress:"EADV 2026",pi:"Ya-Wen (Betty) Yang",doi:"JEADV DOI:10.1111/jdv.70471",nct:""},
+  {firma:"Janssen",drug:"Erleada (apalutamide)",typ:"Phase 3",signal:"Act Now",titel:"PROTEUS — perioperative high-risk PCa",status:"Published NEJM Jun 3 2026",congress:"ASCO 2026 LBA1",pi:"Mary-Ellen Taplin (Dana-Farber)",doi:"NEJM DOI:10.1056/NEJMoa2603878",nct:"NCT03767244"},
+  {firma:"AstraZeneca",drug:"Camizestrant",typ:"Regulatory",signal:"Act Now",titel:"CHMP positive — ER+/HER2- advanced BC (ESR1+)",status:"CHMP positive May 26 2026 — EC approval imminent",congress:"ASCO 2026",pi:"Francois-Clement Bidard",doi:"",nct:"SERENA-6"},
+  {firma:"AstraZeneca",drug:"Truqap + Abiraterone",typ:"Regulatory",signal:"Hot",titel:"FDA approved — PTEN-deficient mHSPC (CAPItello-281)",status:"FDA approved Jun 15 2026 — EU application running",congress:"ESMO 2025",pi:"Karim Fizazi",doi:"Annals of Oncology",nct:"CAPItello-281"},
+  {firma:"AstraZeneca",drug:"Ultomiris (ravulizumab)",typ:"Regulatory",signal:"Hot",titel:"FDA Priority Review — IgAN (I CAN Phase III)",status:"FDA Priority Review Jun 15 2026 — PDUFA Q4 2026",congress:"ERA 2026",pi:"",doi:"",nct:"ALXN1210-IgAN-320"},
+  {firma:"Novartis",drug:"Cosentyx (secukinumab)",typ:"Phase 3",signal:"Act Now",titel:"REPLENISH — Polymyalgia Rheumatica",status:"Published NEJM Jun 3 2026",congress:"EULAR 2026",pi:"Prof. John Stone (Harvard/MGH)",doi:"",nct:"NCT05767034"},
+  {firma:"Novartis",drug:"Vanrafia (atrasentan)",typ:"Phase 3",signal:"Act Now",titel:"ALIGN — IgAN final 2.5yr data",status:"Published Lancet Jun 4 2026",congress:"ERA Jun 2026",pi:"Prof. Hiddo Heerspink",doi:"",nct:"NCT04573478"},
+  {firma:"Novartis",drug:"Rhapsido (remibrutinib)",typ:"Phase 3",signal:"Hot",titel:"RemIND Phase III — CIndU (3 subtypes) EAACI Jun 15",status:"Phase III positive — sNDA FDA filed",congress:"EAACI 2026",pi:"Prof. Dr. Martin Metz, Charite Berlin",doi:"JEADV / JDDG",nct:"NCT05976243"},
+  {firma:"Novartis",drug:"Fabhalta (iptacopan)",typ:"Phase 3",signal:"Hot",titel:"APPLAUSE-IgAN Phase III eGFR positive + FDA priority review",status:"Phase III positive — FDA priority review",congress:"ERA / ASN 2026",pi:"",doi:"",nct:""},
+  {firma:"UCB",drug:"Dapirolizumab pegol (DZP)",typ:"Phase 3",signal:"Hot",titel:"PHOENYCS GO — SLE Phase III",status:"Published Lancet May 29 2026",congress:"EULAR 2026",pi:"Megan Clowse (Duke)",doi:"",nct:"NCT04294667"},
+  {firma:"AbbVie",drug:"Skyrizi (risankizumab)",typ:"Regulatory",signal:"Hot",titel:"EC approved — paediatric plaque psoriasis 6+ years",status:"EC approved Jun 23 2026",congress:"EADV 2026",pi:"Prof. Dr. Nina Magnolo, Univ.klinikum Muenster",doi:"JEADV / JDDG",nct:"NCT04435600"},
+  {firma:"Incyte",drug:"Monjuvi/Minjuvi + Lenalidomid + R-CHOP",typ:"Phase 3",signal:"Warm",titel:"frontMIND Phase III — 1L DLBCL/HGBL (EHA Plenary + Lancet)",status:"Phase III positive — EHA Plenary + Lancet Jun 13 2026",congress:"EHA 2026 Stockholm Plenary",pi:"Dr. Georg Lenz, Univ.klinikum Muenster",doi:"The Lancet Jun 2026",nct:"NCT04824092"},
+  {firma:"Boehringer Ingelheim",drug:"Nerandomilast (Jascayd)",typ:"Regulatory",signal:"Warm",titel:"FIBRONEER Survival Modeling — +5.4yr IPF, 59% Mortalitaetsreduktion",status:"ATS + EULAR 2026 praesentiert — CHMP positiv Mai 2026",congress:"ATS / EULAR 2026",pi:"Prof. Toby Maher (USC Los Angeles)",doi:"",nct:""},
+  {firma:"Roche/Genentech",drug:"Lunsumio VELO + Polivy",typ:"Regulatory",signal:"Hot",titel:"sBLA FDA akzeptiert — R/R LBCL (SUNMO Phase III)",status:"sBLA FDA akzeptiert Jun 18 2026 — PDUFA Feb 9 2027",congress:"ASCO / EHA 2026",pi:"",doi:"",nct:"NCT05171647"},
+  {firma:"Merck/MSD",drug:"Tulisokibart (MK-7240)",typ:"Phase 3",signal:"Warm",titel:"ATLAS-UC Phase III positiv — erster Anti-TL1A Biologic",status:"Phase III ATLAS-UC positiv Jun 22 2026",congress:"Upcoming congress 2026",pi:"",doi:"",nct:"NCT06052059"},
+];
+let evFilter='All';
+const EV_TYPES_LIST=['All','Phase 3','Phase 2','Regulatory','Wiley Pub','Congress'];
+
+function renderEvidence(){
+  const q=(document.getElementById('srch')||{value:''}).value.toLowerCase();
+  let filtered=evFilter==='All'?EV_ITEMS:EV_ITEMS.filter(e=>e.typ===evFilter);
+  if(q) filtered=filtered.filter(e=>[e.firma,e.drug,e.titel,e.pi,e.status].some(f=>(f||'').toLowerCase().includes(q)));
+  filtered=[...filtered].sort((a,b)=>{const so={'Act Now':0,'Hot':1,'Warm':2,'Watch':3};return(so[a.signal]??4)-(so[b.signal]??4);});
+  const fBtns=EV_TYPES_LIST.map(f=>`<span onclick="setEvFilter('${f}')" style="padding:4px 10px;border-radius:12px;font-size:10px;cursor:pointer;border:0.5px solid ${evFilter===f?'#bfdbfe':'#e2e8f0'};background:${evFilter===f?'#eff6ff':'#f8f9fb'};color:${evFilter===f?'#2563eb':'#64748b'}">${f} (${f==='All'?EV_ITEMS.length:EV_ITEMS.filter(e=>e.typ===f).length})</span>`).join('');
+  const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8','RWE':'background:#faf5ff;color:#7c3aed','IIT':'background:#fffbeb;color:#d97706'};
+  const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+  const rows=filtered.map(e=>`<tr>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:700;color:#0f172a">${esc(e.firma)}</div><div style="font-size:10px;color:#94a3b8">${esc(e.drug)}</div></td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;${ETC[e.typ]||''}">${esc(e.typ)}</span></td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:600;color:#0f172a;margin-bottom:2px">${esc(e.titel)}</div>${e.nct?`<div style="font-size:10px;color:#64748b;font-family:monospace">${esc(e.nct)}</div>`:''}${e.doi?`<div style="font-size:10px;color:#15803d">📄 ${esc(e.doi)}</div>`:''}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="color:#475569">${esc(e.status)}</div>${e.congress?`<div style="font-size:10px;color:#94a3b8">📅 ${esc(e.congress)}</div>`:''}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top">${e.pi?`<div>👤 ${esc(e.pi)}</div>`:'<span style="color:#94a3b8">—</span>'}</td>
+    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${ESC2[e.signal]||''}">${esc(e.signal)}</span></td>
+  </tr>`).join('');
+  return`<div style="max-width:900px">
+    <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Evidence Generation</div>
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${EV_ITEMS.length} Items · Klinische Studien, Regulatory Events, Wiley Publikationen · Jun 23 2026</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">${fBtns}</div>
+    <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px #0000000a">
+      <thead><tr style="background:#f8f9fb">
+        ${['Firma','Typ','Titel / NCT','Status / Kongress','PI / KOL','Signal'].map(h=>`<th style="padding:8px 10px;border-bottom:0.5px solid #e2e8f0;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#94a3b8;text-align:left">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+function setEvFilter(f){evFilter=f;drawMain();}
+
+function renderScan() {
+  const logHtml = scanLog.slice(0,12).map(e => {
+    const isHot = (e.status||'').toLowerCase().includes('hot') || (e.status||'').toLowerCase().includes('act');
+    return `<div class="le" style="background:${isHot?'#fef2f2':'#f0fdf4'};border-left-color:${isHot?'#ef4444':'#22c55e'};color:${isHot?'#dc2626':'#15803d'}">
+      <strong>${esc(e.title)}</strong>${e.datum?' · '+esc(e.datum):''}${e.trigger?'<br>'+esc(e.trigger.slice(0,120)):''}
+    </div>`;
+  }).join('') || `<div class="es">Noch keine Aktivitäten.</div>`;
+
+  return `<div class="ai-view">
+    <div class="ai-title">Daily Scan</div>
+    <div class="ai-desc">Feed einfügen. <span class="badge sonnet">Sonnet 4.6</span> lädt Live-Daten aus Airtable und matcht gegen dein Portfolio.</div>
+    <textarea class="ai-input" id="scan-input" placeholder="Pharmawand / Regulatory / M&A Feed hier einfügen…" oninput="scanInput=this.value">${esc(scanInput)}</textarea>
+    <div class="ai-actions">
+      <button class="btn btnp" onclick="runScan()" ${scanLoad?'disabled':''}>
+        ${scanLoad?`<span class="spin"></span>Sonnet 4.6 läuft…`:'⚡ Scan starten (Sonnet 4.6)'}
+      </button>
+      ${scanResult?`<button class="btn btnd btnsm" onclick="scanResult='';drawMain()">Clear</button>`:''}
+    </div>
+    ${scanLoad?`<div class="ai-load">⟳ Lade Airtable-Daten, dann Sonnet 4.6…</div>`:''}
+    ${scanResult?`<div class="ai-out">${esc(scanResult)}</div>`:''}
+    <div style="margin-top:16px;font-weight:700;font-family:Georgia,serif;font-size:15px;margin-bottom:8px">Aktivitäten-Log</div>
+    <div class="slog">${logHtml}</div>
+  </div>`;
+}
+
+async function runScan() {
+  if (!scanInput.trim()) return;
+  scanLoad = true; drawMain();
+  try {
+    const portfolio = accs.map(a=>`${a.name} (${a.ta}${a.drug?' · '+a.drug.slice(0,30):''})`).join('\n');
+    const sys = `Du bist IME-Intelligence-Analyst für Osman Bal, Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
+Portfolio (${accs.length} Firmen aus Airtable OB_IME):
+${portfolio}
+Extrahiere IME-relevante Signale aus dem Feed. Klassifiziere: ACT NOW / HOT / WARM / WATCH / SKIP. Für jeden Treffer: Firma, Drug, Signalstufe, IME-Winkel, nächste Aktion. Klar und direkt, kein Fülltext.`;
+    scanResult = await callClaude(SONNET, sys, `Feed (${TODAY()}):\n\n${scanInput}`, 1000);
+  } catch(e) { scanResult = 'Fehler: ' + e.message; }
+  scanLoad = false; drawMain();
+}
+
+// ═══ BRIEFING ═══
+function renderBriefing() {
+  return `<div class="ai-view">
+    <div class="ai-title">Daily Briefing</div>
+    <div class="ai-desc">Strategische Analyse deines Portfolios. <span class="badge opus">Opus 4.8</span> liest Live-Daten aus Airtable und generiert Prioritäten für heute.</div>
+    <div class="ai-actions">
+      <button class="btn btnv" onclick="genBriefing()" ${briefLoad?'disabled':''}>
+        ${briefLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ Briefing generieren (Opus 4.8)'}
+      </button>
+      ${briefTxt?`<button class="btn btnd btnsm" onclick="briefTxt='';drawMain()">Clear</button>`:''}
+    </div>
+    ${briefLoad?`<div class="ai-load">⟳ Opus 4.8 analysiert dein komplettes Portfolio…</div>`:`<div class="ai-out">${briefTxt||'Klick zum Generieren. Opus 4.8 lädt automatisch die aktuellen Daten aus Airtable.'}</div>`}
+  </div>`;
+}
+
+async function genBriefing() {
+  briefLoad = true; briefTxt = ''; drawMain();
+  try {
+    const an   = accs.filter(a=>a.stage==='act_now');
+    const hot  = accs.filter(a=>a.stage==='hot');
+    const warm = accs.filter(a=>a.stage==='warm');
+    const sys = `Du bist der strategische IME-Berater von Osman Bal, Senior Account Manager bei Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
+Constraints:
+- Grants NGC54513/NGC54512 (Novartis) ABGELEHNT — nie erwähnen
+- Josefin Snellman (Novartis) — nicht erneut kontaktieren (5 unbeantwortete Kontakte)
+- Gilead/Roche Onkologie → Kurt (nicht Osman)
+Gib ein präzises, actionable Briefing. Keine Füllsätze.`;
+    const user = `LIVE PIPELINE aus Airtable OB_IME — ${TODAY()}
+
+ACT NOW (${an.length}): ${an.map(a=>`${a.name} | ${a.drug||a.ta} | IME-Fit: ${a.imeFit} | ${a.notes.slice(0,120)}`).join('\n')||'Keine'}
+
+HOT (${hot.length}): ${hot.map(a=>`${a.name} | ${a.imeFit||a.status}`).join(', ')||'Keine'}
+
+WARM (${warm.length}): ${warm.map(a=>a.name).join(', ')||'Keine'}
+
+Letzte Aktivitäten: ${scanLog.slice(0,5).map(e=>e.title+' ('+e.datum+')').join('; ')||'Keine'}
+
+Liefere:
+1. PIPELINE STATUS (2-3 Sätze)
+2. TOP 3 AKTIONEN HEUTE (konkrete Person, Hook, was senden)
+3. KURT FLAG (was geht zu Kurt heute)
+4. STRATEGISCHER INSIGHT (1 Absatz)
+5. NÄCHSTE 4 WOCHEN (bevorstehende Trigger)`;
+    briefTxt = await callClaude(OPUS, sys, user, 1000);
+  } catch(e) { briefTxt = 'Fehler: ' + e.message; }
+  briefLoad = false; drawMain();
+}
+
+// ═══ ADP / COI ═══
+function renderADP() {
+  return `<div class="ai-view">
+    <div class="ai-title">ADP / COI Analyse</div>
+    <div class="ai-desc">Artikel-Metadaten einfügen. <span class="badge opus">Opus 4.8</span> führt vollständige COI-Analyse durch.</div>
+    <textarea class="ai-input" id="adp-input" placeholder="Title: ...&#10;Journal: ...&#10;Category: Full Length / Case Report&#10;Drug: ...&#10;Account: ...&#10;Corresponding author: ...&#10;Email: ..." style="min-height:140px" oninput="adpInput=this.value">${esc(adpInput)}</textarea>
+    <div class="ai-actions">
+      <button class="btn btnv" onclick="runADP()" ${adpLoad?'disabled':''}>
+        ${adpLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ ADP/COI Analyse (Opus 4.8)'}
+      </button>
+      ${adpResult?`<button class="btn btnd btnsm" onclick="adpResult=null;drawMain()">Clear</button>`:''}
+    </div>
+    ${adpLoad?`<div class="ai-load">Opus 4.8: COI-Analyse, ORCID-Verifikation, IME-Positionierung…</div>`:''}
+    ${adpResult?renderADPResult(adpResult):''}
+  </div>`;
+}
+
+function renderADPResult(r) {
+  const isADP = r.coiResult==='ADP';
+  const fields = [
+    ['Account / Tier', r.tier],
+    ['Hook Drug', r.hookDrug],
+    ['Klinisches Problem', r.hookProblem],
+    ['Study Type', r.hookStudyType],
+    ['IME Angle', r.adpAngle],
+    ['Positioning', r.positioning],
+    ['Knowledge Gap', r.gap],
+    ['COI Begründung', r.coiReason],
+  ];
+  return `<div style="margin-top:14px">
+    <div class="adp-verdict ${isADP?'adp-ok':'adp-skip'}">${isADP?'✓ ADP — Weiterverfolgen':'✕ SKIP'}</div>
+    ${fields.map(([l,v])=>v?`<div class="adp-section"><div class="adp-label">${l}</div><div class="adp-val">${esc(String(v))}</div></div>`:'').join('')}
+    ${r.outreachTargets?.length?`<div class="adp-section"><div class="adp-label">Outreach Targets</div><div class="adp-val">${r.outreachTargets.map(t=>`• ${esc(t)}`).join('\n')}</div></div>`:''}
+    ${r.pharmaAuthors?.length?`<div class="adp-section"><div class="adp-label">Pharma Authors</div><div class="adp-val">${r.pharmaAuthors.map(a=>`• ${esc(a.name)} — ${esc(a.affiliation)}`).join('\n')}</div></div>`:''}
+  </div>`;
+}
+
+async function runADP() {
+  if (!adpInput.trim()) return;
+  adpLoad = true; adpResult = null; drawMain();
+  const sys = `Wiley IME COI-Experte. Heute: ${TODAY()}. Antworte NUR mit einem gültigen JSON-Objekt — kein Markdown, keine Backticks.
+Keys: tier, coiResult (ADP/SKIP), coiReason, hookDrug, hookProblem, hookStudyType, hookRareDisease (bool), adpAngle, positioning, outreachTargets (array), gap, pharmaAuthors (array {name,affiliation,email}), kolAuthors (array {name,affiliation,ambassadorPotential}), hcpVerification (array {name,orcidFound,orcidId,verificationStatus,verificationNote})`;
+  try {
+    const raw = await callClaude(OPUS, sys, `Analysiere diesen Artikel:\n\n${adpInput}`, 1500);
+    adpResult = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    adpResult = {coiResult:'ERROR',coiReason:'Parse-Fehler: '+e.message,tier:'—',hookDrug:'—',hookProblem:'—',hookStudyType:'—',hookRareDisease:false,adpAngle:'—',positioning:'—',outreachTargets:[],gap:'—',pharmaAuthors:[],kolAuthors:[]};
+  }
+  adpLoad = false; drawMain();
+}
+
+// ═══ DIAGNOSE ═══
+async function diagnose() {
+  const m = document.getElementById('main');
+  m.innerHTML = `<div style="max-width:700px"><div class="ai-title">🔍 Diagnose</div><div id="diag-out" class="diag">Teste Verbindung…</div></div>`;
+  const out = document.getElementById('diag-out');
+  const token = getToken();
+
+  let log = '';
+  log += `Token: ${token ? token.slice(0,20)+'…' : 'KEIN TOKEN'}\n`;
+  log += `Base: ${BASE}\n`;
+  log += `Tabelle: ${T_FIRMA}\n\n`;
+
+  if (!token) { out.textContent = log + 'FEHLER: Kein Token gespeichert.'; return; }
+
+  try {
+    log += `Sende Request zu Airtable…\n`;
+    out.textContent = log;
+    const url = `https://api.airtable.com/v0/${BASE}/${T_FIRMA}?pageSize=3&fields[]=Firma&fields[]=IME-Fit`;
+    const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+    log += `HTTP Status: ${r.status}\n`;
+
+    if (r.status === 403) {
+      log += '\n⚠ 403 FORBIDDEN\nDein Token hat KEINEN Zugriff auf die Base OB_IME.\n\nFix:\n1. Gehe zu airtable.com/create/tokens\n2. Bearbeite deinen Token\n3. Unter "Access" → füge "OB_IME" hinzu\n4. Speichere → lade Tracker neu';
+      out.textContent = log; return;
+    }
+    if (r.status === 401) {
+      log += '\n⚠ 401 UNAUTHORIZED\nToken ungültig oder abgelaufen.\nKlicke auf den Token-Text oben rechts zum Zurücksetzen.';
+      out.textContent = log; return;
+    }
+
+    const d = await r.json();
+    log += `Records erhalten: ${(d.records||[]).length}\n\n`;
+
+    if ((d.records||[]).length === 0) {
+      log += '⚠ Keine Records — Tabelle ist leer oder Token hat keine Leserechte für Felder.\n';
+    } else {
+      log += 'Erste 3 Records:\n';
+      d.records.slice(0,3).forEach((rec,i) => {
+        log += `\n[${i+1}] ID: ${rec.id}\n`;
+        log += `    Fields: ${JSON.stringify(rec.fields)}\n`;
+      });
+    }
+    out.textContent = log;
+    // Now try loading everything
+    log += '\n\nLade alle Firmen…\n';
+    out.textContent = log;
+    await loadFromAirtable();
+    log += `✓ Fertig — ${accs.length} Firmen geladen.`;
+    out.textContent = log;
+
+  } catch(e) {
+    log += `\nFEHLER: ${e.message}`;
+    out.textContent = log;
+  }
+}
+
+// ═══ NAVIGATION ═══
+function sv(v) {
+  view = v; selId = null;
+  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','scan','briefing','adp'][i]===v));
+  draw();
+}
+function sel(id) { selId=id; view='pipeline'; document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0)); draw(); }
+
+// ═══ INIT ═══
+loadFromAirtable();
+</script>
+</body>
+</html>
