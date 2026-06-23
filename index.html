@@ -446,7 +446,7 @@ function renderDetail(a) {
     })()}
     <div class="ar">
       <button class="btn" onclick="sel(null)">← Zurück</button>
-      <button class="btn btnp" onclick="contactFilter='${a.id}';sv('contacts')">👤 Kontakte dieser Firma</button>
+      <button class="btn btnp" onclick="contactFirmaFilter=a.name;sv('contacts')">👤 Kontakte dieser Firma</button>
     </div>
   </div>`;
 }
@@ -507,80 +507,136 @@ function renderEvidence(){
 }
 function setEvFilter(f){evFilter=f;drawMain();}
 
-// ═══ KONTAKTE ═══
-function renderContacts(firmaFilter) {
+// ═══ KONTAKTE DATABASE ═══
+const CONTACTS = [
+  // ── NOVARTIS ─────────────────────────────────────────────────────────
+  {id:"c01", name:"Corine Gaillez",        firma:"Novartis", rolle:"Sr GMA Secukinumab",      ta:"Dermatology / Immunology", email:"",                          status:"Contacted", signals:["Mark TeamLink"],    note:"InMail gesendet Jun 2026, Follow-up 17 Jun. Paediatric psoriasis Knowledge Hub. 5 IME-Winkel verfügbar (Cosentyx PMR, Vanrafia IgAN, Cosentyx paed HS, Rhapsido CSU, RemIND CIndU)."},
+  {id:"c02", name:"Martin Hager",          firma:"Novartis", rolle:"GMA Oncology",             ta:"Oncology",                 email:"",                          status:"Active",    signals:["Mark TeamLink"],    note:"Email open. Follow-up 16 Jun. ASCO 2026 Kisqali hook. Mark TeamLink Intro anbieten."},
+  {id:"c03", name:"Linn Southall",         firma:"Novartis", rolle:"MA Nephrology",            ta:"Nephrology",               email:"",                          status:"Contacted", signals:[],                  note:"IgAN outreach gesendet. Cross-specialty Nephrologie/Rheumatologie Framing. Wiley Nephrology journal anchor."},
+  {id:"c04", name:"Mirela Guina",          firma:"Novartis", rolle:"Medical Affairs",          ta:"Dermatology",              email:"",                          status:"Contacted", signals:[],                  note:"Nachricht gesendet 27 Mai 2026. Response prüfen Jun 16."},
+  {id:"c05", name:"Assya Achouba",         firma:"Novartis", rolle:"Medical Affairs",          ta:"Immunology",               email:"",                          status:"New",       signals:[],                  note:"⚠ Pivot von Josefin Snellman (5x keine Antwort). Josefin NICHT re-kontaktieren."},
+  {id:"c06", name:"Ivan Nikolaev",         firma:"Novartis", rolle:"Medical Affairs",          ta:"Dermatology",              email:"",                          status:"New",       signals:[],                  note:"⚠ JEADV Chronic Pruritus Supplement mit Aman Matharoo nicht zustande gekommen — NICHT erwähnen. Neuer Angle: Rhapsido CIndU RemIND Phase III."},
+  // ── TAKEDA ───────────────────────────────────────────────────────────
+  {id:"c07", name:"Taylor Spector",        firma:"Takeda",   rolle:"Global Medical Affairs Derm", ta:"Dermatology",           email:"",                          status:"Active",    signals:[],                  note:"Messaged 11 Mai, Follow-up 16 Jun. Nina Magnolo als Anker. Kennt Panagiotis Beretsos (Janssen, 6J zusammen bei Takeda)."},
+  {id:"c08", name:"Martin Kot",            firma:"Takeda",   rolle:"TYK2 Scientific Training", ta:"Dermatology",             email:"",                          status:"New",       signals:[],                  note:"TYK2/Zasocitinib Scientific Training. Interner Kontakt für LATITUDE IME."},
+  {id:"c09", name:"Michele Brunori",       firma:"Takeda",   rolle:"Medical Affairs Gastro",  ta:"Gastroenterology",         email:"",                          status:"Warm-up",   signals:[],                  note:"Warm intro via Evelina van Ree beim UCB Scoping Call 6 Jul."},
+  {id:"c10", name:"Dr. Melinda Gooderham", firma:"Takeda",   rolle:"KOL / PI LATITUDE",       ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"PI LATITUDE-PsO-3001/3002. 40 JEADV Pubs. Co-Autorin ICONIC-TOTAL (DOI:10.1111/jdv.70471). SKiN Centre Peterborough, Ontario. Kontakt via Lusha."},
+  // ── ABBVIE ───────────────────────────────────────────────────────────
+  {id:"c11", name:"Caroline Park",         firma:"AbbVie",   rolle:"Medical Affairs IBD",     ta:"Gastroenterology",         email:"caroline.park@abbvie.com",  status:"Active",    signals:[],                  note:"Email bestätigt. Opener: IBD Day Post. JCC-Hook. EC Approval Skyrizi paed Psoriasis Jun 23 — neuer Derma-Angle."},
+  {id:"c12", name:"Anne Lejeune",          firma:"AbbVie",   rolle:"Medical Affairs",         ta:"Gastroenterology",         email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ex-Takeda IBD 4 Jahre. Wahrscheinlich kennt Peyrin-Biroulet. JCC-Hook. Wiley IME Alumni Signal."},
+  {id:"c13", name:"Prof. Nina Magnolo",    firma:"AbbVie",   rolle:"KOL / Lead Investigator", ta:"Dermatology (Paediatric)", email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Lead Investigator OptIMMize-1 (Skyrizi paed Psoriasis). Universitätsklinikum Münster. Zitiert im AbbVie Pressetext Jun 23 2026. DACH-lokaler KOL-Anker."},
+  // ── JANSSEN ──────────────────────────────────────────────────────────
+  {id:"c14", name:"Panagiotis Beretsos",   firma:"Janssen",  rolle:"Head ESE GMA, Basel",     ta:"Immunology / Oncology",    email:"",                          status:"New",       signals:["Mark TeamLink"],   note:"Höchster Wert Janssen. Taylor Spector 6J bei Takeda zusammen — warm intro möglich. Mark TeamLink-Signal."},
+  {id:"c15", name:"Jessica H. Rubens",     firma:"Janssen",  rolle:"Medical Affairs",         ta:"Immunology",               email:"jessica.h.rubens@jnj.com",  status:"Active",    signals:[],                  note:"Primärer Outreach-Kontakt Janssen. EMA filing hook. 7 IME-Winkel inkl. MonumenTAL-3 NEJM + Imaavy wAIHA."},
+  {id:"c16", name:"Ya-Wen (Betty) Yang",   firma:"Janssen",  rolle:"Sr Director Global MA Immunology", ta:"Immunology / Dermatology", email:"ya-wen.yang@jnj.com (unverified)", status:"New", signals:[], note:"Co-Autorin ICONIC-TOTAL JEADV (DOI:10.1111/jdv.70471). Icotrokinra EMA MAA H2 2026 hook. Via Lusha verifizieren."},
+  // ── UCB ──────────────────────────────────────────────────────────────
+  {id:"c17", name:"Evelina van Ree",       firma:"UCB",      rolle:"Medical Affairs",         ta:"Immunology",               email:"Evelina.vanRee@ucb.com",    status:"Active",    signals:[],                  note:"Scoping Call 6 Jul bestätigt. Michele Brunori (Takeda) warm intro via diesen Call. DZP SLE Lancet + Cizutamig + Bimzelx angles."},
+  // ── ASTRAZENECA ──────────────────────────────────────────────────────
+  {id:"c18", name:"Alex Dorr",             firma:"AstraZeneca", rolle:"Medical Affairs Oncology", ta:"Oncology",             email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Camizestrant EC + Truqap FDA mHSPC + Ultomiris IgAN PDUFA Q4 2026."},
+  {id:"c19", name:"Marisol Urbieta",       firma:"AstraZeneca", rolle:"Medical Affairs",       ta:"Oncology",               email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Follow-up mit AZ Onkologie-Pipeline."},
+  {id:"c20", name:"Botond Ponner",         firma:"AstraZeneca", rolle:"Medical Affairs",       ta:"Oncology",               email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Follow-up mit AZ Onkologie-Pipeline."},
+  // ── ELI LILLY ────────────────────────────────────────────────────────
+  {id:"c21", name:"Prof. Britta Siegmund", firma:"Eli Lilly", rolle:"KOL / IBD",             ta:"Gastroenterology / IBD",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. IBD/Gastro KOL. Relevant für Lilly Omvoh + AbbVie Skyrizi IBD IME."},
+  // ── NOVO NORDISK ─────────────────────────────────────────────────────
+  {id:"c22", name:"Anders West",           firma:"Novo Nordisk", rolle:"Lead IME Grants",     ta:"Endocrinology / CV",       email:"anwc@novonordisk.com",       status:"Watch",     signals:[],                  note:"IME Grants Lead, Novo Nordisk Denmark. 2 Projekte 2025 abgelehnt (Basal Insulin). POSEIDON CV Inflammation = anderes TA/Budget. Trigger: POSEIDON Wiley Pub oder CV Approval."},
+  {id:"c23", name:"Sebastian Pieperhoff",  firma:"Novo Nordisk", rolle:"Sr Medical Advisor",  ta:"Diabetes / Endocrinology", email:"sepf@novonordisk.com",        status:"Watch",     signals:[],                  note:"Sr Medical Advisor Diabetes, Novo Nordisk Pharma GmbH Mainz. 9 Jahre Novo Nordisk. Lokaler DACH MA Kontakt."},
+  // ── AMGEN ────────────────────────────────────────────────────────────
+  {id:"c24", name:"Margreet Plantenga",    firma:"Amgen",    rolle:"Medical Affairs",         ta:"Dermatology",              email:"",                          status:"Contacted", signals:[],                  note:"Amgen Breda. Apremilast PPP Phase III JEADV Pub (DOI:10.1111/jdv.70166). DACH personnel turnover — verifizieren."},
+  // ── REGENERON / SANOFI ───────────────────────────────────────────────
+  {id:"c25", name:"Prof. Schön",           firma:"Regeneron/Sanofi", rolle:"KOL / cSCC",     ta:"Dermatology / Oncology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Göttingen, cSCC. JDDG Autor. Dupixent/Cemiplimab IME-Angle."},
+  {id:"c26", name:"Prof. Blume-Peytavi",   firma:"Pfizer",   rolle:"KOL / AA",               ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. Alopecia Areata. JDDG-Autorin. Cibinqo/Abrocitinib Pfizer hook."},
+  {id:"c27", name:"Prof. Dr. Zink",        firma:"Pfizer",   rolle:"KOL / AD",               ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"TU Munich. Atopische Dermatitis. JDDG-Autor. Cibinqo Pfizer + Omvoh Lilly hook."},
+  // ── ROCHE / GENENTECH ────────────────────────────────────────────────
+  {id:"c28", name:"Prof. Schett",          firma:"Roche/Genentech", rolle:"KOL / SLE Rheum", ta:"Rheumatology / Oncology",  email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Erlangen. SLE/Rheum. ART-Autor. Roche/AZ → Kurt."},
+  // ── GILEAD ───────────────────────────────────────────────────────────
+  {id:"c29", name:"Prof. Heiner Wedemeyer", firma:"Gilead",  rolle:"KOL / HBV Hepatology",  ta:"Hepatology",               email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"MHH Hannover. DGVS Präsident. Seladelpar/Bulevirtide Gilead → Kurt handoff."},
+  // ── LEO PHARMA ───────────────────────────────────────────────────────
+  {id:"c30", name:"Ramy Elbana",           firma:"LEO Pharma", rolle:"Medical Affairs",      ta:"Dermatology",              email:"",                          status:"New",       signals:[],                  note:"Congress contact. AD/Tralokinumab angle."},
+  // ── VIRBAC ───────────────────────────────────────────────────────────
+  {id:"c31", name:"Laure Poincelot",       firma:"Virbac",   rolle:"Medical Affairs",        ta:"Other (Vet/Derm)",         email:"",                          status:"New",       signals:[],                  note:"Congress contact. Vet/Derm crossover."},
+  // ── ALEXION/AZ ───────────────────────────────────────────────────────
+  {id:"c32", name:"Adelaide Eliopoulos",   firma:"Alexion/AZ", rolle:"Medical Affairs",      ta:"Rare Disease",             email:"",                          status:"New",       signals:[],                  note:"Congress contact. Rare Disease pipeline."},
+  // ── SANOFI ───────────────────────────────────────────────────────────
+  {id:"c33", name:"Marisa Muninger",       firma:"Sanofi",   rolle:"Medical Affairs",        ta:"Immunology",               email:"",                          status:"New",       signals:[],                  note:"Congress contact. Dupixent/Sarclisa angle."},
+  // ── KOL NETWORK ──────────────────────────────────────────────────────
+  {id:"c34", name:"Prof. Finckh",          firma:"(KOL — AbbVie/Lilly)", rolle:"KOL / RA JAK", ta:"Rheumatology",          email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Geneva. RA/JAK. ART Autor. AbbVie/Lilly IME hook."},
+  {id:"c35", name:"Prof. Lauper",          firma:"(KOL — AbbVie/Lilly)", rolle:"KOL / RA",    ta:"Rheumatology",            email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Geneva. RA/JAK. ART Autor. AbbVie/Lilly IME hook."},
+  {id:"c36", name:"Prof. Poddubnyy",       firma:"(KOL — Novartis/UCB)", rolle:"KOL / axSpA", ta:"Rheumatology",            email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. axSpA/MRI. ART Autor. Novartis/UCB Cosentyx/Bimzelx hook."},
+  {id:"c37", name:"Prof. Diekhoff",        firma:"(KOL — Novartis/UCB)", rolle:"KOL / axSpA MRI", ta:"Rheumatology",        email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. axSpA/MRI. ART Autor. Novartis/UCB hook."},
+  {id:"c38", name:"Prof. Hassel",          firma:"(KOL — Regeneron)", rolle:"KOL / cSCC",    ta:"Dermatology / Oncology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Heidelberg. cSCC. IJD/JDDG Autor. Regeneron/Sanofi Cemiplimab hook."},
+  {id:"c39", name:"Prof. Nikolaus Marx",   firma:"(KOL — Novo Nordisk)", rolle:"KOL / CV Inflammation", ta:"Cardiology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Uni Hospital Aachen. CV Inflammation/Cardio-Metabolic. POSEIDON study. Novo Nordisk hook."},
+  {id:"c40", name:"Laurent Peyrin-Biroulet", firma:"(KOL — Takeda/AbbVie)", rolle:"KOL / JCC Editor-in-Chief", ta:"Gastroenterology / IBD", email:"",        status:"New",       signals:["KOL/MA Access"],   note:"Nancy, France. IBD/Crohn's KOL. Editor-in-Chief JCC (Wiley). Takeda IBD IME + AbbVie hook."},
+  {id:"c41", name:"Prof. Dr. Martin Metz", firma:"(KOL — Novartis)", rolle:"KOL / CIndU",    ta:"Dermatology / Immunology", email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. CIndU. RemIND Phase III PI. Novartis Rhapsido hook. DACH-lokal."},
+  {id:"c42", name:"Dr. Georg Lenz",        firma:"(KOL — Incyte)",  rolle:"KOL / DLBCL",    ta:"Oncology / Haematology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Universitätsklinikum Münster. frontMIND Phase III PI. Incyte Monjuvi hook. DACH-lokal."},
+  // ── IME NETWORK SIGNALS ──────────────────────────────────────────────
+  {id:"c43", name:"Mark Gmelig Meyling",   firma:"(Wiley IME)", rolle:"Manager / TeamLink",  ta:"All TAs",                  email:"",                          status:"Active",    signals:["Mark TeamLink"],   note:"Manager Osman @ Wiley. Stärkster Intro-Signal. TeamLink Verbindung zu: Corine Gaillez, Martin Hager, Panagiotis Beretsos."},
+  {id:"c44", name:"Saulo Prado",           firma:"(IQVIA / Wiley Alumni)", rolle:"Wiley IME Alumni", ta:"All TAs",           email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ehemaliger Wiley IME Kollege, jetzt IQVIA. IME-Ecosystem-aware. Kontakt ist mit IME-Prozessen vertraut."},
+  {id:"c45", name:"Martin Steiniche Nielsen", firma:"(Wiley Alumni)", rolle:"Wiley IME Alumni", ta:"All TAs",               email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ehemaliger Wiley IME Kollege. IME-Ecosystem-aware."},
+  {id:"c46", name:"Felix David",           firma:"(Medscape)",  rolle:"Competitor Signal",   ta:"All TAs",                  email:"",                          status:"Watch",     signals:["Medscape ⚠"],      note:"Jetzt bei Medscape. Competitor Signal: Kontakte mit Felix als Mutual → wahrscheinlich in Medscape-Pipeline. Differenzierung: Journal Credibility, EACCME, Editorial Independence."},
+  {id:"c47", name:"Caroline Phillips",     firma:"(Medscape)",  rolle:"Competitor Signal",   ta:"All TAs",                  email:"",                          status:"Watch",     signals:["Medscape ⚠"],      note:"Jetzt bei Medscape (ex-Wiley, ~12-13 Jahre). Competitor Signal. Gleiche Differenzierungsstrategie wie bei Felix David."},
+  {id:"c48", name:"Susanne Kammerer",      firma:"(Independent)", rolle:"Medical Writer / KOL Access", ta:"All TAs",         email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Medical Writer und Wissenschaftsjournalistin. KOL/MA Access Signal."},
+  {id:"c49", name:"Geoff Covey",           firma:"(Wiley IME)", rolle:"Senior Wiley Signal",  ta:"All TAs",                  email:"",                          status:"New",       signals:["Senior Wiley"],    note:"Mark's ehemaliger Manager, Wiley IME. Senior Wiley Signal für hochrangige Intro."},
+];
+
+const SIGNAL_CSS = {
+  "Mark TeamLink":     "background:#eef2ff;color:#4338ca;border:0.5px solid #c7d2fe",
+  "Wiley IME Alumni":  "background:#f0fdf4;color:#15803d;border:0.5px solid #86efac",
+  "Medscape ⚠":        "background:#fef2f2;color:#dc2626;border:0.5px solid #fecaca",
+  "Senior Wiley":      "background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff",
+  "KOL/MA Access":     "background:#fffbeb;color:#d97706;border:0.5px solid #fde68a",
+};
+
+const STATUS_CSS = {
+  "Active":    "background:#f0fdf4;color:#15803d",
+  "Contacted": "background:#eff6ff;color:#2563eb",
+  "Warm-up":   "background:#fffbeb;color:#d97706",
+  "New":       "background:#f8f9fb;color:#64748b",
+};
+
+let contactFirmaFilter = '';
+
+function renderContacts() {
   const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
-  let contacts = allContacts;
+  let contacts = CONTACTS;
+  if (contactFirmaFilter) contacts = contacts.filter(c => c.firma.toLowerCase().includes(contactFirmaFilter.toLowerCase()) || contactFirmaFilter.toLowerCase().includes(c.firma.toLowerCase().split(' ')[0]));
+  if (q) contacts = contacts.filter(c => [c.name,c.rolle,c.ta,c.email,c.firma,c.note].some(f=>(f||'').toLowerCase().includes(q)));
 
-  // Filter by firma if called from detail view
-  if (firmaFilter) {
-    contacts = contacts.filter(c => c.firmaIds.includes(firmaFilter));
-  } else if (contactFilter) {
-    contacts = contacts.filter(c => c.firmaIds.includes(contactFilter));
-  }
+  // Group by firma
+  const firmas = [...new Set(contacts.map(c=>c.firma))];
 
-  // Search filter
-  if (q) contacts = contacts.filter(c =>
-    [c.name, c.rolle, c.ta, c.email, c.notizen].some(f => f.toLowerCase().includes(q))
-  );
-
-  const ROLLE_CSS = {
-    'Medical Affairs': 'background:#eff6ff;color:#2563eb;border:0.5px solid #bfdbfe',
-    'KOL': 'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac',
-    'Brand Manager': 'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff',
-    'Market Access': 'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a',
-    'Medical Director': 'background:#fef2f2;color:#dc2626;border:0.5px solid #fecaca',
-  };
-  const FIT_CSS = {
-    'Hoch': 'background:#f0fdf4;color:#15803d',
-    'Mittel': 'background:#fffbeb;color:#d97706',
-    'Niedrig': 'background:#f8f9fb;color:#64748b',
-  };
-
-  if (!contacts.length) {
-    return `<div style="max-width:860px">
-      <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Kontakte</div>
-      <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${allContacts.length} Kontakte gesamt · ${firmaFilter||contactFilter?'gefiltert nach Firma':'alle Firmen'}</div>
-      <div style="color:#94a3b8;font-size:11px;padding:20px 0">Keine Kontakte gefunden${firmaFilter?` für diese Firma`:''}. Kontakte in Airtable unter 👤 Kontakte anlegen.</div>
-    </div>`;
-  }
-
-  // Group by firma if showing all
-  const grouped = {};
-  contacts.forEach(c => {
-    const firmaName = accs.find(a => c.firmaIds.includes(a.id))?.name || 'Unbekannte Firma';
-    if (!grouped[firmaName]) grouped[firmaName] = [];
-    grouped[firmaName].push(c);
-  });
-
-  const cards = Object.entries(grouped).map(([firma, cs]) => `
-    <div style="margin-bottom:20px">
-      ${!firmaFilter && !contactFilter ? `<div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:#64748b;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">${esc(firma)} · ${cs.length} Kontakt${cs.length!==1?'e':''}</div>` : ''}
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+  const groups = firmas.map(firma => {
+    const cs = contacts.filter(c=>c.firma===firma);
+    return `<div style="margin-bottom:20px">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:#64748b;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">
+        ${esc(firma)} · ${cs.length} Kontakt${cs.length!==1?'e':''}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px">
         ${cs.map(c => `<div style="background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:14px;box-shadow:0 1px 2px #0000000a">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
             <div>
               <div style="font-size:13px;font-weight:700;color:#0f172a">${esc(c.name)}</div>
-              <div style="font-size:11px;color:#64748b;margin-top:1px">${esc(c.ta)||'—'}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:1px">${esc(c.rolle)}</div>
+              ${c.ta ? `<div style="font-size:10px;color:#94a3b8">${esc(c.ta)}</div>` : ''}
             </div>
-            ${c.kontaktiert ? `<span style="font-size:9px;background:#f0fdf4;color:#15803d;border:0.5px solid #86efac;padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap">✓ Kontaktiert</span>` : '<span style="font-size:9px;background:#f8f9fb;color:#94a3b8;border:0.5px solid #e2e8f0;padding:2px 7px;border-radius:10px;font-weight:700">Neu</span>'}
+            <span style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap;${STATUS_CSS[c.status]||'background:#f8f9fb;color:#64748b'}">${esc(c.status)}</span>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
-            ${c.rolle ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;${ROLLE_CSS[c.rolle]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0'}">${esc(c.rolle)}</span>` : ''}
-            ${c.imeFit ? `<span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;${FIT_CSS[c.imeFit]||'background:#f1f5f9;color:#64748b'}">${esc(c.imeFit)}</span>` : ''}
-          </div>
-          ${c.email ? `<div style="font-size:11px;color:#2563eb;margin-bottom:4px">✉ <a href="mailto:${esc(c.email)}" style="color:#2563eb;text-decoration:none">${esc(c.email)}</a></div>` : ''}
-          ${c.telefon ? `<div style="font-size:11px;color:#64748b;margin-bottom:4px">📞 ${esc(c.telefon)}</div>` : ''}
-          ${c.notizen ? `<div style="font-size:10px;color:#64748b;margin-top:6px;line-height:1.5;padding-top:6px;border-top:0.5px solid #f1f5f9">${esc(c.notizen.slice(0,120))}${c.notizen.length>120?'…':''}</div>` : ''}
+          ${c.signals.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${c.signals.map(s=>`<span style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;${SIGNAL_CSS[s]||'background:#f1f5f9;color:#64748b'}">${esc(s)}</span>`).join('')}</div>` : ''}
+          ${c.email ? `<div style="font-size:11px;margin-bottom:4px">✉ <a href="mailto:${esc(c.email)}" style="color:#2563eb;text-decoration:none">${esc(c.email)}</a></div>` : ''}
+          ${c.note ? `<div style="font-size:10px;color:#64748b;margin-top:6px;line-height:1.55;padding-top:6px;border-top:0.5px solid #f1f5f9">${esc(c.note)}</div>` : ''}
         </div>`).join('')}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
-  return `<div style="max-width:860px">
+  return `<div style="max-width:880px">
     <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Kontakte</div>
-    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${contacts.length} von ${allContacts.length} Kontakten · Live aus Airtable</div>
-    ${contactFilter||firmaFilter ? `<button class="btn btnsm" onclick="contactFilter='';sv('contacts')" style="margin-bottom:12px">← Alle Kontakte</button>` : ''}
-    ${cards}
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${contacts.length} von ${CONTACTS.length} Kontakten · Director-level + · Stand Jun 2026</div>
+    ${contactFirmaFilter ? `<button class="btn btnsm" onclick="contactFirmaFilter='';draw()" style="margin-bottom:12px">← Alle Kontakte</button>` : ''}
+    <div style="background:#fffbeb;border:0.5px solid #fde68a;border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:11px;color:#92400e">
+      <strong>⚠ Constraints:</strong> Josefin Snellman (Novartis) — nicht erneut kontaktieren (5x keine Antwort). 
+      Medscape-Signal: Kontakte mit Felix David / Caroline Phillips als Mutual → Differenzierung über Journal-Credibility, EACCME, Editorial Independence.
+    </div>
+    ${groups || '<div class="es">Keine Kontakte gefunden.</div>'}
   </div>`;
 }
 
