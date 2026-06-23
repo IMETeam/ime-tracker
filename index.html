@@ -186,15 +186,60 @@ const SONNET = 'claude-sonnet-4-6';
 // ═══════════════════════════════════════════════════════
 // AIRTABLE CONFIG
 // ═══════════════════════════════════════════════════════
-const BASE_ID = 'appg0XyK32g3GYV0x';
+// ═══════════════════════════════════════════════════════
+// AIRTABLE CONFIG — OB_IME base (your active working base)
+// ═══════════════════════════════════════════════════════
+const BASE_ID = 'appACnCQAtFmXXSzn';
 const TABLES  = {
-  accounts : 'tblB2UqJdlBrwx1c6',
-  evidence : 'tblSAAUuZDEmGwim8',
-  scan     : 'tblRaZcnyE0V7U41I'
+  accounts : 'tbl0dO2h94ApvdNEo',   // 🏢 Firmen
+  contacts : 'tblxd0NuIglt5uQzW',   // 👤 Kontakte
+  activities: 'tbljU3lzcWqlCWtbg',  // 📋 Aktivitäten
 };
-const AF = { company:'fldQfX5KDx2j1AoNy', tier:'fldhoXI27QfTFkqv9', stage:'fld6KVCnPdf1uqWgy', ta:'fldtDzENSBiXgaaYy', drug:'fldMkOOoczIOOgdRd', owner:'fld2yta1kU8PXfl5j', pi:'fldJqexjNnIIwB6Yw', entry:'fldwgcX5nGHmEcBUM', badge:'fldkWMHzlrTij4GOO', notes:'fld1Pkt3YwQE0qbSb', updated:'fldeNyD4rJiBZM3MF' };
-const EF = { title:'fld7GNyIyXJn9pa6D', account:'fldEsGEL2z3IBmaab', drug:'fldjv3RQXCZKWAjrd', type:'fldmFTxyFJMXr1TRc', signal:'fldFqNuuSOY63BMyh', nct:'fldD7tVKLQfhy67LH', status:'fldhpJYj7Gx91gC4k', congress:'fld8iu1PslLfowtoN', pi:'fldFFuAHtH99erhlp', doi:'flddxlUm622C7tRoo', notes:'fld8UOFDrtu1smS24' };
-const SF = { entry:'fldEdmmQO5ryIbVZF', account:'fldjpjn8phrxJUyYv', type:'fldGY4xUVcvf6cDRV', drug:'fldTs36SHZLhMsFOW', source:'fld2pO5ZdwJrJY8OL', date:'fldiullnFKrQljysa' };
+
+// Firmen (Accounts) field IDs
+const AF = {
+  company : 'fldToE9qbX1BwyG80',   // Firma (primary)
+  ta      : 'fldFKHRW7pZmlvjoP',   // Therapiegebiet(e) — multipleSelects
+  drug    : 'fldgNFwrDmyWAbRwB',   // Produkte / Brands
+  imeFit  : 'fld2eusGAQ7fvnNlM',   // IME-Fit — singleSelect
+  status  : 'fldEm2Kta3KyIv65S',   // Status Beziehung — singleSelect
+  notes   : 'fldSUIHGSrXeuETJW',   // Notizen
+};
+
+// Kontakte field IDs
+const CF = {
+  name    : 'fld1Nug0yMl3w3LAD',
+  firma   : 'fldPT18Pi9doDxw8w',
+  rolle   : 'fldYowNGwp3TSqZXT',
+  ta      : 'flduonc5aFEI81VCb',
+  email   : 'fldDyRMrH9ltnikku',
+  imeFit  : 'fld1eZkDIhVCutgHT',
+  notes   : 'fldJjRM3nWQj9Hul1',
+};
+
+// Aktivitäten field IDs
+const ACF = {
+  title     : 'fldxo6X7DLz5RBURT',
+  kontakt   : 'fldK9Qn44Lzgm9P3T',
+  firma     : 'fldmRo2eZSBqh5J6R',
+  datum     : 'fldac9pKqsWpWw8TR',
+  ausloser  : 'fldn16MsXRf99vCdm',
+  loesungen : 'fldA8GP85R28qg8jB',
+  statusAkt : 'fldQHNn27SubQ4FJO',
+  followup  : 'fldCfs2SpA4lR7XJy',
+  ergebnis  : 'fldK2ao5zukTLErhw',
+};
+
+// Stage mapping from IME-Fit / Status Beziehung values
+function stageFromRecord(imeFit, statusBez) {
+  const f = (imeFit||'').toLowerCase();
+  const s = (statusBez||'').toLowerCase();
+  if (f.includes('act now') || f.includes('sofort') || s.includes('act now')) return 'act_now';
+  if (f.includes('hot') || s.includes('hot')) return 'hot';
+  if (f.includes('warm') || s.includes('warm') || s.includes('aktiv')) return 'warm';
+  if (f.includes('active') || f.includes('aktiv') || s.includes('laufend')) return 'active';
+  return 'watch';
+}
 
 const STAGE_ORDER = {'Act Now':0,'Hot':1,'Warm':2,'Active':3,'Watch':4,'Done':5};
 
@@ -216,9 +261,9 @@ async function atFetch(tableId, offset=''){
   if(!token) throw new Error('NO_TOKEN');
   // Explicitly request all known fields per table so Airtable returns them even if empty
   const fieldMap = {
-    [TABLES.accounts]: Object.values(AF),
-    [TABLES.evidence]: Object.values(EF),
-    [TABLES.scan]:     Object.values(SF)
+    [TABLES.accounts]:  Object.values(AF),
+    [TABLES.contacts]:  Object.values(CF),
+    [TABLES.activities]:Object.values(ACF),
   };
   const fields = fieldMap[tableId] || [];
   const fieldParams = fields.map(f=>'fields[]='+f).join('&');
@@ -238,55 +283,55 @@ async function atFetch(tableId, offset=''){
 
 // Fetch all three tables and return structured context
 async function fetchLiveContext(statusEl){
-  if(statusEl){ statusEl.textContent='⟳ Fetching accounts from Airtable…'; statusEl.classList.add('on'); }
-  const [accRecs, evRecs, scanRecs] = await Promise.all([
-    atFetch(TABLES.accounts),
-    atFetch(TABLES.evidence),
-    atFetch(TABLES.scan)
-  ]);
-  if(statusEl) statusEl.textContent=`✓ Loaded ${accRecs.length} accounts, ${evRecs.length} evidence items, ${scanRecs.length} scan entries from Airtable`;
+  if(statusEl){ statusEl.textContent='⟳ Lade Daten aus Airtable (OB_IME)…'; statusEl.classList.add('on'); }
 
-  // Sort accounts by stage priority
-  accRecs.sort((a,b)=>(STAGE_ORDER[fv(a,AF.stage)]??9)-(STAGE_ORDER[fv(b,AF.stage)]??9));
+  const [accRecs, actRecs] = await Promise.all([
+    atFetch(TABLES.accounts),
+    atFetch(TABLES.activities),
+  ]);
+
+  if(statusEl) statusEl.textContent=`✓ ${accRecs.length} Firmen, ${actRecs.length} Aktivitäten geladen`;
 
   const accounts = accRecs.map(r=>({
     id: r.id,
     company: fv(r,AF.company),
-    tier: fv(r,AF.tier),
-    stage: fv(r,AF.stage),
-    ta: fv(r,AF.ta),
+    ta: fv(r,AF.ta),       // multipleSelects — fv joins with ', '
     drug: fv(r,AF.drug),
-    owner: fv(r,AF.owner),
-    pi: fv(r,AF.pi),
-    entry: fv(r,AF.entry),
-    badge: fv(r,AF.badge),
+    imeFit: fv(r,AF.imeFit),
+    status: fv(r,AF.status),
     notes: fv(r,AF.notes),
-    updated: fv(r,AF.updated)
+    stage: stageFromRecord(fv(r,AF.imeFit), fv(r,AF.status)),
+    tier: 1,               // OB_IME has no tier field — default T1
+    owner: 'Osman',
+    pi: '',
+    entry: '',
+    badge: fv(r,AF.imeFit) ? '⚡ IME-Fit: '+fv(r,AF.imeFit) : '',
   }));
 
-  const evidence = evRecs.map(r=>({
-    title: fv(r,EF.title),
-    account: fv(r,EF.account),
-    drug: fv(r,EF.drug),
-    type: fv(r,EF.type),
-    signal: fv(r,EF.signal),
-    status: fv(r,EF.status),
-    congress: fv(r,EF.congress),
-    pi: fv(r,EF.pi),
-    doi: fv(r,EF.doi)
+  accounts.sort((a,b)=>(STAGE_ORDER[a.stage]??9)-(STAGE_ORDER[b.stage]??9));
+
+  const activities = actRecs.map(r=>({
+    title: fv(r,ACF.title),
+    firma: fv(r,ACF.firma),
+    datum: fv(r,ACF.datum),
+    ausloser: fv(r,ACF.ausloser),
+    status: fv(r,ACF.statusAkt),
+    followup: fv(r,ACF.followup),
+    ergebnis: fv(r,ACF.ergebnis),
   }));
 
-  const scanLog = scanRecs
-    .sort((a,b)=>new Date(b.createdTime)-new Date(a.createdTime))
+  // Use activities as scan log
+  const scanLog = activities
+    .sort((a,b)=>new Date(b.datum||0)-new Date(a.datum||0))
     .slice(0,15)
-    .map(r=>({
-      type: fv(r,SF.type),
-      account: fv(r,SF.account),
-      entry: fv(r,SF.entry),
-      date: fv(r,SF.date)
+    .map(a=>({
+      type: a.status||'',
+      account: a.firma,
+      entry: `${a.title}${a.ausloser?' — '+a.ausloser:''}${a.ergebnis?' | '+a.ergebnis:''}`,
+      date: a.datum||'',
     }));
 
-  return {accounts, evidence, scanLog, loadedAt: new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  return {accounts, evidence:[], scanLog, loadedAt: new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
 }
 
 // ═══════════════════════════════════════════════════════
@@ -371,19 +416,18 @@ async function loadFromAirtable(){
     liveLoadedAt  = ctx.loadedAt;
 
     // Map to local format for pipeline board
-    console.log("First raw account:", JSON.stringify(liveAccounts[0]));
     accs = liveAccounts.map(a=>({
       id: a.id,
-      name: a.company || "(no name)",
-      tier: parseInt(String(a.tier||"2").replace(/[^0-9]/g,""))||2,
-      ta: a.ta || "Other",
-      stage: stageId(a.stage || "Watch"),
-      owner: a.owner || "Osman",
-      pi: a.pi || "",
-      piRoute: a.entry || "",
-      drug: a.drug || "",
-      notes: a.notes || "",
-      scanBadge: a.badge || ""
+      name: a.company || '(kein Name)',
+      tier: a.tier || 1,
+      ta: a.ta || 'Other',
+      stage: a.stage || 'watch',
+      owner: a.owner || 'Osman',
+      pi: a.pi || '',
+      piRoute: a.entry || '',
+      drug: a.drug || '',
+      notes: a.notes || '',
+      scanBadge: a.badge || ''
     }));
 
     evs = liveEvidence.map((e,i)=>({
