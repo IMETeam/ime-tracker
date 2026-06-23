@@ -171,10 +171,14 @@ const SM = Object.fromEntries(STAGES.map(s=>[s.id,s]));
 const SO = {act_now:4,hot:3,warm:2,active:1,watch:0};
 
 function stageFrom(imeFit, statusBez) {
-  const combined = ((imeFit||'')+(statusBez||'')).toLowerCase();
-  if (combined.includes('act now') || combined.includes('sofort'))  return 'act_now';
-  if (combined.includes('hot'))                                       return 'hot';
-  if (combined.includes('warm') || combined.includes('aktiv'))       return 'warm';
+  const f = (imeFit||'').replace(/[^a-zA-ZäöüÄÖÜß ]/g,'').toLowerCase().trim();
+  const s = (statusBez||'').toLowerCase().trim();
+  // Exact values from OB_IME Airtable base
+  // IME-Fit: "🟢 Hoch" | "🟡 Mittel" | "⚪ Beobachten"
+  // Status Beziehung: "Neu — kein Kontakt" | "Erstkontakt gesendet" | "In Gespräch" | "Proposal eingereicht" | "Aktiver Partner"
+  if (s === 'aktiver partner' || s === 'proposal eingereicht')  return 'active';
+  if (f.includes('hoch'))                                        return 'hot';
+  if (f.includes('mittel') || s === 'in gespräch')              return 'warm';
   return 'watch';
 }
 
