@@ -363,18 +363,19 @@ async function loadFromAirtable(){
     liveLoadedAt  = ctx.loadedAt;
 
     // Map to local format for pipeline board
+    console.log("First raw account:", JSON.stringify(liveAccounts[0]));
     accs = liveAccounts.map(a=>({
       id: a.id,
-      name: a.company,
-      tier: parseInt((a.tier||'2').replace(/\D/g,''))||2,
-      ta: a.ta||'Other',
-      stage: stageId(a.stage||'Watch'),
-      owner: a.owner||'Osman',
-      pi: a.pi||'',
-      piRoute: a.entry||'',
-      drug: a.drug||'',
-      notes: a.notes||'',
-      scanBadge: a.badge||''
+      name: a.company || "(no name)",
+      tier: parseInt(String(a.tier||"2").replace(/[^0-9]/g,""))||2,
+      ta: a.ta || "Other",
+      stage: stageId(a.stage || "Watch"),
+      owner: a.owner || "Osman",
+      pi: a.pi || "",
+      piRoute: a.entry || "",
+      drug: a.drug || "",
+      notes: a.notes || "",
+      scanBadge: a.badge || ""
     }));
 
     evs = liveEvidence.map((e,i)=>({
