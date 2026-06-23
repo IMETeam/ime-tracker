@@ -214,7 +214,15 @@ function fv(rec, fid){
 async function atFetch(tableId, offset=''){
   const token = getToken();
   if(!token) throw new Error('NO_TOKEN');
-  const url = `https://api.airtable.com/v0/${BASE_ID}/${tableId}?pageSize=100${offset?'&offset='+offset:''}`;
+  // Explicitly request all known fields per table so Airtable returns them even if empty
+  const fieldMap = {
+    [TABLES.accounts]: Object.values(AF),
+    [TABLES.evidence]: Object.values(EF),
+    [TABLES.scan]:     Object.values(SF)
+  };
+  const fields = fieldMap[tableId] || [];
+  const fieldParams = fields.map(f=>'fields[]='+f).join('&');
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${tableId}?pageSize=100${fieldParams?'&'+fieldParams:''}${offset?'&offset='+offset:''}`;
   let r;
   try{ r = await fetch(url,{headers:{'Authorization':'Bearer '+token},mode:'cors'}); }
   catch(e){ throw new Error('CORS_OR_NETWORK'); }
