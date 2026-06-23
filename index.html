@@ -407,6 +407,25 @@ function renderDetail(a) {
       <div class="df"><div class="dl">Status Beziehung</div><div class="dv hi">${esc(a.status)||'—'}</div></div>
     </div>
     ${a.notes?`<div class="nb2"><div class="dl">Notizen</div><div class="dv" style="margin-top:4px">${esc(a.notes)}</div></div>`:''}
+    ${(()=>{
+      const nm = a.name.toLowerCase().split(' ')[0];
+      const evItems = EV_ITEMS ? EV_ITEMS.filter(e => e.firma.toLowerCase().includes(nm) || nm.includes(e.firma.toLowerCase().split(' ')[0])) : [];
+      if(!evItems.length) return '';
+      const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8'};
+      const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
+      return '<div style="background:#faf5ff;border:0.5px solid #e9d5ff;border-radius:8px;padding:10px;margin-bottom:10px"><div class=\"dl\" style=\"margin-bottom:8px\">🔬 Evidence Generation (' + evItems.length + ')</div>' +
+        evItems.map(e=>'<div style=\"margin-top:8px;padding-top:8px;border-top:0.5px solid #e9d5ff\">' +
+          '<div style=\"display:flex;gap:6px;align-items:center;margin-bottom:4px\">' +
+          '<span style=\"display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;' + (ETC[e.typ]||'background:#f1f5f9;color:#64748b') + '\">' + esc(e.typ) + '</span>' +
+          '<span style=\"display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;' + (ESC2[e.signal]||'') + '\">' + esc(e.signal) + '</span></div>' +
+          '<div style=\"font-size:11px;color:#0f172a;font-weight:600\">' + esc(e.titel) + '</div>' +
+          (e.nct ? '<div style=\"font-size:10px;color:#64748b;font-family:monospace\">' + esc(e.nct) + '</div>' : '') +
+          (e.congress ? '<div style=\"font-size:10px;color:#64748b\">📅 ' + esc(e.congress) + '</div>' : '') +
+          (e.pi ? '<div style=\"font-size:10px;color:#15803d\">👤 ' + esc(e.pi) + '</div>' : '') +
+          (e.doi ? '<div style=\"font-size:10px;color:#15803d\">📄 ' + esc(e.doi) + '</div>' : '') +
+          '<div style=\"font-size:10px;color:#475569;margin-top:2px\">' + esc(e.status) + '</div></div>'
+        ).join('') + '</div>';
+    })()}
     <div class="ar"><button class="btn" onclick="sel(null)">← Zurück</button></div>
   </div>`;
 }
