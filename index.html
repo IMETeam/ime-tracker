@@ -320,6 +320,11 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); c
       <div id="scan-log"></div>
     </div>
 
+    <!-- ACCOUNT DETAIL -->
+    <div id="pane-detail" class="pane">
+      <div id="detail-content"></div>
+    </div>
+
   </div>
 </main>
 </div>
@@ -545,15 +550,17 @@ function renderAccounts() {
     (!ti || a.t === parseInt(ti)) && (!st || a.s === st) && (!ta || a.ta.includes(ta))
   );
   document.getElementById('acc-count').textContent = `${f.length} von ${ACCOUNTS.length} Accounts`;
-  document.getElementById('acc-tbody').innerHTML = f.map(a => `
-    <tr>
+  document.getElementById('acc-tbody').innerHTML = f.map(a => {
+    const gi = ACCOUNTS.indexOf(a);
+    return `<tr style="cursor:pointer" onclick="showAccountDetail(${gi},'pipeline')" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background=''">
       <td style="font-weight:600">${a.n}</td>
       <td class="${tierClass(a.t)} nw">T${a.t}</td>
       <td class="nw">${stageBadge(a.s)}</td>
       <td style="font-size:11px;color:var(--text-2)">${a.ta}</td>
       <td style="font-size:11.5px">${a.drug}</td>
-      <td style="font-size:11px;color:var(--text-2);max-width:240px">${a.note}</td>
-    </tr>`).join('');
+      <td style="font-size:11px;color:var(--text-2);max-width:240px">${a.note.slice(0,80)}${a.note.length>80?'…':''}</td>
+    </tr>`;
+  }).join('');
 }
 
 // ── RENDER CONTACTS ───────────────────────────────────────────────────────────
@@ -610,7 +617,14 @@ function renderPipeline() {
     const items = ACCOUNTS.filter(a => a.s===s);
     return `<div class="pipe-col">
       <div class="pipe-col-hd">${s} <span style="opacity:.6">(${items.length})</span></div>
-      ${items.map(a=>`<div class="pipe-card"><span class="${tierClass(a.t)}">${a.n}</span><div class="pc-sub">${a.ta.split('/')[0]}</div></div>`).join('')}
+      ${items.map((a,i)=>{
+        const gi = ACCOUNTS.indexOf(a);
+        return `<div class="pipe-card" style="cursor:pointer;transition:box-shadow .12s" onmouseover="this.style.boxShadow='0 2px 8px rgba(26,58,92,.15)'" onmouseout="this.style.boxShadow=''" onclick="showAccountDetail(${gi},'pipeline')">
+          <span class="${tierClass(a.t)}">${a.n}</span>
+          <div class="pc-sub">${a.ta.split('/')[0]}</div>
+          <div style="font-size:9px;color:var(--text-3);margin-top:3px;opacity:0.7">↗ Details</div>
+        </div>`;
+      }).join('')}
     </div>`;
   }).join('');
 }
@@ -689,6 +703,7 @@ const PANE_LABELS = {
   pipeline:  {title:'Pipeline Board', sub:'Alle Accounts nach Stage'},
   evidence:  {title:'Evidence Generation', sub:'24 klinische Studien, Regulatory Events, Wiley Pubs'},
   scan:      {title:'Scan / Briefing', sub:'Pharmawand-Analyse & AI Briefing'},
+  detail:    {title:'Account Detail', sub:''},
 };
 
 function showPane(id) {
@@ -705,6 +720,115 @@ function showPane(id) {
   if (id==='evidence')  renderEvidence();
 }
 
+// ── ACCOUNT DETAIL (fullscreen pane) ─────────────────────────────────────────
+let _prevPane = 'pipeline';
+
+function showAccountDetail(idx, fromPane) {
+  const a = ACCOUNTS[idx];
+  if (!a) return;
+  _prevPane = fromPane || _prevPane;
+
+  const evItems = EVIDENCE.filter(e => {
+    const firmLow = e.firm.toLowerCase();
+    const nameLow = a.n.toLowerCase();
+    return nameLow === firmLow || nameLow.startsWith(firmLow.split('/')[0]) || firmLow.startsWith(nameLow.split('/')[0]);
+  });
+
+  const ETC = {"Phase 3":"background:#fef2f2;color:#c53030","Phase 2":"background:#fff7ed;color:#c2410c","Regulatory":"background:#ecfdf5;color:#065f46","Wiley Pub":"background:#f0fdf4;color:#15803d","Congress":"background:#eff6ff;color:#1d4ed8"};
+
+  const evHtml = evItems.length ? `
+    <div class="card" style="border-color:#c4b5fd;background:#f0edfb;margin-top:0">
+      <div class="card-title" style="color:#5b3fa6">🔬 Evidence Generation (${evItems.length})</div>
+      <table class="data-table" style="margin-top:4px">
+        <thead><tr>
+          <th>Typ</th><th>Titel / NCT</th><th>Status / Kongress</th><th>PI / KOL</th><th>Signal</th>
+        </tr></thead>
+        <tbody>
+          ${evItems.map(e=>`<tr>
+            <td><span class="ev-type" style="${ETC[e.typ]||''}">${e.typ}</span></td>
+            <td>
+              <div style="font-weight:500;font-size:12px">${e.titel}</div>
+              ${e.nct?`<div style="font-size:10px;color:var(--text-3);font-family:var(--mono)">${e.nct}</div>`:''}
+              ${e.doi?`<div style="font-size:10px;color:var(--green)">📄 ${e.doi}</div>`:''}
+            </td>
+            <td>
+              <div style="font-size:11px">${e.status}</div>
+              ${e.congress?`<div style="font-size:10px;color:var(--text-3)">📅 ${e.congress}</div>`:''}
+            </td>
+            <td style="font-size:11px">${e.pi||'—'}</td>
+            <td>${stageBadge(e.sig)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : '';
+
+  // Contacts for this account
+  const accContacts = CONTACTS.filter(c => c.acc === a.n || a.n.startsWith(c.acc.split('/')[0]) || c.acc.startsWith(a.n.split('/')[0]));
+  const conHtml = accContacts.length ? `
+    <div class="card" style="margin-top:0">
+      <div class="card-title">👤 Kontakte (${accContacts.length})</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:4px">
+        ${accContacts.map(c=>{
+          const ini = c.name.split(' ').map(n=>n[0]).slice(0,2).join('');
+          return `<div class="contact-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <div class="contact-avatar">${ini}</div>
+              <div>
+                <div style="font-size:12px;font-weight:600"><span class="status-dot ${stDot(c.status)}"></span>${c.name}</div>
+                <div style="font-size:10px;color:var(--text-3)">${c.role}</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px">
+              <span class="badge b-gray">${c.ta}</span>
+              <span class="badge b-gray">${c.status}</span>
+            </div>
+            <div class="sig-row">${c.signals.map(s=>`<span class="badge b-purple">${s}</span>`).join('')}</div>
+            <div style="font-size:11px;color:var(--text-2);margin-top:6px;line-height:1.5">${c.note}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('detail-content').innerHTML = `
+    <div style="max-width:900px">
+      <button onclick="showPane(_prevPane)" style="display:inline-flex;align-items:center;gap:5px;margin-bottom:18px;background:none;border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text-2);font-family:inherit">
+        ← Zurück
+      </button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        ${stageBadge(a.s)}
+        <span class="badge b-gray">Tier ${a.t}</span>
+        <span class="badge b-gray">${a.ta}</span>
+      </div>
+      <div style="font-size:26px;font-weight:600;color:var(--text);margin-bottom:16px">${a.n}</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div class="card">
+          <div class="card-title">Drug / Programme</div>
+          <div style="font-size:13px;font-weight:500">${a.drug||'—'}</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Stage</div>
+          ${stageBadge(a.s)}
+        </div>
+      </div>
+
+      ${a.note?`<div class="card" style="margin-bottom:16px">
+        <div class="card-title">Notizen / Scan-Badge</div>
+        <div style="font-size:12.5px;color:var(--text-2);line-height:1.7;margin-top:4px">${a.note}</div>
+      </div>`:''}
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        ${conHtml}
+        ${evHtml}
+      </div>
+    </div>`;
+
+  document.getElementById('topbar-title').textContent = a.n;
+  document.getElementById('topbar-sub').textContent = `${a.ta} · ${stageBadge(a.s).replace(/<[^>]+>/g,'')} · Tier ${a.t}`;
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id==='pane-detail'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+}
+
 function init() {
   try { const s = localStorage.getItem('ime_scan_log_v2'); if (s) JSON.parse(s).forEach(e => scanLog.push(e)); } catch(e) {}
   renderDashboard();
@@ -712,5 +836,6 @@ function init() {
 }
 init();
 </script>
+
 </body>
 </html>
