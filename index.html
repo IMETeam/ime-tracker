@@ -1,849 +1,716 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>IME Milestone Tracker v16 — Wiley-VCH</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IME Unified Tracker v2 — Wiley-VCH · 24. Jun 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'SF Mono',Consolas,monospace,system-ui;font-size:13px;background:#f0f2f5;min-height:100vh;padding:16px}
-#app{display:flex;flex-direction:column;height:calc(100vh - 32px);min-height:580px;border:0.5px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#f8f9fb;box-shadow:0 4px 24px #0000000f}
-.topbar{display:flex;align-items:center;gap:10px;padding:9px 16px;background:#fff;border-bottom:0.5px solid #e2e8f0;flex-shrink:0}
-.logo{font-family:Georgia,serif;font-size:16px;color:#0f172a;font-weight:700}
-.logo em{color:#c53030;font-style:italic}
-.nav{display:flex;gap:3px;margin-left:10px}
-.nb{padding:4px 11px;border-radius:6px;border:0.5px solid transparent;background:transparent;color:#94a3b8;font-size:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:all .12s}
-.nb:hover{background:#f1f5f9;color:#475569}
-.nb.on{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
-.sp{flex:1}
-.kc{font-size:10px;color:#94a3b8;cursor:pointer}
-.badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
-.opus{background:#f3e8ff;color:#7c3aed;border:0.5px solid #d8b4fe}
-.sonnet{background:#e0f2fe;color:#0369a1;border:0.5px solid #bae6fd}
-.abar{background:#fef2f2;border-bottom:0.5px solid #fecaca;padding:6px 16px;font-size:11px;color:#dc2626;display:none;align-items:center;gap:8px;flex-shrink:0}
-.abar.on{display:flex}
-.pulse{width:7px;height:7px;border-radius:50%;background:#e53e3e;animation:pulse 1.5s infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
-.alink{cursor:pointer;text-decoration:underline;margin-right:8px;font-weight:700}
-.body{display:flex;flex:1;overflow:hidden}
-.sb{width:252px;flex-shrink:0;overflow-y:auto;border-right:0.5px solid #e2e8f0;padding:10px;background:#fff}
-.fi{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
-.si{width:100%;padding:6px 9px;background:#f8f9fb;border:0.5px solid #e2e8f0;border-radius:6px;color:#0f172a;font-family:inherit;font-size:11px;outline:none}
-.si:focus{border-color:#93c5fd}
-.fr{display:flex;gap:4px}
-.alist{display:flex;flex-direction:column;gap:3px}
-.ac{padding:8px 10px;border-radius:6px;border:0.5px solid #e2e8f0;background:#f8f9fb;cursor:pointer;transition:all .12s}
-.ac:hover{background:#f1f5f9;border-color:#cbd5e0}
-.ac.sel{background:#eff6ff;border-color:#93c5fd}
-.acr{display:flex;align-items:center;gap:6px;margin-bottom:2px}
-.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.an{font-size:11px;color:#0f172a;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tier{font-size:9px;color:#94a3b8;letter-spacing:.8px}
-.ata{font-size:10px;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sbg{display:inline-block;margin-top:3px;font-size:9px;color:#744210;background:#fffbeb;padding:1px 5px;border-radius:3px;border:0.5px solid #fde68a;line-height:1.4;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.main{flex:1;overflow-y:auto;padding:18px;background:#f8f9fb}
-.d-name{font-family:Georgia,serif;font-size:22px;color:#0f172a;margin-bottom:8px;font-weight:700}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.chip{padding:2px 8px;border-radius:12px;font-size:9px;letter-spacing:.4px;text-transform:uppercase;border:0.5px solid}
-.dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.df{background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;padding:10px;box-shadow:0 1px 2px #0000000a}
-.dl{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.dv{font-size:12px;color:#475569;line-height:1.5}
-.dv.hi{color:#0f172a;font-weight:500}
-.pib{background:#f0fdf4;border:0.5px solid #86efac;border-radius:8px;padding:10px;margin-bottom:10px}
-.nb2{background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:10px;box-shadow:0 1px 2px #0000000a}
-.scb{background:#fffbeb;border:0.5px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:10px}
-.ar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.btn{padding:6px 12px;border-radius:6px;border:0.5px solid #e2e8f0;background:#fff;color:#0f172a;font-family:inherit;font-size:11px;cursor:pointer;transition:all .12s}
-.btn:hover{background:#f8f9fb}
-.btnp{background:#2563eb;color:#fff;border-color:#2563eb}
-.btnv{background:#f3e8ff;color:#7c3aed;border-color:#d8b4fe}
-.btnd{background:#fee2e2;color:#dc2626;border-color:#fecaca}
-.btna{background:#f0fdf4;color:#16a34a;border-color:#86efac}
-.btnsm{padding:4px 9px;font-size:10px}
-.fg{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
-.fg label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
-.fg input,.fg select,.fg textarea{padding:6px 8px;background:#f8f9fb;border:0.5px solid #e2e8f0;border-radius:5px;color:#0f172a;font-family:inherit;font-size:11px;outline:none}
-.fg textarea{resize:vertical;min-height:55px}
-.fgr{display:flex;gap:8px}.fgr .fg{flex:1}
-.es{color:#94a3b8;font-size:11px;padding:14px 0;text-align:center}
-.mo{position:absolute;inset:0;background:#00000045;z-index:50;display:flex;align-items:center;justify-content:center;border-radius:12px}
-.md{background:#fff;border:0.5px solid #e2e8f0;border-radius:12px;padding:20px;width:480px;max-height:540px;overflow-y:auto;box-shadow:0 20px 50px #0000001f}
-.mt{font-family:Georgia,serif;font-size:16px;color:#0f172a;margin-bottom:14px;font-weight:700}
-.stage-group{margin-bottom:20px}
-.stage-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0}
-.stage-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
-.stage-cnt{font-size:10px;color:#94a3b8}
-.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px}
-.pc{padding:10px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;cursor:pointer;transition:all .12s;box-shadow:0 1px 2px #0000000a}
-.pc:hover{border-color:#cbd5e0;transform:translateY(-1px);box-shadow:0 4px 10px #0000001a}
-.pn{font-size:11px;color:#0f172a;font-weight:700;margin-bottom:3px}
-.pd{font-size:10px;color:#94a3b8;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pf{display:flex;justify-content:space-between;align-items:center}
-.pt{font-size:9px;color:#cbd5e0}
-.ai-view{max-width:760px}
-.ai-title{font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700}
-.ai-desc{font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.6}
-.ai-input{width:100%;padding:10px 12px;background:#fff;border:0.5px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:11px;color:#0f172a;resize:vertical;min-height:100px;outline:none;margin-bottom:10px}
-.ai-input:focus{border-color:#93c5fd}
-.ai-actions{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-.ai-out{background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:16px;font-size:12px;color:#475569;line-height:1.9;white-space:pre-wrap;box-shadow:0 1px 3px #0000000a;min-height:80px}
-.ai-load{color:#94a3b8;font-size:11px;padding:10px 0;animation:fd 1s infinite alternate}
-@keyframes fd{from{opacity:.4}to{opacity:1}}
-.slog{display:flex;flex-direction:column;gap:4px;margin-top:10px}
-.le{padding:8px 11px;border-radius:5px;border-left:3px solid;font-size:11px;line-height:1.55}
-.adp-verdict{display:inline-block;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
-.adp-ok{background:#f0fdf4;color:#15803d;border:0.5px solid #86efac}
-.adp-skip{background:#f8f9fb;color:#64748b;border:0.5px solid #e2e8f0}
-.adp-section{margin-bottom:10px}
-.adp-label{font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-.adp-val{font-size:11.5px;color:#0f172a;line-height:1.6;background:#fff;border:0.5px solid #e2e8f0;border-radius:6px;padding:8px 10px}
-.diag{background:#0f172a;color:#86efac;border-radius:8px;padding:14px;font-size:11px;font-family:monospace;white-space:pre-wrap;margin-top:10px;max-height:300px;overflow-y:auto}
-.fab-row{display:flex;justify-content:space-between;padding:8px 16px;background:#fff;border-top:0.5px solid #e2e8f0;flex-shrink:0;align-items:center}
-.spin{display:inline-block;width:10px;height:10px;border:2px solid #ddd;border-top-color:#7c3aed;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:4px}
-@keyframes spin{to{transform:rotate(360deg)}}
+:root {
+  --bg: #f8f7f4; --surface: #ffffff; --surface2: #f2f0ec;
+  --border: #e4e0d8; --border-strong: #ccc8be;
+  --text: #1a1917; --text-2: #5a5650; --text-3: #9a9690;
+  --accent: #1a3a5c; --accent-light: #e8f0f8;
+  --red: #c0392b; --red-bg: #fdf0ef;
+  --amber: #b5620a; --amber-bg: #fef5e7;
+  --blue: #1a5fa8; --blue-bg: #eaf1fb;
+  --green: #1a7a4a; --green-bg: #eaf6ef;
+  --teal: #0d6e6e; --teal-bg: #e6f5f5;
+  --purple: #5b3fa6; --purple-bg: #f0edfb;
+  --gray: #5a5650; --gray-bg: #f2f0ec;
+  --radius: 6px; --radius-lg: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; min-height: 100vh; }
+.shell { display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 200px; flex-shrink: 0; background: var(--accent); color: #fff; display: flex; flex-direction: column; padding: 0; overflow-y: auto; }
+.sidebar-logo { padding: 20px 18px 14px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.sidebar-logo .brand { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 3px; }
+.sidebar-logo .title { font-size: 15px; font-weight: 600; color: #fff; }
+.nav { padding: 10px 0; flex: 1; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 18px; font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,.65); cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: color .15s, background .15s; }
+.nav-item:hover { background: rgba(255,255,255,.08); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,.14); color: #fff; }
+.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; opacity: .7; }
+.nav-item.active svg { opacity: 1; }
+.nav-section { padding: 14px 18px 4px; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+.sidebar-footer { padding: 14px 18px; border-top: 1px solid rgba(255,255,255,.12); font-size: 11px; color: rgba(255,255,255,.4); }
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+.topbar-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.topbar-sub { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.content { padding: 22px 24px; flex: 1; }
+.pane { display: none; }
+.pane.active { display: block; }
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+.kpi-num { font-size: 26px; font-weight: 600; color: var(--text); font-family: var(--mono); line-height: 1; }
+.kpi-num.red { color: var(--red); } .kpi-num.amber { color: var(--amber); } .kpi-num.blue { color: var(--blue); }
+.kpi-lbl { font-size: 11px; color: var(--text-3); margin-top: 5px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+.card-title { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+.badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.b-red { background: var(--red-bg); color: var(--red); }
+.b-amber { background: var(--amber-bg); color: var(--amber); }
+.b-blue { background: var(--blue-bg); color: var(--blue); }
+.b-green { background: var(--green-bg); color: var(--green); }
+.b-teal { background: var(--teal-bg); color: var(--teal); }
+.b-purple { background: var(--purple-bg); color: var(--purple); }
+.b-gray { background: var(--gray-bg); color: var(--gray); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; padding: 7px 10px; font-size: 10.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); background: var(--bg); white-space: nowrap; }
+.data-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.data-table tr:hover td { background: var(--bg); }
+.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.filter-bar input, .filter-bar select { font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); outline: none; font-family: inherit; }
+.filter-bar input { min-width: 180px; flex: 1; }
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent); }
+.result-count { font-size: 11px; color: var(--text-3); margin-bottom: 8px; }
+.t1 { font-weight: 600; color: var(--red); } .t2 { font-weight: 500; color: var(--amber); } .t3 { color: var(--text-3); }
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px; }
+.contact-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--blue); flex-shrink: 0; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 4px; vertical-align: middle; }
+.sd-c { background: var(--green); } .sd-a { background: var(--blue); } .sd-w { background: var(--amber); } .sd-n { background: var(--text-3); }
+.action-item { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius-lg); padding: 13px 14px; display: flex; gap: 12px; margin-bottom: 8px; }
+.action-item.high { border-left-color: var(--red); } .action-item.med { border-left-color: var(--amber); }
+.action-date { font-size: 11px; font-weight: 600; font-family: var(--mono); min-width: 56px; }
+.pipe-board { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.pipe-col { background: var(--surface2); border-radius: var(--radius-lg); padding: 10px 8px; min-height: 120px; }
+.pipe-col-hd { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); text-align: center; margin-bottom: 8px; }
+.pipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 7px 8px; margin-bottom: 5px; font-size: 11.5px; font-weight: 500; }
+.pipe-card .pc-sub { font-size: 10px; color: var(--text-3); margin-top: 1px; font-weight: 400; }
+.scan-btns { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.scan-btn { font-size: 12px; font-weight: 500; padding: 7px 14px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: inherit; transition: background .12s, border-color .12s; }
+.scan-btn:hover { background: var(--bg); border-color: var(--accent); }
+.scan-btn.running { border-color: var(--blue); color: var(--blue); }
+.scan-output { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; font-size: 12.5px; line-height: 1.8; min-height: 180px; white-space: pre-wrap; max-height: 440px; overflow-y: auto; color: var(--text); font-family: var(--mono); margin-bottom: 18px; }
+.scan-output.idle { color: var(--text-3); font-family: inherit; font-size: 13px; }
+.log-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 9px 12px; margin-bottom: 7px; }
+.log-item .li-meta { font-size: 10.5px; color: var(--text-3); font-family: var(--mono); margin-bottom: 3px; }
+.log-item .li-preview { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--border-strong); border-top-color: var(--blue); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.an-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.an-row:last-child { border-bottom: none; }
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+.sig-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.nw { white-space: nowrap; }
+/* Evidence */
+.ev-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 12px; }
+.ev-type { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 9px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.scan-briefing-box { background: var(--green-bg); border: 1px solid #86efac; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; }
+.scan-briefing-box .sb-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.scan-briefing-box .sb-date { font-size: 10px; font-family: var(--mono); color: var(--green); font-weight: 600; }
 </style>
 </head>
 <body>
-<div id="app">
+<div class="shell">
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Wiley-VCH · IME</div>
+    <div class="title">Unified Tracker</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Übersicht</div>
+    <button class="nav-item active" onclick="showPane('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <div class="nav-section">Accounts</div>
+    <button class="nav-item" onclick="showPane('accounts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      Alle Accounts <span style="font-size:10px;opacity:.6;margin-left:auto">59</span>
+    </button>
+    <button class="nav-item" onclick="showPane('pipeline')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="4" height="14"/><rect x="9" y="4" width="4" height="17"/><rect x="16" y="10" width="4" height="11"/></svg>
+      Pipeline Board
+    </button>
+    <div class="nav-section">Outreach</div>
+    <button class="nav-item" onclick="showPane('contacts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Kontakte <span style="font-size:10px;opacity:.6;margin-left:auto">49</span>
+    </button>
+    <button class="nav-item" onclick="showPane('actions')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Follow-ups
+    </button>
+    <div class="nav-section">Intelligence</div>
+    <button class="nav-item" onclick="showPane('evidence')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      Evidence
+    </button>
+    <button class="nav-item" onclick="showPane('scan')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Scan / Briefing
+    </button>
+  </nav>
+  <div class="sidebar-footer">DACH + Frankreich · 24. Jun 2026</div>
+</aside>
+
+<main class="main">
   <div class="topbar">
-    <div class="logo">IME<em>·</em>TRACKER <span style="font-family:inherit;font-size:10px;color:#94a3b8;font-weight:400">v16</span></div>
-    <div class="nav">
-      <button class="nb on" onclick="sv('pipeline')">Pipeline</button>
-      <button class="nb" onclick="sv('evidence')">Evidence</button>
-      <button class="nb" onclick="sv('contacts')">Kontakte</button>
-      <button class="nb" onclick="sv('scan')">Scan</button>
-      <button class="nb" onclick="sv('briefing')">Briefing</button>
-      <button class="nb" onclick="sv('adp')">ADP / COI</button>
+    <div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-sub" id="topbar-sub">Überblick · Stand 24. Juni 2026</div>
     </div>
-    <div class="sp"></div>
-    <span class="badge opus" style="margin-right:4px">Opus 4.8 ✦ Briefing+ADP</span>
-    <span class="badge sonnet">Sonnet 4.6 ✦ Scan</span>
-    <span class="kc" id="kc" style="margin-left:8px" onclick="resetToken()"></span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span class="badge b-red">3 Act Now</span>
+      <span class="badge b-amber">5 Hot</span>
+      <span class="badge b-blue">13 Warm</span>
+    </div>
   </div>
-  <div class="abar" id="abar">
-    <div class="pulse"></div><strong>ACT NOW:</strong>
-    <span id="abar-names"></span>
-  </div>
-  <div class="body">
-    <div class="sb">
-      <div class="fi">
-        <input class="si" id="srch" placeholder="Suche Firma, Drug, Notizen…" oninput="draw()"/>
-        <select class="si" id="fs" onchange="draw()">
-          <option value="All">Alle Stages</option>
-          <option value="act_now">Act Now</option>
-          <option value="hot">Hot</option>
-          <option value="warm">Warm</option>
-          <option value="watch">Watch</option>
-        </select>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="pane-dashboard" class="pane active">
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-num">59</div><div class="kpi-lbl">Accounts total</div></div>
+        <div class="kpi-card"><div class="kpi-num red">3</div><div class="kpi-lbl">Act Now</div></div>
+        <div class="kpi-card"><div class="kpi-num amber">5</div><div class="kpi-lbl">Hot</div></div>
+        <div class="kpi-card"><div class="kpi-num blue">13</div><div class="kpi-lbl">Warm</div></div>
+        <div class="kpi-card"><div class="kpi-num">49</div><div class="kpi-lbl">Kontakte enriched</div></div>
       </div>
-      <div class="alist" id="alist"></div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Act Now — sofort handeln</div>
+          <div class="an-row">
+            <div>
+              <div style="font-size:13px;font-weight:600">Janssen</div>
+              <div style="font-size:11px;color:var(--text-2);margin-top:2px">7 IME-Winkel: MonumenTAL-3 NEJM+EHA, Imaavy wAIHA, Icotrokinra EMA, PROTEUS NEJM</div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:2px">jessica.h.rubens@jnj.com · Beretsos via Taylor Spector</div>
+            </div>
+            <span class="badge b-red">Act Now</span>
+          </div>
+          <div class="an-row">
+            <div>
+              <div style="font-size:13px;font-weight:600">AstraZeneca</div>
+              <div style="font-size:11px;color:var(--text-2);margin-top:2px">Camizestrant EC approval imminent · Truqap FDA Jun 15 mHSPC · Ultomiris IgAN PDUFA Q4</div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:2px">Dorr · Urbieta · Ponner — InMails gesendet</div>
+            </div>
+            <span class="badge b-red">Act Now</span>
+          </div>
+          <div class="an-row">
+            <div>
+              <div style="font-size:13px;font-weight:600">Takeda</div>
+              <div style="font-size:11px;color:var(--text-2);margin-top:2px">LATITUDE Atlas Jun 11: zasocitinib SUPERIOR vs deucravacitinib · NDA FY2026</div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:2px">Dr. Melinda Gooderham via Lusha · PASI 100 &gt;35% vs 14%</div>
+            </div>
+            <span class="badge b-red">Act Now</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">IME Netzwerk-Signale</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span class="badge b-purple">Mark TeamLink</span><span style="font-size:12px;color:var(--text-2)">Stärkste Intro-Basis — sofort nutzen</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span class="badge b-teal">Wiley IME Alumni</span><span style="font-size:12px;color:var(--text-2)">Saulo Prado · Martin Steiniche Nielsen</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span class="badge b-red">Medscape ⚠</span><span style="font-size:12px;color:var(--text-2)">Felix David · Caroline Phillips → differenzieren</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span class="badge b-blue">Senior Wiley</span><span style="font-size:12px;color:var(--text-2)">Geoff Covey (Mark's former manager)</span></div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 0"><span class="badge b-gray">KOL/MA Access</span><span style="font-size:12px;color:var(--text-2)">Susanne Kammerer (medical writer)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Tier 1 — Hot &amp; Warm</div>
+          <div id="dash-t1"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Tier 2 — Upgrades</div>
+          <div id="dash-t2"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Nächste Deadlines</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:2px" id="dash-deadlines"></div>
+      </div>
     </div>
-    <div class="main" id="main" style="position:relative"></div>
+
+    <!-- ACCOUNTS -->
+    <div id="pane-accounts" class="pane">
+      <div class="filter-bar">
+        <input type="text" id="fq" placeholder="Suche Account, Drug, Notiz…" oninput="renderAccounts()">
+        <select id="ftier" onchange="renderAccounts()"><option value="">Alle Tiers</option><option value="1">Tier 1</option><option value="2">Tier 2</option><option value="3">Tier 3</option></select>
+        <select id="fstage" onchange="renderAccounts()"><option value="">Alle Stages</option><option>Act Now</option><option>Hot</option><option>Warm</option><option>Active</option><option>Watch</option></select>
+        <select id="fta" onchange="renderAccounts()"><option value="">Alle TAs</option><option>Dermatology</option><option>Oncology</option><option>Gastroenterology</option><option>Immunology</option><option>Nephrology</option><option>Cardiology</option><option>Rare Disease</option><option>Rheumatology</option><option>Hepatology</option></select>
+      </div>
+      <div class="result-count" id="acc-count"></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Account</th><th>Tier</th><th>Stage</th><th>TA</th><th>Drug / Programme</th><th style="max-width:240px;color:var(--text-3)">Notiz / Scan-Badge</th></tr></thead>
+          <tbody id="acc-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CONTACTS -->
+    <div id="pane-contacts" class="pane">
+      <div class="filter-bar">
+        <input type="text" id="fcq" placeholder="Suche Name, Firma, Notiz…" oninput="renderContacts()">
+        <select id="fcacc" onchange="renderContacts()"><option value="">Alle Firmen</option><option>Novartis</option><option>Takeda</option><option>AbbVie</option><option>Janssen</option><option>UCB</option><option>AstraZeneca</option><option>Eli Lilly</option><option>Novo Nordisk</option><option>Amgen</option></select>
+        <select id="fcst" onchange="renderContacts()"><option value="">Alle Status</option><option>Contacted</option><option>Active</option><option>Warm-up</option><option>New</option><option>Watch</option></select>
+      </div>
+      <div class="result-count" id="con-count"></div>
+      <div class="contact-grid" id="contact-grid"></div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div id="pane-actions" class="pane">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:16px">Priorisierte Follow-ups — Stand 24. Juni 2026</div>
+      <div id="action-list"></div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div id="pane-pipeline" class="pane">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">Alle Accounts nach Stage</div>
+      <div class="pipe-board" id="pipe-board"></div>
+    </div>
+
+    <!-- EVIDENCE -->
+    <div id="pane-evidence" class="pane">
+      <div class="filter-bar">
+        <input type="text" id="evq" placeholder="Suche Firma, Drug, Titel…" oninput="renderEvidence()">
+        <select id="evsig" onchange="renderEvidence()"><option value="">Alle Signale</option><option>Act Now</option><option>Hot</option><option>Warm</option><option>Watch</option></select>
+        <select id="evtyp" onchange="renderEvidence()"><option value="">Alle Typen</option><option>Phase 3</option><option>Phase 2</option><option>Regulatory</option><option>Wiley Pub</option><option>Congress</option></select>
+      </div>
+      <div class="result-count" id="ev-count"></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Firma / Drug</th><th>Typ</th><th>Titel / NCT</th><th>Status / Kongress</th><th>PI / KOL</th><th>Signal</th></tr></thead>
+          <tbody id="ev-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SCAN / BRIEFING -->
+    <div id="pane-scan" class="pane">
+      <div class="scan-briefing-box">
+        <div class="sb-header">
+          <span class="badge b-green">✓ Scan 24 Jun 2026</span>
+          <span class="sb-date">Pharmawand Feed analysiert · Opus 4.8</span>
+        </div>
+        <div style="font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:8px">Findings heute:</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-2)">
+          <div><span class="badge b-blue" style="margin-right:6px">Sanofi · Warm</span>Wayrilz (rilzabrutinib) MHLW Japan ITP-Zulassung — BTKi, globaler Rollout nach MHLW UK Jun 1. Sarclisa SC Japan + Redemplo FCS EC ebenfalls aktiv.</div>
+          <div><span class="badge b-blue" style="margin-right:6px">AbbVie · Warm</span>Maviret EC-Zulassung akute Hepatitis C (3+ Jahre) — erste EU-Therapie für akute + chronische HCV. AP&amp;T / Hepatologie-Angle.</div>
+          <div><span class="badge b-gray" style="margin-right:6px">Quoin · Skip</span>QYLEKI (QRX003) FDA Brand Name Conditional Acceptance, Netherton Syndrome Phase 3 H2 2026 — kein Portfolio-Match.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:10px">⚠ Keine neuen Act Now / Hot Trigger im heutigen Feed. Nächster Major Trigger: Camizestrant EC Approval (imminent), Janssen Icotrokinra EU H2 2026.</div>
+      </div>
+
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">Manueller Scan-Workflow: Pharmawand-Feed hier in Claude pasten → Opus 4.8 analysiert → Airtable-Update. API-Buttons sind ohne Anthropic API Key nicht funktional.</div>
+      <div class="scan-btns">
+        <button class="scan-btn" onclick="runScan('actnow')" id="btn-actnow"><span id="sp-actnow"></span>⚡ Act Now Briefing</button>
+        <button class="scan-btn" onclick="runScan('t2')" id="btn-t2"><span id="sp-t2"></span>↑ T2 Upgrade-Check</button>
+        <button class="scan-btn" onclick="runScan('contacts')" id="btn-contacts"><span id="sp-contacts"></span>👤 Kontakt-Check</button>
+        <button class="scan-btn" onclick="runScan('pipeline')" id="btn-pipeline"><span id="sp-pipeline"></span>📊 Pipeline Update</button>
+      </div>
+      <div class="scan-output idle" id="scan-output">Wähle einen Scan-Typ — erfordert Anthropic API Key im Browser (oder nutze diesen Claude Chat für manuelle Analyse).</div>
+      <div class="card-title" style="margin-bottom:10px;margin-top:4px">Scan-Log</div>
+      <div id="scan-log"></div>
+    </div>
+
   </div>
-  <div class="fab-row">
-    <button class="btn btnsm" onclick="diagnose()" style="color:#64748b">🔍 Diagnose</button>
-    <button class="btn btnsm btnp" onclick="loadFromAirtable()">↻ Reload</button>
-  </div>
+</main>
 </div>
 
 <script>
-// ═══ MODELS ═══
-const OPUS   = 'claude-opus-4-8';
-const SONNET = 'claude-sonnet-4-6';
-
-// ═══ AIRTABLE — OB_IME ═══
-const BASE    = 'appACnCQAtFmXXSzn';
-const T_FIRMA = 'tbl0dO2h94ApvdNEo';  // 🏢 Firmen
-const T_AKTIV    = 'tbljU3lzcWqlCWtbg';  // 📋 Aktivitäten
-const T_KONTAKT  = 'tblxd0NuIglt5uQzW';  // 👤 Kontakte
-const KONTAKT_FIELDS = ['Name','Rolle','Therapiegebiet','E-Mail','Telefon','IME-Fit Kontakt','Bereits kontaktiert','Notizen'];
-
-// Field names (used directly — no IDs needed)
-const FIRMA_FIELDS = ['Firma','Therapiegebiet(e)','Produkte / Brands','IME-Fit','Status Beziehung','Notizen'];
-const AKTIV_FIELDS = ['Aktivität','Datum','Auslöser (PR / Symposium)','Status','Ergebnis / Notizen'];
-
-// ═══ EVIDENCE TYPE + SIGNAL STYLES ═══
-const EV_TYPE_CSS={'Phase 3':'background:#fef2f2;color:#c53030;border:0.5px solid #fecaca','Phase 2':'background:#fff7ed;color:#c2410c;border:0.5px solid #fed7aa','Regulatory':'background:#ecfdf5;color:#065f46;border:0.5px solid #6ee7b7','Wiley Pub':'background:#f0fdf4;color:#15803d;border:0.5px solid #86efac','Congress':'background:#eff6ff;color:#1d4ed8;border:0.5px solid #bfdbfe','RWE':'background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff','IIT':'background:#fffbeb;color:#d97706;border:0.5px solid #fde68a'};
-const SIG_CSS={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
-function TB(type){const c=EV_TYPE_CSS[type]||'background:#f1f5f9;color:#64748b;border:0.5px solid #e2e8f0';return`<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;${c}">${esc(type)}</span>`;}
-function SB(sig){const c=SIG_CSS[sig]||'background:#f1f5f9;color:#64748b';return`<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${c}">${esc(sig)}</span>`;}
-
-// ═══ STAGES ═══
-const STAGES = [
-  {id:'act_now', label:'Act Now', color:'#dc2626'},
-  {id:'hot',     label:'Hot',     color:'#ea580c'},
-  {id:'warm',    label:'Warm',    color:'#d97706'},
-  {id:'active',  label:'Active',  color:'#2563eb'},
-  {id:'watch',   label:'Watch',   color:'#94a3b8'},
+// ── ACCOUNTS ──────────────────────────────────────────────────────────────────
+const ACCOUNTS = [
+  // ACT NOW
+  {n:"Janssen",t:1,s:"Act Now",ta:"Immunology / Oncology",drug:"Icotrokinra / Talvey / Imaavy / Erleada",note:"7 IME-Winkel: MonumenTAL-3 NEJM+EHA Jun 13 (72% PFS), Imaavy wAIHA EHA+FDA Priority Review, Icotrokinra EMA MAA H2 2026, PROTEUS NEJM Jun 3. jessica.h.rubens@jnj.com. Beretsos via Taylor Spector."},
+  {n:"AstraZeneca",t:1,s:"Act Now",ta:"Oncology / Nephrology",drug:"Camizestrant / Truqap / Ultomiris / Datroway",note:"Camizestrant EC approval imminent (CHMP+ Mai 26). Truqap FDA Jun 15 PTEN mHSPC (1 in 4 patients). Ultomiris IgAN FDA Priority Review PDUFA Q4 2026. Dorr/Urbieta/Ponner InMails."},
+  {n:"Takeda",t:1,s:"Act Now",ta:"Dermatology / Gastroenterology",drug:"Zasocitinib (TAK-279) / Vedolizumab",note:"LATITUDE Atlas Jun 11: zasocitinib SUPERIOR vs deucravacitinib. PASI 100 >35% vs 14%. NDA FY2026. PI: Dr. Melinda Gooderham via Lusha. IBD JCC Supplement ongoing."},
+  // HOT
+  {n:"AbbVie",t:1,s:"Hot",ta:"Dermatology / Gastroenterology / Immunology",drug:"Skyrizi / Rinvoq / Maviret",note:"NEW 23 Jun: Skyrizi EC-Zulassung paed. Psoriasis 6+ Jahre. KOL Prof. Nina Magnolo (Münster). Maviret EC akute HCV (AP&T angle). caroline.park@abbvie.com aktiv. Anne Lejeune Wiley IME Alumni."},
+  {n:"Amgen",t:1,s:"Hot",ta:"Dermatology",drug:"Apremilast (PPP)",note:"JEADV DOI:10.1111/jdv.70166 (Terui/Gooderham). Direkter Wiley-Hook. Margreet Plantenga (Amgen Breda) outreach pending."},
+  {n:"Travere",t:2,s:"Hot",ta:"Nephrology / Rare Disease",drug:"Civorebrutinib / Sparsentan",note:"Civorebrutinib BTK lizensiert Jun 2026 ($112.5M, Everest Medicines). PMN Phase I/II positiv. FSGS/MCD geplant. IgAN landscape sehr aktiv."},
+  {n:"Incyte",t:2,s:"Hot",ta:"Oncology / Haematology",drug:"Monjuvi/Minjuvi (tafasitamab)",note:"frontMIND Phase III EHA Plenary+Lancet Jun 13: 25% PFS 1L DLBCL. Japan MHLW Jun 19. KOL Dr. Georg Lenz Münster (DACH). Upgrade Watch→Hot."},
+  {n:"Boehringer Ingelheim",t:2,s:"Hot",ta:"Respiratory / Immunology",drug:"Jascayd (nerandomilast)",note:"FIBRONEER Survival Modeling: +5.4 Jahre IPF, 59% Mortalitätsreduktion. ATS+EULAR 2026. CHMP positiv Mai 2026. Upgrade Watch→Hot. KOL Prof. Maher (USC)."},
+  // WARM
+  {n:"Novartis",t:1,s:"Warm",ta:"Dermatology / Oncology / Nephrology",drug:"Cosentyx / Vanrafia / Rhapsido / Fabhalta / Kisqali",note:"5 IME-Winkel: REPLENISH PMR NEJM+EULAR; ALIGN IgAN Lancet+ERA; Cosentyx paed HS FDA; RemIND CIndU EAACI+sNDA; APPLAUSE-IgAN Phase III+FDA Priority. NGC54513/54512 DECLINED. Josefin Snellman NICHT re-kontaktieren."},
+  {n:"UCB",t:1,s:"Warm",ta:"Immunology",drug:"Bimekizumab / Dapirolizumab / Cizutamig",note:"Scoping Call 6 Jul Evelina van Ree (Evelina.vanRee@ucb.com). DZP SLE Lancet Mai 29 (BICLA 50% vs 35%). Cizutamig BCMA TCE 10+ autoimmune Indikationen."},
+  {n:"Eli Lilly",t:1,s:"Warm",ta:"Dermatology / Oncology",drug:"Omvoh / Lebrikizumab / Retevmo",note:"Omvoh CHMP+ CD (JCC angle). Jaypirca BRUIN CLL-322 Phase III Jun 15 (45% PFS). Retevmo LIBRETTO-432 NEJM+ASCO 83% EFS."},
+  {n:"Sanofi",t:1,s:"Warm",ta:"Immunology / Haematology",drug:"Dupixent / Sarclisa / Wayrilz",note:"NEW 24 Jun: Wayrilz MHLW Japan ITP-Zulassung. Sarclisa SC Japan Jun 19. Tzield FDA akut. T1D Jun 15 Kinder 8-17. Libtayo NICE UK Jun 17 NSCLC."},
+  {n:"Merck/MSD",t:2,s:"Warm",ta:"Gastroenterology / Immunology",drug:"Tulisokibart (MK-7240)",note:"ATLAS-UC Phase III positiv Jun 22 — erster Anti-TL1A Biologic. 7 Indikationen inkl. CD, HS, RA, PsA. JCC-Angle IBD. Upgrade Watch→Warm."},
+  {n:"Roche/Genentech",t:2,s:"Warm",ta:"Oncology",drug:"Giredestrant / Tecentriq / Lunsumio+Polivy",note:"FLAG KURT: 3 concurrent PDUFA: Tecentriq ATOMIC Okt 9 (dMMR Stage III Colon); Giredestrant Nov 30; Lunsumio+Polivy sBLA Feb 9 2027."},
+  {n:"Sobi",t:3,s:"Warm",ta:"Cardiology / Rare Disease",drug:"Tryngolza (olezarsen)",note:"Phase 3 CORE/CORE2 EAS 2026: 85% Pankreatitis-Reduktion, 66% TG-Reduktion sHTG. Erste RNA-Therapie. Direct Account."},
+  {n:"Biogen",t:2,s:"Warm",ta:"Nephrology / Ophthalmology",drug:"Empaveli / Syfovre",note:"Apellis-Akquisition Mai 14 2026. Empaveli C3G/IC-MPGN/PNH. Syfovre GA AMD."},
+  {n:"Cytokinetics",t:2,s:"Active",ta:"Cardiology",drug:"Myqorzo (aficamten)",note:"EU Launch Germany Jun 2026. Wiley ESC Heart Failure DOI:10.1093/eschf/xvag023. KOL: Prof. Düngen (Charité) + Prof. Olivotto (Florenz)."},
+  {n:"BMS/Celgene",t:2,s:"Warm",ta:"Oncology / Cardiology",drug:"Camzyos / Opdivo",note:"Camzyos FDA Priority Review oHCM PDUFA Sep 30. Opdivo+AVD EC approved frontline cHL."},
+  {n:"Vertex",t:2,s:"Warm",ta:"Rare Disease",drug:"Trikafta",note:"FDA expanded age 2+ — ~95% US CF population. EU label verifizieren."},
+  {n:"Galderma",t:2,s:"Warm",ta:"Dermatology",drug:"Nemolizumab",note:"FDA Approval Mai 22 2026 (Akne). Zwei aktive FDA Derm-Approvals. Direct Account."},
+  {n:"Pfizer",t:1,s:"Warm",ta:"Oncology / Dermatology",drug:"Talzenna+Xtandi / Cibinqo",note:"TALAPRO-3 ASCO 2026: >50% rPFS metastatic PCa HRR+. Pfizer+Innovent 12 ADC programs ($650M upfront). Cibinqo AD+AA Derm aktiv."},
+  {n:"Regeneron/Sanofi",t:1,s:"Warm",ta:"Dermatology / Oncology",drug:"Dupixent / Cemiplimab",note:"cSCC + AD. Prof. Schön (Göttingen) JDDG-Autor. Libtayo NICE UK Jun 17 NSCLC positiv."},
+  // WATCH
+  {n:"Novo Nordisk",t:1,s:"Watch",ta:"Rare Disease / CV",drug:"—",note:"POSEIDON (CV Inflammation). CHMP+ Sogroya expansion Mai 21. anwc@novonordisk.com. sepf@novonordisk.com."},
+  {n:"Nestlé",t:1,s:"Active",ta:"Oncology",drug:"—",note:"Head & Neck Cancer Knowledge Hub. EBAC Accreditation pending. Kontakt: Suchi/Wendy."},
+  {n:"Gilead",t:1,s:"Warm",ta:"Hepatology",drug:"Hepcludex / Livdelzi",note:"FLAG KURT: Hepcludex FDA Mai 22 (HDV). Livdelzi EASL 2026 PBC. Tubulis ADC Akquisition. KOL: Prof. Wedemeyer (MHH Hannover)."},
+  {n:"Idorsia",t:3,s:"Watch",ta:"Dermatology",drug:"CSU / C.diff vaccine",note:"C. diff vaccine Phase 1 high-dose positiv Jun 2026. Partnership sought."},
+  {n:"BridgeBio",t:3,s:"Watch",ta:"Rare Disease",drug:"BBP-418 (LGMD2I)",note:"FDA Priority Review Mai 28 2026. PDUFA Nov 27 2026."},
+  {n:"LEO Pharma",t:2,s:"Watch",ta:"Dermatology",drug:"Tralokinumab",note:"AD. Ramy Elbana — Congress contact."},
+  {n:"Alexion/AZ",t:2,s:"Watch",ta:"Rare Disease",drug:"—",note:"Adelaide Eliopoulos — Next Conference."},
+  {n:"Ferring",t:2,s:"Watch",ta:"Gastroenterology",drug:"—",note:"IBD watch."},
+  {n:"ViiV",t:2,s:"Watch",ta:"Other",drug:"—",note:"HIV."},
+  {n:"Vifor/CSL",t:2,s:"Watch",ta:"Rare Disease",drug:"—",note:"Iron deficiency."},
+  {n:"Daiichi-Sankyo",t:2,s:"Watch",ta:"Oncology",drug:"Enhertu",note:"ADC pipeline."},
+  {n:"Eisai",t:2,s:"Watch",ta:"Oncology",drug:"—",note:""},
+  {n:"Ipsen",t:2,s:"Watch",ta:"Oncology / Rare Disease",drug:"—",note:""},
+  {n:"Kyowa Kirin",t:2,s:"Watch",ta:"Dermatology",drug:"—",note:"Prurigo."},
+  {n:"GSK",t:3,s:"Watch",ta:"Immunology",drug:"Belimumab / Nucala",note:"Nucala NICE UK COPD Jun 17 positiv."},
+  {n:"Bayer",t:3,s:"Watch",ta:"Cardiology",drug:"Finerenone",note:""},
+  {n:"Otsuka",t:3,s:"Watch",ta:"Nephrology",drug:"Tolvaptan",note:"ADPKD."},
+  {n:"Biomarin",t:3,s:"Watch",ta:"Rare Disease",drug:"—",note:""},
+  {n:"Ultragenyx",t:3,s:"Watch",ta:"Rare Disease",drug:"—",note:""},
+  {n:"Almirall",t:3,s:"Watch",ta:"Dermatology",drug:"—",note:""},
+  {n:"Protagonist",t:3,s:"Watch",ta:"Gastroenterology",drug:"Rusfertide",note:"PV."},
+  {n:"Calliditas",t:3,s:"Watch",ta:"Nephrology",drug:"Nefecon",note:"IgAN."},
+  {n:"Madrigal",t:3,s:"Watch",ta:"Hepatology",drug:"Rezdiffra",note:"NASH/MASH."},
+  {n:"Zealand Pharma",t:3,s:"Watch",ta:"Gastroenterology",drug:"Glepaglutide",note:"SBS-IF."},
+  {n:"BeOne",t:3,s:"Watch",ta:"Oncology",drug:"Zanubrutinib",note:""},
+  {n:"Servier",t:3,s:"Watch",ta:"Oncology",drug:"—",note:""},
+  {n:"Dr. Falk",t:3,s:"Watch",ta:"Gastroenterology",drug:"—",note:"IBD."},
+  {n:"LFB",t:3,s:"Watch",ta:"Rare Disease",drug:"—",note:""},
+  {n:"Merz",t:3,s:"Watch",ta:"Dermatology",drug:"—",note:"Aesthetics."},
+  {n:"Virbac",t:3,s:"Watch",ta:"Other",drug:"—",note:"Vet/Derm crossover. Laure Poincelot — Next Conference."},
+  {n:"Idorsia",t:3,s:"Watch",ta:"Dermatology",drug:"—",note:"CSU."},
+  {n:"Sobi",t:3,s:"Warm",ta:"Rare Disease / Cardiology",drug:"Tryngolza (olezarsen)",note:"CORE/CORE2 EAS 2026: 85% pancreatitis reduction, 66% TG sHTG. Direct Account."},
 ];
-const SM = Object.fromEntries(STAGES.map(s=>[s.id,s]));
-const SO = {act_now:4,hot:3,warm:2,active:1,watch:0};
 
-function stageFrom(imeFit, statusBez) {
-  const f = (imeFit||'').replace(/[^a-zA-ZäöüÄÖÜß ]/g,'').toLowerCase().trim();
-  const s = (statusBez||'').toLowerCase().trim();
-  // Exact values from OB_IME Airtable base
-  // IME-Fit: "🟢 Hoch" | "🟡 Mittel" | "⚪ Beobachten"
-  // Status Beziehung: "Neu — kein Kontakt" | "Erstkontakt gesendet" | "In Gespräch" | "Proposal eingereicht" | "Aktiver Partner"
-  if (s === 'aktiver partner' || s === 'proposal eingereicht')  return 'active';
-  if (f.includes('hoch'))                                        return 'hot';
-  if (f.includes('mittel') || s === 'in gespräch')              return 'warm';
-  return 'watch';
-}
-
-// ═══ TOKEN ═══
-function getToken()  { return localStorage.getItem('at_key_ime')||''; }
-function saveToken(t){ localStorage.setItem('at_key_ime', t); }
-function resetToken(){ localStorage.removeItem('at_key_ime'); location.reload(); }
-
-// ═══ AIRTABLE FETCH — uses field NAMES, not IDs ═══
-async function atFetch(tableId, fieldNames) {
-  const token = getToken();
-  if (!token) throw new Error('NO_TOKEN');
-
-  // Build URL with explicit field names
-  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
-  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}`;
-
-  let r;
-  try { r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } }); }
-  catch(e) { throw new Error('NETWORK_ERROR: ' + e.message); }
-
-  if (r.status === 401) throw new Error('TOKEN_INVALID');
-  if (r.status === 403) throw new Error('TOKEN_NO_ACCESS — Token hat keinen Zugriff auf OB_IME. Gehe zu airtable.com/create/tokens und füge OB_IME unter Access hinzu.');
-  if (!r.ok) { const t = await r.text(); throw new Error('HTTP ' + r.status + ': ' + t.slice(0,200)); }
-
-  const d = await r.json();
-  if (d.error) throw new Error('Airtable error: ' + JSON.stringify(d.error));
-
-  let records = d.records || [];
-  if (d.offset) {
-    // paginate
-    const more = await atFetchPage(tableId, fieldNames, d.offset);
-    records = [...records, ...more];
-  }
-  return records;
-}
-
-async function atFetchPage(tableId, fieldNames, offset) {
-  const token = getToken();
-  const fp = fieldNames.map(n => 'fields[]=' + encodeURIComponent(n)).join('&');
-  const url = `https://api.airtable.com/v0/${BASE}/${tableId}?pageSize=100&${fp}&offset=${offset}`;
-  const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
-  const d = await r.json();
-  let records = d.records || [];
-  if (d.offset) {
-    const more = await atFetchPage(tableId, fieldNames, d.offset);
-    records = [...records, ...more];
-  }
-  return records;
-}
-
-// Get field value by name
-function fn(rec, name) {
-  if (!rec || !rec.fields) return '';
-  const v = rec.fields[name];
-  if (v === undefined || v === null || v === '') return '';
-  if (typeof v === 'object' && !Array.isArray(v) && v.name) return v.name;
-  if (Array.isArray(v)) return v.map(x => x && x.name ? x.name : String(x)).filter(Boolean).join(', ');
-  return String(v);
-}
-
-// ═══ STATE ═══
-let accs = [], scanLog = [], allContacts = [], selId = null, view = 'pipeline', contactFilter = '';
-let briefTxt = '', briefLoad = false;
-let adpInput = '', adpResult = null, adpLoad = false;
-let scanInput = '', scanResult = '', scanLoad = false;
-
-// ═══ LOAD FROM AIRTABLE ═══
-async function loadFromAirtable() {
-  if (!getToken()) {
-    const t = prompt('Airtable Personal Access Token eingeben (wird lokal gespeichert):');
-    if (t && t.trim().startsWith('pat')) {
-      saveToken(t.trim());
-    } else {
-      setKc('Kein Token — Pipeline leer');
-      return;
-    }
-  }
-
-  setKc('⟳ Lade OB_IME…');
-  try {
-    const [firmenRecs, aktivRecs, kontaktRecs] = await Promise.all([
-      atFetch(T_FIRMA, FIRMA_FIELDS),
-      atFetch(T_AKTIV, AKTIV_FIELDS),
-      atFetch(T_KONTAKT, KONTAKT_FIELDS),
-    ]);
-
-    accs = firmenRecs.map(r => ({
-      id:    r.id,
-      name:  fn(r, 'Firma') || '(kein Name)',
-      ta:    fn(r, 'Therapiegebiet(e)') || 'Other',
-      drug:  fn(r, 'Produkte / Brands') || '',
-      imeFit:fn(r, 'IME-Fit') || '',
-      status:fn(r, 'Status Beziehung') || '',
-      notes: fn(r, 'Notizen') || '',
-      stage: stageFrom(fn(r,'IME-Fit'), fn(r,'Status Beziehung')),
-      badge: fn(r,'IME-Fit') ? fn(r,'IME-Fit') : '',
-    })).sort((a,b) => (SO[b.stage]||0) - (SO[a.stage]||0));
-
-    scanLog = aktivRecs.map(r => ({
-      title:   fn(r, 'Aktivität'),
-      datum:   fn(r, 'Datum'),
-      trigger: fn(r, 'Auslöser (PR / Symposium)'),
-      status:  fn(r, 'Status'),
-      result:  fn(r, 'Ergebnis / Notizen'),
-    })).sort((a,b) => new Date(b.datum||0) - new Date(a.datum||0));
-
-    allContacts = kontaktRecs.map(r => ({
-      id: r.id,
-      name: fn(r, 'Name') || '(kein Name)',
-      rolle: fn(r, 'Rolle') || '',
-      ta: fn(r, 'Therapiegebiet') || '',
-      email: fn(r, 'E-Mail') || '',
-      telefon: fn(r, 'Telefon') || '',
-      imeFit: fn(r, 'IME-Fit Kontakt') || '',
-      kontaktiert: fn(r, 'Bereits kontaktiert') === 'true' || fn(r, 'Bereits kontaktiert') === '1',
-      notizen: fn(r, 'Notizen') || '',
-      firmaIds: r.fields['Firma'] ? r.fields['Firma'].map(f => f.id || f) : [],
-    }));
-
-    const ts = new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-    setKc(`${accs.length} Firmen · ${aktivRecs.length} Aktivitäten · ${ts}`);
-    draw();
-
-  } catch(e) {
-    setKc('⚠ ' + e.message);
-    console.error('Airtable error:', e);
-  }
-}
-
-function setKc(txt) { document.getElementById('kc').textContent = txt; }
-
-// ═══ CLAUDE API ═══
-async function callClaude(model, system, user, maxTokens=1100) {
-  const body = { model, max_tokens: maxTokens, messages: [{role:'user', content:user}] };
-  if (system) body.system = system;
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  const d = await r.json();
-  return (d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('') || '';
-}
-
-// ═══ HELPERS ═══
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function TODAY(){ return new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}); }
-
-function gf() {
-  const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
-  const s = (document.getElementById('fs')||{value:'All'}).value;
-  return accs.filter(a => {
-    const mq = !q || [a.name,a.drug,a.ta,a.notes,a.imeFit].some(f=>f.toLowerCase().includes(q));
-    return mq && (s==='All' || a.stage===s);
-  });
-}
-
-// ═══ DRAW ═══
-function draw() {
-  const an = accs.filter(a=>a.stage==='act_now');
-  const bar = document.getElementById('abar');
-  const nm  = document.getElementById('abar-names');
-  if (an.length) {
-    bar.classList.add('on');
-    nm.innerHTML = an.map(a=>`<span class="alink" onclick="sel('${a.id}')">${esc(a.name)}</span>`).join('');
-  } else {
-    bar.classList.remove('on');
-  }
-
-  const fa = gf();
-  document.getElementById('alist').innerHTML = fa.length
-    ? fa.map(a => {
-        const st = SM[a.stage] || STAGES[4];
-        return `<div class="ac${selId===a.id?' sel':''}" onclick="sel('${a.id}')">
-          <div class="acr"><div class="dot" style="background:${st.color}"></div>
-          <div class="an">${esc(a.name)}</div></div>
-          <div class="ata">${esc(a.ta)}${a.drug?' · '+esc(a.drug.slice(0,18)):''}</div>
-          ${a.badge?`<div class="sbg">⚡ ${esc(a.badge.slice(0,55))}</div>`:''}
-        </div>`;
-      }).join('')
-    : `<div class="es">${accs.length===0?'Keine Daten — Token prüfen':'Keine Treffer'}</div>`;
-
-  drawMain();
-}
-
-function drawMain() {
-  const m = document.getElementById('main');
-  if (view==='pipeline') {
-    if (selId) { const a=accs.find(x=>x.id===selId); if(a){m.innerHTML=renderDetail(a);return;} }
-    m.innerHTML = renderPL();
-  } else if (view==='evidence') { m.innerHTML = renderEvidence(); }
-  else if (view==='contacts') { m.innerHTML = renderContacts(); }
-  else if (view==='scan')     { m.innerHTML = renderScan(); }
-  else if (view==='briefing')   { m.innerHTML = renderBriefing(); }
-  else if (view==='adp')        { m.innerHTML = renderADP(); }
-}
-
-// ═══ PIPELINE ═══
-function renderPL() {
-  const fa = gf();
-  if (!fa.length) return `<div class="es">Keine Daten. <button class="btn btnsm btnp" onclick="loadFromAirtable()" style="margin-left:8px">↻ Reload</button></div>`;
-  let h = '';
-  for (const st of STAGES) {
-    const sa = fa.filter(a=>a.stage===st.id);
-    if (!sa.length) continue;
-    h += `<div class="stage-group" style="margin-bottom:20px">
-      <div class="stage-hdr" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">
-        <div class="dot" style="background:${st.color};width:8px;height:8px;border-radius:50%"></div>
-        <span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:${st.color}">${st.label}</span>
-        <span style="font-size:10px;color:#94a3b8">${sa.length} Firmen</span>
-      </div>
-      <div class="pg">${sa.map(a=>`<div class="pc" onclick="sel('${a.id}')">
-        <div class="pn">${esc(a.name)}</div>
-        <div class="pd">${esc((a.drug||a.ta).slice(0,28))}</div>
-        <div class="pf"><span style="font-size:9px;color:#cbd5e0">${esc(a.ta.slice(0,20))}</span>${a.badge?`<span style="color:#d97706;font-size:10px">⚡</span>`:''}</div>
-      </div>`).join('')}</div>
-    </div>`;
-  }
-  return h;
-}
-
-function renderDetail(a) {
-  const st = SM[a.stage] || STAGES[4];
-  return `<div style="max-width:680px">
-    <div class="d-name">${esc(a.name)}</div>
-    <div class="chips">
-      <span class="chip" style="color:${st.color};border-color:${st.color}40;background:${st.color}12">${st.label}</span>
-      <span class="chip" style="color:#64748b;border-color:#e2e8f0;background:#f8f9fb">${esc(a.ta)}</span>
-    </div>
-    <div class="dg">
-      <div class="df"><div class="dl">Produkte / Brands</div><div class="dv hi">${esc(a.drug)||'—'}</div></div>
-      <div class="df"><div class="dl">IME-Fit</div><div class="dv hi" style="color:${st.color}">${esc(a.imeFit)||'—'}</div></div>
-      <div class="df"><div class="dl">Status Beziehung</div><div class="dv hi">${esc(a.status)||'—'}</div></div>
-    </div>
-    ${a.notes?`<div class="nb2"><div class="dl">Notizen</div><div class="dv" style="margin-top:4px">${esc(a.notes)}</div></div>`:''}
-    ${(()=>{
-      const nm = a.name.toLowerCase().split(' ')[0];
-      const evItems = EV_ITEMS ? EV_ITEMS.filter(e => e.firma.toLowerCase().includes(nm) || nm.includes(e.firma.toLowerCase().split(' ')[0])) : [];
-      if(!evItems.length) return '';
-      const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8'};
-      const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
-      return '<div style="background:#faf5ff;border:0.5px solid #e9d5ff;border-radius:8px;padding:10px;margin-bottom:10px"><div class=\"dl\" style=\"margin-bottom:8px\">🔬 Evidence Generation (' + evItems.length + ')</div>' +
-        evItems.map(e=>'<div style=\"margin-top:8px;padding-top:8px;border-top:0.5px solid #e9d5ff\">' +
-          '<div style=\"display:flex;gap:6px;align-items:center;margin-bottom:4px\">' +
-          '<span style=\"display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;' + (ETC[e.typ]||'background:#f1f5f9;color:#64748b') + '\">' + esc(e.typ) + '</span>' +
-          '<span style=\"display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;' + (ESC2[e.signal]||'') + '\">' + esc(e.signal) + '</span></div>' +
-          '<div style=\"font-size:11px;color:#0f172a;font-weight:600\">' + esc(e.titel) + '</div>' +
-          (e.nct ? '<div style=\"font-size:10px;color:#64748b;font-family:monospace\">' + esc(e.nct) + '</div>' : '') +
-          (e.congress ? '<div style=\"font-size:10px;color:#64748b\">📅 ' + esc(e.congress) + '</div>' : '') +
-          (e.pi ? '<div style=\"font-size:10px;color:#15803d\">👤 ' + esc(e.pi) + '</div>' : '') +
-          (e.doi ? '<div style=\"font-size:10px;color:#15803d\">📄 ' + esc(e.doi) + '</div>' : '') +
-          '<div style=\"font-size:10px;color:#475569;margin-top:2px\">' + esc(e.status) + '</div></div>'
-        ).join('') + '</div>';
-    })()}
-    <div class="ar">
-      <button class="btn" onclick="sel(null)">← Zurück</button>
-      <button class="btn btnp" onclick="contactFirmaFilter=a.name;sv('contacts')">👤 Kontakte dieser Firma</button>
-    </div>
-  </div>`;
-}
-
-// ═══ SCAN ═══
-// ═══ EVIDENCE ═══
-const EV_ITEMS=[
-  {firma:"Takeda",drug:"Zasocitinib (TAK-279)",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE Atlas — H2H vs deucravacitinib",status:"Topline Jun 11 2026 — SUPERIORITY",congress:"Upcoming congresses 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — expected",nct:"NCT06973291"},
-  {firma:"Takeda",drug:"Zasocitinib",typ:"Phase 3",signal:"Act Now",titel:"LATITUDE-PsO-3001/3002 — vs placebo + apremilast",status:"Published AAD Mar 28 2026",congress:"AAD 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — imminent",nct:"NCT06088043"},
-  {firma:"Janssen",drug:"Talvey + Darzalex Faspro",typ:"Phase 3",signal:"Act Now",titel:"MonumenTAL-3 — GPRC5D bispecific RRMM",status:"NEJM published Jun 13 2026 — sBLA+EMA filed",congress:"EHA 2026 Stockholm",pi:"Roberto Mina / Maria-Victoria Mateos",doi:"NEJM DOI:10.1056/NEJMoa2604657",nct:"NCT05455320"},
-  {firma:"Janssen",drug:"Imaavy (nipocalimab)",typ:"Phase 3",signal:"Act Now",titel:"ENERGY Phase II/III — wAIHA",status:"Phase II/III positive — FDA Priority Review granted",congress:"EHA 2026 Stockholm",pi:"Bruno Fattizzo, Universita di Milano",doi:"",nct:"NCT04119050"},
-  {firma:"Janssen",drug:"Icotrokinra",typ:"Regulatory",signal:"Act Now",titel:"EMA MAA filed — first oral IL-23R blocker",status:"EMA MAA filed — EU approval H2 2026",congress:"EADV 2026",pi:"Ya-Wen (Betty) Yang",doi:"JEADV DOI:10.1111/jdv.70471",nct:""},
-  {firma:"Janssen",drug:"Erleada (apalutamide)",typ:"Phase 3",signal:"Act Now",titel:"PROTEUS — perioperative high-risk PCa",status:"Published NEJM Jun 3 2026",congress:"ASCO 2026 LBA1",pi:"Mary-Ellen Taplin (Dana-Farber)",doi:"NEJM DOI:10.1056/NEJMoa2603878",nct:"NCT03767244"},
-  {firma:"AstraZeneca",drug:"Camizestrant",typ:"Regulatory",signal:"Act Now",titel:"CHMP positive — ER+/HER2- advanced BC (ESR1+)",status:"CHMP positive May 26 2026 — EC approval imminent",congress:"ASCO 2026",pi:"Francois-Clement Bidard",doi:"",nct:"SERENA-6"},
-  {firma:"AstraZeneca",drug:"Truqap + Abiraterone",typ:"Regulatory",signal:"Hot",titel:"FDA approved — PTEN-deficient mHSPC (CAPItello-281)",status:"FDA approved Jun 15 2026 — EU application running",congress:"ESMO 2025",pi:"Karim Fizazi",doi:"Annals of Oncology",nct:"CAPItello-281"},
-  {firma:"AstraZeneca",drug:"Ultomiris (ravulizumab)",typ:"Regulatory",signal:"Hot",titel:"FDA Priority Review — IgAN (I CAN Phase III)",status:"FDA Priority Review Jun 15 2026 — PDUFA Q4 2026",congress:"ERA 2026",pi:"",doi:"",nct:"ALXN1210-IgAN-320"},
-  {firma:"Novartis",drug:"Cosentyx (secukinumab)",typ:"Phase 3",signal:"Act Now",titel:"REPLENISH — Polymyalgia Rheumatica",status:"Published NEJM Jun 3 2026",congress:"EULAR 2026",pi:"Prof. John Stone (Harvard/MGH)",doi:"",nct:"NCT05767034"},
-  {firma:"Novartis",drug:"Vanrafia (atrasentan)",typ:"Phase 3",signal:"Act Now",titel:"ALIGN — IgAN final 2.5yr data",status:"Published Lancet Jun 4 2026",congress:"ERA Jun 2026",pi:"Prof. Hiddo Heerspink",doi:"",nct:"NCT04573478"},
-  {firma:"Novartis",drug:"Rhapsido (remibrutinib)",typ:"Phase 3",signal:"Hot",titel:"RemIND Phase III — CIndU (3 subtypes) EAACI Jun 15",status:"Phase III positive — sNDA FDA filed",congress:"EAACI 2026",pi:"Prof. Dr. Martin Metz, Charite Berlin",doi:"JEADV / JDDG",nct:"NCT05976243"},
-  {firma:"Novartis",drug:"Fabhalta (iptacopan)",typ:"Phase 3",signal:"Hot",titel:"APPLAUSE-IgAN Phase III eGFR positive + FDA priority review",status:"Phase III positive — FDA priority review",congress:"ERA / ASN 2026",pi:"",doi:"",nct:""},
-  {firma:"UCB",drug:"Dapirolizumab pegol (DZP)",typ:"Phase 3",signal:"Hot",titel:"PHOENYCS GO — SLE Phase III",status:"Published Lancet May 29 2026",congress:"EULAR 2026",pi:"Megan Clowse (Duke)",doi:"",nct:"NCT04294667"},
-  {firma:"AbbVie",drug:"Skyrizi (risankizumab)",typ:"Regulatory",signal:"Hot",titel:"EC approved — paediatric plaque psoriasis 6+ years",status:"EC approved Jun 23 2026",congress:"EADV 2026",pi:"Prof. Dr. Nina Magnolo, Univ.klinikum Muenster",doi:"JEADV / JDDG",nct:"NCT04435600"},
-  {firma:"Incyte",drug:"Monjuvi/Minjuvi + Lenalidomid + R-CHOP",typ:"Phase 3",signal:"Warm",titel:"frontMIND Phase III — 1L DLBCL/HGBL (EHA Plenary + Lancet)",status:"Phase III positive — EHA Plenary + Lancet Jun 13 2026",congress:"EHA 2026 Stockholm Plenary",pi:"Dr. Georg Lenz, Univ.klinikum Muenster",doi:"The Lancet Jun 2026",nct:"NCT04824092"},
-  {firma:"Boehringer Ingelheim",drug:"Nerandomilast (Jascayd)",typ:"Regulatory",signal:"Warm",titel:"FIBRONEER Survival Modeling — +5.4yr IPF, 59% Mortalitaetsreduktion",status:"ATS + EULAR 2026 praesentiert — CHMP positiv Mai 2026",congress:"ATS / EULAR 2026",pi:"Prof. Toby Maher (USC Los Angeles)",doi:"",nct:""},
-  {firma:"Roche/Genentech",drug:"Lunsumio VELO + Polivy",typ:"Regulatory",signal:"Hot",titel:"sBLA FDA akzeptiert — R/R LBCL (SUNMO Phase III)",status:"sBLA FDA akzeptiert Jun 18 2026 — PDUFA Feb 9 2027",congress:"ASCO / EHA 2026",pi:"",doi:"",nct:"NCT05171647"},
-  {firma:"Merck/MSD",drug:"Tulisokibart (MK-7240)",typ:"Phase 3",signal:"Warm",titel:"ATLAS-UC Phase III positiv — erster Anti-TL1A Biologic",status:"Phase III ATLAS-UC positiv Jun 22 2026",congress:"Upcoming congress 2026",pi:"",doi:"",nct:"NCT06052059"},
-];
-let evFilter='All';
-const EV_TYPES_LIST=['All','Phase 3','Phase 2','Regulatory','Wiley Pub','Congress'];
-
-function renderEvidence(){
-  const q=(document.getElementById('srch')||{value:''}).value.toLowerCase();
-  let filtered=evFilter==='All'?EV_ITEMS:EV_ITEMS.filter(e=>e.typ===evFilter);
-  if(q) filtered=filtered.filter(e=>[e.firma,e.drug,e.titel,e.pi,e.status].some(f=>(f||'').toLowerCase().includes(q)));
-  filtered=[...filtered].sort((a,b)=>{const so={'Act Now':0,'Hot':1,'Warm':2,'Watch':3};return(so[a.signal]??4)-(so[b.signal]??4);});
-  const fBtns=EV_TYPES_LIST.map(f=>`<span onclick="setEvFilter('${f}')" style="padding:4px 10px;border-radius:12px;font-size:10px;cursor:pointer;border:0.5px solid ${evFilter===f?'#bfdbfe':'#e2e8f0'};background:${evFilter===f?'#eff6ff':'#f8f9fb'};color:${evFilter===f?'#2563eb':'#64748b'}">${f} (${f==='All'?EV_ITEMS.length:EV_ITEMS.filter(e=>e.typ===f).length})</span>`).join('');
-  const ETC={'Phase 3':'background:#fef2f2;color:#c53030','Phase 2':'background:#fff7ed;color:#c2410c','Regulatory':'background:#ecfdf5;color:#065f46','Wiley Pub':'background:#f0fdf4;color:#15803d','Congress':'background:#eff6ff;color:#1d4ed8','RWE':'background:#faf5ff;color:#7c3aed','IIT':'background:#fffbeb;color:#d97706'};
-  const ESC2={'Act Now':'background:#fef2f2;color:#dc2626','Hot':'background:#fff7ed;color:#ea580c','Warm':'background:#fffbeb;color:#d97706','Watch':'background:#f1f5f9;color:#64748b'};
-  const rows=filtered.map(e=>`<tr>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:700;color:#0f172a">${esc(e.firma)}</div><div style="font-size:10px;color:#94a3b8">${esc(e.drug)}</div></td>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;${ETC[e.typ]||''}">${esc(e.typ)}</span></td>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="font-weight:600;color:#0f172a;margin-bottom:2px">${esc(e.titel)}</div>${e.nct?`<div style="font-size:10px;color:#64748b;font-family:monospace">${esc(e.nct)}</div>`:''}${e.doi?`<div style="font-size:10px;color:#15803d">📄 ${esc(e.doi)}</div>`:''}</td>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><div style="color:#475569">${esc(e.status)}</div>${e.congress?`<div style="font-size:10px;color:#94a3b8">📅 ${esc(e.congress)}</div>`:''}</td>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top">${e.pi?`<div>👤 ${esc(e.pi)}</div>`:'<span style="color:#94a3b8">—</span>'}</td>
-    <td style="padding:9px 10px;border-bottom:0.5px solid #f1f5f9;font-size:11px;vertical-align:top"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;${ESC2[e.signal]||''}">${esc(e.signal)}</span></td>
-  </tr>`).join('');
-  return`<div style="max-width:900px">
-    <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Evidence Generation</div>
-    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${EV_ITEMS.length} Items · Klinische Studien, Regulatory Events, Wiley Publikationen · Jun 23 2026</div>
-    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">${fBtns}</div>
-    <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px #0000000a">
-      <thead><tr style="background:#f8f9fb">
-        ${['Firma','Typ','Titel / NCT','Status / Kongress','PI / KOL','Signal'].map(h=>`<th style="padding:8px 10px;border-bottom:0.5px solid #e2e8f0;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:#94a3b8;text-align:left">${h}</th>`).join('')}
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-  </div>`;
-}
-function setEvFilter(f){evFilter=f;drawMain();}
-
-// ═══ KONTAKTE DATABASE ═══
+// ── CONTACTS ──────────────────────────────────────────────────────────────────
 const CONTACTS = [
-  // ── NOVARTIS ─────────────────────────────────────────────────────────
-  {id:"c01", name:"Corine Gaillez",        firma:"Novartis", rolle:"Sr GMA Secukinumab",      ta:"Dermatology / Immunology", email:"",                          status:"Contacted", signals:["Mark TeamLink"],    note:"InMail gesendet Jun 2026, Follow-up 17 Jun. Paediatric psoriasis Knowledge Hub. 5 IME-Winkel verfügbar (Cosentyx PMR, Vanrafia IgAN, Cosentyx paed HS, Rhapsido CSU, RemIND CIndU)."},
-  {id:"c02", name:"Martin Hager",          firma:"Novartis", rolle:"GMA Oncology",             ta:"Oncology",                 email:"",                          status:"Active",    signals:["Mark TeamLink"],    note:"Email open. Follow-up 16 Jun. ASCO 2026 Kisqali hook. Mark TeamLink Intro anbieten."},
-  {id:"c03", name:"Linn Southall",         firma:"Novartis", rolle:"MA Nephrology",            ta:"Nephrology",               email:"",                          status:"Contacted", signals:[],                  note:"IgAN outreach gesendet. Cross-specialty Nephrologie/Rheumatologie Framing. Wiley Nephrology journal anchor."},
-  {id:"c04", name:"Mirela Guina",          firma:"Novartis", rolle:"Medical Affairs",          ta:"Dermatology",              email:"",                          status:"Contacted", signals:[],                  note:"Nachricht gesendet 27 Mai 2026. Response prüfen Jun 16."},
-  {id:"c05", name:"Assya Achouba",         firma:"Novartis", rolle:"Medical Affairs",          ta:"Immunology",               email:"",                          status:"New",       signals:[],                  note:"⚠ Pivot von Josefin Snellman (5x keine Antwort). Josefin NICHT re-kontaktieren."},
-  {id:"c06", name:"Ivan Nikolaev",         firma:"Novartis", rolle:"Medical Affairs",          ta:"Dermatology",              email:"",                          status:"New",       signals:[],                  note:"⚠ JEADV Chronic Pruritus Supplement mit Aman Matharoo nicht zustande gekommen — NICHT erwähnen. Neuer Angle: Rhapsido CIndU RemIND Phase III."},
-  // ── TAKEDA ───────────────────────────────────────────────────────────
-  {id:"c07", name:"Taylor Spector",        firma:"Takeda",   rolle:"Global Medical Affairs Derm", ta:"Dermatology",           email:"",                          status:"Active",    signals:[],                  note:"Messaged 11 Mai, Follow-up 16 Jun. Nina Magnolo als Anker. Kennt Panagiotis Beretsos (Janssen, 6J zusammen bei Takeda)."},
-  {id:"c08", name:"Martin Kot",            firma:"Takeda",   rolle:"TYK2 Scientific Training", ta:"Dermatology",             email:"",                          status:"New",       signals:[],                  note:"TYK2/Zasocitinib Scientific Training. Interner Kontakt für LATITUDE IME."},
-  {id:"c09", name:"Michele Brunori",       firma:"Takeda",   rolle:"Medical Affairs Gastro",  ta:"Gastroenterology",         email:"",                          status:"Warm-up",   signals:[],                  note:"Warm intro via Evelina van Ree beim UCB Scoping Call 6 Jul."},
-  {id:"c10", name:"Dr. Melinda Gooderham", firma:"Takeda",   rolle:"KOL / PI LATITUDE",       ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"PI LATITUDE-PsO-3001/3002. 40 JEADV Pubs. Co-Autorin ICONIC-TOTAL (DOI:10.1111/jdv.70471). SKiN Centre Peterborough, Ontario. Kontakt via Lusha."},
-  // ── ABBVIE ───────────────────────────────────────────────────────────
-  {id:"c11", name:"Caroline Park",         firma:"AbbVie",   rolle:"Medical Affairs IBD",     ta:"Gastroenterology",         email:"caroline.park@abbvie.com",  status:"Active",    signals:[],                  note:"Email bestätigt. Opener: IBD Day Post. JCC-Hook. EC Approval Skyrizi paed Psoriasis Jun 23 — neuer Derma-Angle."},
-  {id:"c12", name:"Anne Lejeune",          firma:"AbbVie",   rolle:"Medical Affairs",         ta:"Gastroenterology",         email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ex-Takeda IBD 4 Jahre. Wahrscheinlich kennt Peyrin-Biroulet. JCC-Hook. Wiley IME Alumni Signal."},
-  {id:"c13", name:"Prof. Nina Magnolo",    firma:"AbbVie",   rolle:"KOL / Lead Investigator", ta:"Dermatology (Paediatric)", email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Lead Investigator OptIMMize-1 (Skyrizi paed Psoriasis). Universitätsklinikum Münster. Zitiert im AbbVie Pressetext Jun 23 2026. DACH-lokaler KOL-Anker."},
-  // ── JANSSEN ──────────────────────────────────────────────────────────
-  {id:"c14", name:"Panagiotis Beretsos",   firma:"Janssen",  rolle:"Head ESE GMA, Basel",     ta:"Immunology / Oncology",    email:"",                          status:"New",       signals:["Mark TeamLink"],   note:"Höchster Wert Janssen. Taylor Spector 6J bei Takeda zusammen — warm intro möglich. Mark TeamLink-Signal."},
-  {id:"c15", name:"Jessica H. Rubens",     firma:"Janssen",  rolle:"Medical Affairs",         ta:"Immunology",               email:"jessica.h.rubens@jnj.com",  status:"Active",    signals:[],                  note:"Primärer Outreach-Kontakt Janssen. EMA filing hook. 7 IME-Winkel inkl. MonumenTAL-3 NEJM + Imaavy wAIHA."},
-  {id:"c16", name:"Ya-Wen (Betty) Yang",   firma:"Janssen",  rolle:"Sr Director Global MA Immunology", ta:"Immunology / Dermatology", email:"ya-wen.yang@jnj.com (unverified)", status:"New", signals:[], note:"Co-Autorin ICONIC-TOTAL JEADV (DOI:10.1111/jdv.70471). Icotrokinra EMA MAA H2 2026 hook. Via Lusha verifizieren."},
-  // ── UCB ──────────────────────────────────────────────────────────────
-  {id:"c17", name:"Evelina van Ree",       firma:"UCB",      rolle:"Medical Affairs",         ta:"Immunology",               email:"Evelina.vanRee@ucb.com",    status:"Active",    signals:[],                  note:"Scoping Call 6 Jul bestätigt. Michele Brunori (Takeda) warm intro via diesen Call. DZP SLE Lancet + Cizutamig + Bimzelx angles."},
-  // ── ASTRAZENECA ──────────────────────────────────────────────────────
-  {id:"c18", name:"Alex Dorr",             firma:"AstraZeneca", rolle:"Medical Affairs Oncology", ta:"Oncology",             email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Camizestrant EC + Truqap FDA mHSPC + Ultomiris IgAN PDUFA Q4 2026."},
-  {id:"c19", name:"Marisol Urbieta",       firma:"AstraZeneca", rolle:"Medical Affairs",       ta:"Oncology",               email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Follow-up mit AZ Onkologie-Pipeline."},
-  {id:"c20", name:"Botond Ponner",         firma:"AstraZeneca", rolle:"Medical Affairs",       ta:"Oncology",               email:"",                          status:"Contacted", signals:[],                  note:"LinkedIn InMail gesendet Jun 16. Follow-up mit AZ Onkologie-Pipeline."},
-  // ── ELI LILLY ────────────────────────────────────────────────────────
-  {id:"c21", name:"Prof. Britta Siegmund", firma:"Eli Lilly", rolle:"KOL / IBD",             ta:"Gastroenterology / IBD",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. IBD/Gastro KOL. Relevant für Lilly Omvoh + AbbVie Skyrizi IBD IME."},
-  // ── NOVO NORDISK ─────────────────────────────────────────────────────
-  {id:"c22", name:"Anders West",           firma:"Novo Nordisk", rolle:"Lead IME Grants",     ta:"Endocrinology / CV",       email:"anwc@novonordisk.com",       status:"Watch",     signals:[],                  note:"IME Grants Lead, Novo Nordisk Denmark. 2 Projekte 2025 abgelehnt (Basal Insulin). POSEIDON CV Inflammation = anderes TA/Budget. Trigger: POSEIDON Wiley Pub oder CV Approval."},
-  {id:"c23", name:"Sebastian Pieperhoff",  firma:"Novo Nordisk", rolle:"Sr Medical Advisor",  ta:"Diabetes / Endocrinology", email:"sepf@novonordisk.com",        status:"Watch",     signals:[],                  note:"Sr Medical Advisor Diabetes, Novo Nordisk Pharma GmbH Mainz. 9 Jahre Novo Nordisk. Lokaler DACH MA Kontakt."},
-  // ── AMGEN ────────────────────────────────────────────────────────────
-  {id:"c24", name:"Margreet Plantenga",    firma:"Amgen",    rolle:"Medical Affairs",         ta:"Dermatology",              email:"",                          status:"Contacted", signals:[],                  note:"Amgen Breda. Apremilast PPP Phase III JEADV Pub (DOI:10.1111/jdv.70166). DACH personnel turnover — verifizieren."},
-  // ── REGENERON / SANOFI ───────────────────────────────────────────────
-  {id:"c25", name:"Prof. Schön",           firma:"Regeneron/Sanofi", rolle:"KOL / cSCC",     ta:"Dermatology / Oncology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Göttingen, cSCC. JDDG Autor. Dupixent/Cemiplimab IME-Angle."},
-  {id:"c26", name:"Prof. Blume-Peytavi",   firma:"Pfizer",   rolle:"KOL / AA",               ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. Alopecia Areata. JDDG-Autorin. Cibinqo/Abrocitinib Pfizer hook."},
-  {id:"c27", name:"Prof. Dr. Zink",        firma:"Pfizer",   rolle:"KOL / AD",               ta:"Dermatology",              email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"TU Munich. Atopische Dermatitis. JDDG-Autor. Cibinqo Pfizer + Omvoh Lilly hook."},
-  // ── ROCHE / GENENTECH ────────────────────────────────────────────────
-  {id:"c28", name:"Prof. Schett",          firma:"Roche/Genentech", rolle:"KOL / SLE Rheum", ta:"Rheumatology / Oncology",  email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Erlangen. SLE/Rheum. ART-Autor. Roche/AZ → Kurt."},
-  // ── GILEAD ───────────────────────────────────────────────────────────
-  {id:"c29", name:"Prof. Heiner Wedemeyer", firma:"Gilead",  rolle:"KOL / HBV Hepatology",  ta:"Hepatology",               email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"MHH Hannover. DGVS Präsident. Seladelpar/Bulevirtide Gilead → Kurt handoff."},
-  // ── LEO PHARMA ───────────────────────────────────────────────────────
-  {id:"c30", name:"Ramy Elbana",           firma:"LEO Pharma", rolle:"Medical Affairs",      ta:"Dermatology",              email:"",                          status:"New",       signals:[],                  note:"Congress contact. AD/Tralokinumab angle."},
-  // ── VIRBAC ───────────────────────────────────────────────────────────
-  {id:"c31", name:"Laure Poincelot",       firma:"Virbac",   rolle:"Medical Affairs",        ta:"Other (Vet/Derm)",         email:"",                          status:"New",       signals:[],                  note:"Congress contact. Vet/Derm crossover."},
-  // ── ALEXION/AZ ───────────────────────────────────────────────────────
-  {id:"c32", name:"Adelaide Eliopoulos",   firma:"Alexion/AZ", rolle:"Medical Affairs",      ta:"Rare Disease",             email:"",                          status:"New",       signals:[],                  note:"Congress contact. Rare Disease pipeline."},
-  // ── SANOFI ───────────────────────────────────────────────────────────
-  {id:"c33", name:"Marisa Muninger",       firma:"Sanofi",   rolle:"Medical Affairs",        ta:"Immunology",               email:"",                          status:"New",       signals:[],                  note:"Congress contact. Dupixent/Sarclisa angle."},
-  // ── KOL NETWORK ──────────────────────────────────────────────────────
-  {id:"c34", name:"Prof. Finckh",          firma:"(KOL — AbbVie/Lilly)", rolle:"KOL / RA JAK", ta:"Rheumatology",          email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Geneva. RA/JAK. ART Autor. AbbVie/Lilly IME hook."},
-  {id:"c35", name:"Prof. Lauper",          firma:"(KOL — AbbVie/Lilly)", rolle:"KOL / RA",    ta:"Rheumatology",            email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Geneva. RA/JAK. ART Autor. AbbVie/Lilly IME hook."},
-  {id:"c36", name:"Prof. Poddubnyy",       firma:"(KOL — Novartis/UCB)", rolle:"KOL / axSpA", ta:"Rheumatology",            email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. axSpA/MRI. ART Autor. Novartis/UCB Cosentyx/Bimzelx hook."},
-  {id:"c37", name:"Prof. Diekhoff",        firma:"(KOL — Novartis/UCB)", rolle:"KOL / axSpA MRI", ta:"Rheumatology",        email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. axSpA/MRI. ART Autor. Novartis/UCB hook."},
-  {id:"c38", name:"Prof. Hassel",          firma:"(KOL — Regeneron)", rolle:"KOL / cSCC",    ta:"Dermatology / Oncology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Heidelberg. cSCC. IJD/JDDG Autor. Regeneron/Sanofi Cemiplimab hook."},
-  {id:"c39", name:"Prof. Nikolaus Marx",   firma:"(KOL — Novo Nordisk)", rolle:"KOL / CV Inflammation", ta:"Cardiology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Uni Hospital Aachen. CV Inflammation/Cardio-Metabolic. POSEIDON study. Novo Nordisk hook."},
-  {id:"c40", name:"Laurent Peyrin-Biroulet", firma:"(KOL — Takeda/AbbVie)", rolle:"KOL / JCC Editor-in-Chief", ta:"Gastroenterology / IBD", email:"",        status:"New",       signals:["KOL/MA Access"],   note:"Nancy, France. IBD/Crohn's KOL. Editor-in-Chief JCC (Wiley). Takeda IBD IME + AbbVie hook."},
-  {id:"c41", name:"Prof. Dr. Martin Metz", firma:"(KOL — Novartis)", rolle:"KOL / CIndU",    ta:"Dermatology / Immunology", email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Charité Berlin. CIndU. RemIND Phase III PI. Novartis Rhapsido hook. DACH-lokal."},
-  {id:"c42", name:"Dr. Georg Lenz",        firma:"(KOL — Incyte)",  rolle:"KOL / DLBCL",    ta:"Oncology / Haematology",   email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Universitätsklinikum Münster. frontMIND Phase III PI. Incyte Monjuvi hook. DACH-lokal."},
-  // ── IME NETWORK SIGNALS ──────────────────────────────────────────────
-  {id:"c43", name:"Mark Gmelig Meyling",   firma:"(Wiley IME)", rolle:"Manager / TeamLink",  ta:"All TAs",                  email:"",                          status:"Active",    signals:["Mark TeamLink"],   note:"Manager Osman @ Wiley. Stärkster Intro-Signal. TeamLink Verbindung zu: Corine Gaillez, Martin Hager, Panagiotis Beretsos."},
-  {id:"c44", name:"Saulo Prado",           firma:"(IQVIA / Wiley Alumni)", rolle:"Wiley IME Alumni", ta:"All TAs",           email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ehemaliger Wiley IME Kollege, jetzt IQVIA. IME-Ecosystem-aware. Kontakt ist mit IME-Prozessen vertraut."},
-  {id:"c45", name:"Martin Steiniche Nielsen", firma:"(Wiley Alumni)", rolle:"Wiley IME Alumni", ta:"All TAs",               email:"",                          status:"New",       signals:["Wiley IME Alumni"], note:"Ehemaliger Wiley IME Kollege. IME-Ecosystem-aware."},
-  {id:"c46", name:"Felix David",           firma:"(Medscape)",  rolle:"Competitor Signal",   ta:"All TAs",                  email:"",                          status:"Watch",     signals:["Medscape ⚠"],      note:"Jetzt bei Medscape. Competitor Signal: Kontakte mit Felix als Mutual → wahrscheinlich in Medscape-Pipeline. Differenzierung: Journal Credibility, EACCME, Editorial Independence."},
-  {id:"c47", name:"Caroline Phillips",     firma:"(Medscape)",  rolle:"Competitor Signal",   ta:"All TAs",                  email:"",                          status:"Watch",     signals:["Medscape ⚠"],      note:"Jetzt bei Medscape (ex-Wiley, ~12-13 Jahre). Competitor Signal. Gleiche Differenzierungsstrategie wie bei Felix David."},
-  {id:"c48", name:"Susanne Kammerer",      firma:"(Independent)", rolle:"Medical Writer / KOL Access", ta:"All TAs",         email:"",                          status:"New",       signals:["KOL/MA Access"],   note:"Medical Writer und Wissenschaftsjournalistin. KOL/MA Access Signal."},
-  {id:"c49", name:"Geoff Covey",           firma:"(Wiley IME)", rolle:"Senior Wiley Signal",  ta:"All TAs",                  email:"",                          status:"New",       signals:["Senior Wiley"],    note:"Mark's ehemaliger Manager, Wiley IME. Senior Wiley Signal für hochrangige Intro."},
+  {name:"Corine Gaillez",role:"Sr GMA Secukinumab",acc:"Novartis",ta:"Dermatology",status:"Contacted",signals:["Mark TeamLink"],note:"InMail Jun 2026, Follow-up 17 Jun. Paediatric psoriasis Knowledge Hub. 5 IME-Winkel."},
+  {name:"Martin Hager",role:"GMA Oncology",acc:"Novartis",ta:"Oncology",status:"Active",signals:["Mark TeamLink"],note:"Email open, follow-up 16 Jun. ASCO 2026 Kisqali hook."},
+  {name:"Linn Southall",role:"MA Nephrology",acc:"Novartis",ta:"Nephrology",status:"Contacted",signals:[],note:"IgAN outreach sent. Cross-specialty framing."},
+  {name:"Mirela Guina",role:"Medical Affairs",acc:"Novartis",ta:"Dermatology",status:"Contacted",signals:[],note:"Message sent 27 Mai. Response prüfen."},
+  {name:"Assya Achouba",role:"Medical Affairs",acc:"Novartis",ta:"Immunology",status:"New",signals:[],note:"⚠ Pivot von Josefin Snellman (5x keine Antwort). Josefin NICHT kontaktieren."},
+  {name:"Ivan Nikolaev",role:"Medical Affairs",acc:"Novartis",ta:"Dermatology",status:"New",signals:[],note:"⚠ JEADV Chronic Pruritus Supplement nicht zustande — NICHT erwähnen. Neuer Angle: Rhapsido CIndU RemIND."},
+  {name:"Taylor Spector",role:"Global MA Derm",acc:"Takeda",ta:"Dermatology",status:"Active",signals:[],note:"Messaged 11 Mai, Follow-up 16 Jun. Kennt Beretsos (Janssen, 6J zusammen bei Takeda)."},
+  {name:"Martin Kot",role:"TYK2 Scientific Training",acc:"Takeda",ta:"Dermatology",status:"New",signals:[],note:"TYK2/Zasocitinib. Interner Kontakt LATITUDE IME."},
+  {name:"Michele Brunori",role:"MA Gastroenterology",acc:"Takeda",ta:"Gastroenterology",status:"Warm-up",signals:[],note:"Warm intro via Evelina van Ree beim UCB Scoping Call 6 Jul."},
+  {name:"Dr. Melinda Gooderham",role:"KOL / PI LATITUDE",acc:"Takeda",ta:"Dermatology",status:"New",signals:["KOL/MA Access"],note:"PI LATITUDE-PsO-3001/3002. 40 JEADV Pubs. SKiN Centre Peterborough. Kontakt via Lusha."},
+  {name:"Caroline Park",role:"MA IBD",acc:"AbbVie",ta:"Gastroenterology",status:"Active",signals:[],note:"caroline.park@abbvie.com. IBD Day Post opener. JCC-Hook."},
+  {name:"Anne Lejeune",role:"Medical Affairs",acc:"AbbVie",ta:"Gastroenterology",status:"New",signals:["Wiley IME Alumni"],note:"Ex-Takeda IBD 4 Jahre. JCC-Hook. Wiley IME Alumni Signal."},
+  {name:"Prof. Nina Magnolo",role:"KOL / Lead Investigator",acc:"AbbVie",ta:"Dermatology (Paed.)",status:"New",signals:["KOL/MA Access"],note:"Lead Investigator OptIMMize-1. Univ.klinikum Münster. Zitiert AbbVie Pressetext Jun 23."},
+  {name:"Panagiotis Beretsos",role:"Head ESE GMA, Basel",acc:"Janssen",ta:"Immunology",status:"New",signals:["Mark TeamLink"],note:"Höchster Wert Janssen. Taylor Spector 6J bei Takeda. Mark TeamLink."},
+  {name:"Jessica H. Rubens",role:"Medical Affairs",acc:"Janssen",ta:"Immunology",status:"Active",signals:[],note:"jessica.h.rubens@jnj.com. 7 IME-Winkel: MonumenTAL-3 + Imaavy wAIHA."},
+  {name:"Ya-Wen (Betty) Yang",role:"Sr Director Global MA Immunology",acc:"Janssen",ta:"Immunology",status:"New",signals:[],note:"Co-Autorin ICONIC-TOTAL JEADV (DOI:10.1111/jdv.70471). ya-wen.yang@jnj.com (unverified — via Lusha)."},
+  {name:"Evelina van Ree",role:"Medical Affairs",acc:"UCB",ta:"Immunology",status:"Active",signals:[],note:"Evelina.vanRee@ucb.com. Scoping Call 6 Jul. Michele Brunori warm intro planen."},
+  {name:"Alex Dorr",role:"MA Oncology",acc:"AstraZeneca",ta:"Oncology",status:"Contacted",signals:[],note:"LinkedIn InMail Jun 16. Camizestrant EC + Truqap FDA + Ultomiris IgAN."},
+  {name:"Marisol Urbieta",role:"Medical Affairs",acc:"AstraZeneca",ta:"Oncology",status:"Contacted",signals:[],note:"LinkedIn InMail Jun 16."},
+  {name:"Botond Ponner",role:"Medical Affairs",acc:"AstraZeneca",ta:"Oncology",status:"Contacted",signals:[],note:"LinkedIn InMail Jun 16."},
+  {name:"Prof. Britta Siegmund",role:"KOL / IBD",acc:"Eli Lilly",ta:"Gastroenterology",status:"New",signals:["KOL/MA Access"],note:"Charité Berlin. IBD KOL. Lilly Omvoh + AbbVie Skyrizi IBD IME."},
+  {name:"Anders West",role:"Lead IME Grants",acc:"Novo Nordisk",ta:"Endocrinology",status:"Watch",signals:[],note:"anwc@novonordisk.com. 2 Projekte 2025 abgelehnt (Basal Insulin). POSEIDON = anderes TA."},
+  {name:"Sebastian Pieperhoff",role:"Sr Medical Advisor Diabetes",acc:"Novo Nordisk",ta:"Diabetes",status:"Watch",signals:[],note:"sepf@novonordisk.com. Novo Nordisk Pharma GmbH Mainz. 9 Jahre NNO. DACH-lokal."},
+  {name:"Margreet Plantenga",role:"Medical Affairs",acc:"Amgen",ta:"Dermatology",status:"Contacted",signals:[],note:"Amgen Breda. Apremilast PPP Phase III JEADV Pub. DACH personnel turnover — verifizieren."},
+  {name:"Prof. Schön",role:"KOL / cSCC",acc:"Regeneron/Sanofi",ta:"Dermatology",status:"New",signals:["KOL/MA Access"],note:"Göttingen. cSCC. JDDG-Autor. Dupixent/Cemiplimab hook."},
+  {name:"Prof. Blume-Peytavi",role:"KOL / AA",acc:"Pfizer",ta:"Dermatology",status:"New",signals:["KOL/MA Access"],note:"Charité Berlin. Alopecia Areata. JDDG-Autorin. Cibinqo Pfizer hook."},
+  {name:"Prof. Dr. Zink",role:"KOL / AD",acc:"Pfizer",ta:"Dermatology",status:"New",signals:["KOL/MA Access"],note:"TU Munich. Atopische Dermatitis. JDDG-Autor. Cibinqo + Omvoh hook."},
+  {name:"Ramy Elbana",role:"Medical Affairs",acc:"LEO Pharma",ta:"Dermatology",status:"New",signals:[],note:"Congress contact. AD/Tralokinumab."},
+  {name:"Laure Poincelot",role:"Medical Affairs",acc:"Virbac",ta:"Other",status:"New",signals:[],note:"Congress contact. Vet/Derm crossover."},
+  {name:"Adelaide Eliopoulos",role:"Medical Affairs",acc:"Alexion/AZ",ta:"Rare Disease",status:"New",signals:[],note:"Congress contact. Rare Disease pipeline."},
+  {name:"Marisa Muninger",role:"Medical Affairs",acc:"Sanofi",ta:"Immunology",status:"New",signals:[],note:"Congress contact. Dupixent/Sarclisa/Wayrilz angle."},
+  {name:"Prof. Dr. Martin Metz",role:"KOL / CIndU",acc:"Novartis",ta:"Dermatology / Immunology",status:"New",signals:["KOL/MA Access"],note:"Charité Berlin. CIndU. RemIND Phase III PI. Novartis Rhapsido hook. DACH-lokal."},
+  {name:"Dr. Georg Lenz",role:"KOL / DLBCL",acc:"Incyte",ta:"Oncology / Haematology",status:"New",signals:["KOL/MA Access"],note:"Univ.klinikum Münster. frontMIND Phase III PI. Incyte Monjuvi hook. DACH-lokal."},
+  {name:"Mark Gmelig Meyling",role:"Manager / TeamLink",acc:"(Wiley IME)",ta:"All TAs",status:"Active",signals:["Mark TeamLink"],note:"Manager Osman @ Wiley. Stärkster Intro-Signal. TeamLink → Gaillez, Hager, Beretsos."},
+  {name:"Saulo Prado",role:"Wiley IME Alumni",acc:"(IQVIA)",ta:"All TAs",status:"New",signals:["Wiley IME Alumni"],note:"Ex-Wiley IME. Jetzt IQVIA. IME-Ecosystem-aware."},
+  {name:"Martin Steiniche Nielsen",role:"Wiley IME Alumni",acc:"(Wiley Alumni)",ta:"All TAs",status:"New",signals:["Wiley IME Alumni"],note:"Ex-Wiley IME. IME-Ecosystem-aware."},
+  {name:"Felix David",role:"Competitor Signal",acc:"(Medscape)",ta:"All TAs",status:"Watch",signals:["Medscape ⚠"],note:"Jetzt bei Medscape. Kontakte mit Felix als Mutual → wahrscheinlich in Medscape-Pipeline."},
+  {name:"Caroline Phillips",role:"Competitor Signal",acc:"(Medscape)",ta:"All TAs",status:"Watch",signals:["Medscape ⚠"],note:"Jetzt bei Medscape (ex-Wiley, ~12-13 Jahre). Competitor Signal."},
+  {name:"Susanne Kammerer",role:"Medical Writer / KOL Access",acc:"(Independent)",ta:"All TAs",status:"New",signals:["KOL/MA Access"],note:"Medical Writer und Wissenschaftsjournalistin. KOL/MA Access Signal."},
+  {name:"Geoff Covey",role:"Senior Wiley Signal",acc:"(Wiley IME)",ta:"All TAs",status:"New",signals:["Senior Wiley"],note:"Mark's ehemaliger Manager, Wiley IME. Senior Wiley Signal."},
+  {name:"Prof. Laurent Peyrin-Biroulet",role:"KOL / JCC Editor-in-Chief",acc:"(Takeda/AbbVie)",ta:"Gastroenterology",status:"New",signals:["KOL/MA Access"],note:"Nancy, France. IBD/Crohn's KOL. Editor-in-Chief JCC (Wiley). Takeda + AbbVie hook."},
+  {name:"Prof. Nikolaus Marx",role:"KOL / CV Inflammation",acc:"(Novo Nordisk)",ta:"Cardiology",status:"New",signals:["KOL/MA Access"],note:"Univ. Hospital Aachen. POSEIDON study. Novo Nordisk hook."},
+  {name:"Prof. Finckh",role:"KOL / RA JAK",acc:"(AbbVie/Lilly)",ta:"Rheumatology",status:"New",signals:["KOL/MA Access"],note:"Geneva. RA/JAK. ART-Autor. AbbVie/Lilly hook."},
+  {name:"Prof. Lauper",role:"KOL / RA",acc:"(AbbVie/Lilly)",ta:"Rheumatology",status:"New",signals:["KOL/MA Access"],note:"Geneva. RA/JAK. ART-Autor. AbbVie/Lilly hook."},
+  {name:"Prof. Poddubnyy",role:"KOL / axSpA",acc:"(Novartis/UCB)",ta:"Rheumatology",status:"New",signals:["KOL/MA Access"],note:"Charité Berlin. axSpA/MRI. ART-Autor. Novartis/UCB hook."},
+  {name:"Prof. Hassel",role:"KOL / cSCC",acc:"(Regeneron)",ta:"Dermatology",status:"New",signals:["KOL/MA Access"],note:"Heidelberg. cSCC. IJD/JDDG-Autor. Regeneron/Sanofi Cemiplimab hook."},
+  {name:"Prof. Schett",role:"KOL / SLE Rheum",acc:"(Roche/AZ)",ta:"Rheumatology",status:"New",signals:["KOL/MA Access"],note:"Erlangen. SLE/Rheum. ART-Autor. Roche/AZ hook — Kurt."},
+  {name:"Prof. Heiner Wedemeyer",role:"KOL / HBV Hepatology",acc:"(Gilead)",ta:"Hepatology",status:"New",signals:["KOL/MA Access"],note:"MHH Hannover. DGVS Präsident. Gilead Hepcludex + Livdelzi → Kurt."},
 ];
 
-const SIGNAL_CSS = {
-  "Mark TeamLink":     "background:#eef2ff;color:#4338ca;border:0.5px solid #c7d2fe",
-  "Wiley IME Alumni":  "background:#f0fdf4;color:#15803d;border:0.5px solid #86efac",
-  "Medscape ⚠":        "background:#fef2f2;color:#dc2626;border:0.5px solid #fecaca",
-  "Senior Wiley":      "background:#faf5ff;color:#7c3aed;border:0.5px solid #e9d5ff",
-  "KOL/MA Access":     "background:#fffbeb;color:#d97706;border:0.5px solid #fde68a",
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+const ACTIONS = [
+  {date:"24 Jun",contact:"AbbVie MA Derm / Prof. Magnolo",acc:"AbbVie",ta:"Dermatology (Paed.)",p:"high",desc:"Skyrizi EC-Zulassung paed. Psoriasis Jun 23. Prof. Nina Magnolo (Münster) als Lead Investigator OptIMMize-1 im Pressetext zitiert. IME-Konzept: Paediatrische Dermatologie Wissensluecke. Journals: JEADV + JDDG."},
+  {date:"24 Jun",contact:"jessica.h.rubens@jnj.com",acc:"Janssen",ta:"Immunology / Oncology",p:"high",desc:"7 IME-Winkel jetzt verfuegbar: MonumenTAL-3 NEJM + Imaavy wAIHA EHA (beide Jun 13-15). Zwei NEJM-Publikationen in 14 Tagen. Multi-Asset Concept Note vorbereiten."},
+  {date:"24 Jun",contact:"Boehringer MA Respiratory DACH",acc:"Boehringer Ingelheim",ta:"Respiratory / IPF",p:"high",desc:"Erster Kontakt nach Nerandomilast Survival Modeling: +5.4 Jahre IPF, 59% Mortalitaetsreduktion. CHMP positiv Mai 2026. Stärkster klinischer Hook seit CHMP."},
+  {date:"24 Jun",contact:"→ Kurt",acc:"Roche/Genentech",ta:"Oncology",p:"high",desc:"Roche 3 concurrent PDUFA: Tecentriq ATOMIC Okt 9, Giredestrant Nov 30, Lunsumio+Polivy Feb 9 2027. Größtes Roche-IME-Fenster seit Jahren. Jetzt an Kurt übergeben."},
+  {date:"6 Jul",contact:"Evelina van Ree",acc:"UCB",ta:"Immunology",p:"med",desc:"Scoping Call bestätigt (Evelina.vanRee@ucb.com). Vorbereiten: DZP SLE Lancet + Cizutamig BCMA TCE + Bimzelx AS Phase 3. Michele Brunori (Takeda) warm intro planen."},
+  {date:"Jul",contact:"Corine Gaillez",acc:"Novartis",ta:"Dermatology",p:"med",desc:"Follow-up 5 IME-Winkel: Cosentyx PMR NEJM, Vanrafia IgAN Lancet, Cosentyx paed HS, Rhapsido CSU, RemIND CIndU (Prof. Metz Charite). NGC54513/54512 NICHT erwähnen."},
+  {date:"Jul",contact:"Panagiotis Beretsos",acc:"Janssen",ta:"Immunology",p:"med",desc:"Über Taylor Spector ansteuern (6J zusammen bei Takeda). Icotrokinra EMA MAA H2 2026 Hook. Mark TeamLink Signal."},
+  {date:"Ongoing",contact:"Dr. Melinda Gooderham",acc:"Takeda",ta:"Dermatology",p:"med",desc:"PI LATITUDE Atlas + LATITUDE-PsO. 40 JEADV Pubs. Kontakt via Lusha — SKiN Centre Peterborough. LATITUDE Atlas Jun 11 Superiority Hook."},
+];
+
+// ── EVIDENCE ──────────────────────────────────────────────────────────────────
+const EVIDENCE = [
+  {firm:"Takeda",drug:"Zasocitinib",typ:"Phase 3",sig:"Act Now",titel:"LATITUDE Atlas — H2H vs deucravacitinib",status:"Topline Jun 11 2026 — SUPERIORITY",congress:"Upcoming congresses 2026",pi:"Dr. Gooderham / Dr. Stein Gold",doi:"JEADV — expected",nct:"NCT06973291"},
+  {firm:"Takeda",drug:"Zasocitinib",typ:"Phase 3",sig:"Act Now",titel:"LATITUDE-PsO-3001/3002 — vs placebo + apremilast",status:"Published AAD Mar 28 2026",congress:"AAD 2026",pi:"Dr. Melinda Gooderham",doi:"JEADV — imminent",nct:"NCT06088043"},
+  {firm:"Janssen",drug:"Talvey + Darzalex Faspro",typ:"Phase 3",sig:"Act Now",titel:"MonumenTAL-3 — GPRC5D bispecific RRMM",status:"NEJM published Jun 13 2026 — sBLA+EMA filed",congress:"EHA 2026 Stockholm",pi:"Roberto Mina / Maria-Victoria Mateos",doi:"NEJM DOI:10.1056/NEJMoa2604657",nct:"NCT05455320"},
+  {firm:"Janssen",drug:"Imaavy (nipocalimab)",typ:"Phase 3",sig:"Act Now",titel:"ENERGY Phase II/III — warm autoimmune hemolytic anemia",status:"Phase II/III positive — FDA Priority Review granted",congress:"EHA 2026 Stockholm",pi:"Bruno Fattizzo, Università di Milano",doi:"",nct:"NCT04119050"},
+  {firm:"Janssen",drug:"Icotrokinra",typ:"Regulatory",sig:"Act Now",titel:"EMA MAA filed — first oral IL-23R blocker",status:"EMA MAA filed — EU approval H2 2026",congress:"EADV 2026",pi:"Ya-Wen (Betty) Yang",doi:"JEADV DOI:10.1111/jdv.70471",nct:""},
+  {firm:"Janssen",drug:"Erleada (apalutamide)",typ:"Phase 3",sig:"Act Now",titel:"PROTEUS — perioperative high-risk PCa",status:"Published NEJM Jun 3 2026",congress:"ASCO 2026 LBA1",pi:"Mary-Ellen Taplin (Dana-Farber)",doi:"NEJM DOI:10.1056/NEJMoa2603878",nct:"NCT03767244"},
+  {firm:"AstraZeneca",drug:"Camizestrant",typ:"Regulatory",sig:"Act Now",titel:"CHMP positive — ER+/HER2- advanced BC (ESR1+)",status:"CHMP positive May 26 2026 — EC approval imminent",congress:"ASCO 2026",pi:"François-Clément Bidard",doi:"",nct:"SERENA-6"},
+  {firm:"AstraZeneca",drug:"Truqap + Abiraterone",typ:"Regulatory",sig:"Hot",titel:"FDA approved — PTEN-deficient mHSPC",status:"FDA approved Jun 15 2026",congress:"ESMO 2025",pi:"Karim Fizazi",doi:"Annals of Oncology",nct:"CAPItello-281"},
+  {firm:"AstraZeneca",drug:"Ultomiris (ravulizumab)",typ:"Regulatory",sig:"Hot",titel:"FDA Priority Review — IgAN (I CAN Phase III)",status:"FDA Priority Review Jun 15 2026 — PDUFA Q4 2026",congress:"ERA 2026",pi:"",doi:"",nct:"ALXN1210-IgAN-320"},
+  {firm:"Novartis",drug:"Cosentyx (secukinumab)",typ:"Phase 3",sig:"Act Now",titel:"REPLENISH — Polymyalgia Rheumatica",status:"Published NEJM Jun 3 2026",congress:"EULAR 2026",pi:"Prof. John Stone (Harvard/MGH)",doi:"",nct:"NCT05767034"},
+  {firm:"Novartis",drug:"Vanrafia (atrasentan)",typ:"Phase 3",sig:"Act Now",titel:"ALIGN — IgAN final 2.5yr data",status:"Published Lancet Jun 4 2026",congress:"ERA Jun 2026",pi:"Prof. Hiddo Heerspink",doi:"",nct:"NCT04573478"},
+  {firm:"Novartis",drug:"Rhapsido (remibrutinib)",typ:"Phase 3",sig:"Hot",titel:"RemIND Phase III — CIndU EAACI Jun 15",status:"Phase III positive — sNDA FDA filed",congress:"EAACI 2026",pi:"Prof. Dr. Martin Metz, Charité Berlin",doi:"JEADV / JDDG",nct:"NCT05976243"},
+  {firm:"Novartis",drug:"Fabhalta (iptacopan)",typ:"Phase 3",sig:"Hot",titel:"APPLAUSE-IgAN Phase III eGFR positive",status:"Phase III positive — FDA priority review",congress:"ERA / ASN 2026",pi:"",doi:"",nct:""},
+  {firm:"UCB",drug:"Dapirolizumab pegol (DZP)",typ:"Phase 3",sig:"Hot",titel:"PHOENYCS GO — SLE Phase III",status:"Published Lancet May 29 2026",congress:"EULAR 2026",pi:"Megan Clowse (Duke)",doi:"",nct:"NCT04294667"},
+  {firm:"AbbVie",drug:"Skyrizi (risankizumab)",typ:"Regulatory",sig:"Hot",titel:"EC approved — paediatric plaque psoriasis 6+ Jahre",status:"EC approved Jun 23 2026",congress:"EADV 2026",pi:"Prof. Dr. Nina Magnolo, Univ.klinikum Münster",doi:"JEADV / JDDG",nct:"NCT04435600"},
+  {firm:"AbbVie",drug:"Maviret (glecaprevir/pibrentasvir)",typ:"Regulatory",sig:"Warm",titel:"EC approved — akute Hepatitis C (3+ Jahre)",status:"EC approved Jun 23 2026",congress:"EASL 2026",pi:"Massimo Puoti (Niguarda Hospital, Mailand)",doi:"AP&T / Hepatologie-Angle",nct:""},
+  {firm:"Incyte",drug:"Monjuvi/Minjuvi (tafasitamab) + R-CHOP",typ:"Phase 3",sig:"Hot",titel:"frontMIND Phase III — 1L DLBCL/HGBL (EHA Plenary + Lancet)",status:"Phase III positive — EHA Plenary + Lancet Jun 13 2026",congress:"EHA 2026 Stockholm Plenary",pi:"Dr. Georg Lenz, Univ.klinikum Münster",doi:"The Lancet Jun 2026",nct:"NCT04824092"},
+  {firm:"Boehringer Ingelheim",drug:"Nerandomilast (Jascayd)",typ:"Regulatory",sig:"Hot",titel:"FIBRONEER Survival Modeling — +5.4yr IPF, 59% Mortalitätsreduktion",status:"ATS + EULAR 2026 — CHMP positiv Mai 2026",congress:"ATS / EULAR 2026",pi:"Prof. Toby Maher (USC Los Angeles)",doi:"",nct:""},
+  {firm:"Roche/Genentech",drug:"Lunsumio VELO + Polivy",typ:"Regulatory",sig:"Hot",titel:"sBLA FDA akzeptiert — R/R LBCL (SUNMO Phase III)",status:"sBLA FDA akzeptiert Jun 18 2026 — PDUFA Feb 9 2027",congress:"ASCO / EHA 2026",pi:"",doi:"",nct:"NCT05171647"},
+  {firm:"Merck/MSD",drug:"Tulisokibart (MK-7240)",typ:"Phase 3",sig:"Warm",titel:"ATLAS-UC Phase III positiv — erster Anti-TL1A Biologic",status:"Phase III ATLAS-UC positiv Jun 22 2026",congress:"Upcoming congress 2026",pi:"",doi:"",nct:"NCT06052059"},
+  {firm:"Sanofi",drug:"Wayrilz (rilzabrutinib)",typ:"Regulatory",sig:"Warm",titel:"MHLW Japan ITP-Zulassung — BTKi, Multi-Immune Modulation",status:"MHLW Japan approved Jun 24 2026",congress:"",pi:"Hisashi Kato (Univ. Osaka Hospital)",doi:"",nct:"NCT04562766"},
+  {firm:"Amgen",drug:"Apremilast (PPP)",typ:"Wiley Pub",sig:"Hot",titel:"PPP Phase 3 results — JEADV published",status:"Published JEADV",congress:"AAD 2026",pi:"Tadashi Terui / Melinda Gooderham",doi:"JEADV DOI:10.1111/jdv.70166",nct:""},
+  {firm:"Cytokinetics",drug:"Myqorzo (aficamten)",typ:"Wiley Pub",sig:"Warm",titel:"SEQUOIA-HCM sub-analysis — ESC Heart Failure (Wiley)",status:"Published + EU commercial launch Germany Jun 2026",congress:"ACC 2026",pi:"Prof. Iacopo Olivotto / Prof. Hans-Dirk Düngen",doi:"ESC Heart Failure DOI:10.1093/eschf/xvag023",nct:"NCT05186818"},
+  {firm:"Sobi",drug:"Tryngolza (olezarsen)",typ:"Phase 3",sig:"Warm",titel:"CORE/CORE2 — severe hypertriglyceridaemia (sHTG)",status:"Results EAS Congress Jun 2026",congress:"EAS 2026",pi:"",doi:"",nct:"NCT04568434"},
+];
+
+// ── SCAN PROMPTS ──────────────────────────────────────────────────────────────
+const SCAN_PROMPTS = {
+  actnow: `IME Intelligence Analyst für Osman Bal (Wiley-VCH DACH+Frankreich). Stand 24 Jun 2026. Act Now Accounts analysieren (max 300 Wörter):\n1. Janssen: 7 IME-Winkel — MonumenTAL-3 NEJM+EHA Jun 13 (72% PFS), Imaavy wAIHA FDA Priority Review, Icotrokinra EMA MAA H2 2026, PROTEUS NEJM. Kontakt jessica.h.rubens@jnj.com.\n2. AstraZeneca: Camizestrant EC approval imminent, Truqap FDA Jun 15 PTEN mHSPC, Ultomiris IgAN PDUFA Q4 2026.\n3. Takeda: LATITUDE Atlas Jun 11 — zasocitinib SUPERIOR vs deucravacitinib. PASI 100 >35% vs 14%. NDA FY2026.\nFormat: Account → IME-Einstiegspunkt → Wiley-Journal → nächste konkrete Aktion. Auf Deutsch.`,
+  t2: `IME Analyst. T2 Upgrade-Check (max 280 Wörter). Stand 24 Jun 2026:\n- Incyte (frontMIND Phase III EHA Plenary+Lancet Jun 13, Dr. Georg Lenz Münster DACH-KOL)\n- Boehringer (Nerandomilast Survival Modeling: +5.4yr IPF, 59% Mortalitätsreduktion, CHMP+)\n- Merck/MSD (Tulisokibart ATLAS-UC Phase III positiv Jun 22, erster Anti-TL1A, 7 Indikationen)\n- Roche/Kurt (3 concurrent PDUFA: Tecentriq Okt 9, Giredestrant Nov 30, Lunsumio+Polivy Feb 9 2027)\nWelche 2 haben jetzt stärkstes IME-Momentum? Begründung je 2 Sätze. Auf Deutsch.`,
+  contacts: `Kontaktstatus-Review für Osman Bal (Wiley-VCH IME DACH), max 250 Wörter. Stand 24 Jun 2026:\n- AbbVie: Prof. Nina Magnolo (Münster, OptIMMize-1 Lead Investigator, Skyrizi paed EC Jun 23 — zitiert im Pressetext)\n- Janssen: jessica.h.rubens@jnj.com (7 IME-Winkel, MonumenTAL-3 NEJM + Imaavy EHA)\n- Boehringer: Erster Kontakt Respiratory DACH (Nerandomilast Survival Data)\n- UCB: Scoping Call 6 Jul, Evelina van Ree\n- Novartis: Corine Gaillez (follow-up 5 Winkel), Josefin Snellman ⚠ NICHT re-kontaktieren\nTop 3 Prioritäten für diese Woche? Auf Deutsch.`,
+  pipeline: `Pipeline-Briefing für Osman Bal (Wiley-VCH IME DACH+Frankreich), max 280 Wörter. Stand 24 Jun 2026:\nAct Now: Janssen (7 Winkel), AstraZeneca (Camizestrant EC imminent), Takeda (LATITUDE Atlas superiority)\nHot: AbbVie (Skyrizi paed EC + Maviret HCV), Amgen (JEADV Wiley pub), Travere (BTK kidney), Incyte (frontMIND Lancet), Boehringer (Nerandomilast survival)\nWarm: Novartis (5 Winkel), UCB (Jul 6 call), Eli Lilly, Sanofi, Merck/MSD, Roche (Kurt), +mehr\nStrategischer Insight: Münster als KOL-Hotspot (Prof. Magnolo AbbVie + Dr. Georg Lenz Incyte — beide aktive Phase-III-DACH-Investigators). Was bedeutet das für ein gebündeltes Vorgehen? Auf Deutsch.`,
 };
 
-const STATUS_CSS = {
-  "Active":    "background:#f0fdf4;color:#15803d",
-  "Contacted": "background:#eff6ff;color:#2563eb",
-  "Warm-up":   "background:#fffbeb;color:#d97706",
-  "New":       "background:#f8f9fb;color:#64748b",
-};
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function stageBadge(s) {
+  const m = {"Act Now":"b-red","Hot":"b-amber","Warm":"b-blue","Active":"b-teal","Watch":"b-gray","Done":"b-green"};
+  return `<span class="badge ${m[s]||'b-gray'}">${s}</span>`;
+}
+function tierClass(t) { return t===1?"t1":t===2?"t2":"t3"; }
+function stDot(s) { const m={"Contacted":"sd-c","Active":"sd-a","Warm-up":"sd-w","New":"sd-n","Watch":"sd-n"}; return m[s]||"sd-n"; }
+function evTypeBadge(t) {
+  const m = {"Phase 3":"background:#fef2f2;color:#c53030","Phase 2":"background:#fff7ed;color:#c2410c","Regulatory":"background:#ecfdf5;color:#065f46","Wiley Pub":"background:#f0fdf4;color:#15803d","Congress":"background:#eff6ff;color:#1d4ed8"};
+  return `<span class="ev-type" style="${m[t]||'background:#f1f5f9;color:#64748b'}">${t}</span>`;
+}
 
-let contactFirmaFilter = '';
+// ── RENDER DASHBOARD ──────────────────────────────────────────────────────────
+function renderDashboard() {
+  const t1hw = ACCOUNTS.filter(a => a.t===1 && (a.s==="Hot"||a.s==="Warm"));
+  document.getElementById('dash-t1').innerHTML = t1hw.map(a => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:12.5px;font-weight:500">${a.n}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text-3)">${a.drug.split('/')[0]}</span>
+        ${stageBadge(a.s)}
+      </div>
+    </div>`).join('');
 
+  const t2up = ACCOUNTS.filter(a => a.t===2 && a.s!=="Watch" && a.s!=="Active");
+  document.getElementById('dash-t2').innerHTML = t2up.map(a => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <span style="font-size:12.5px;font-weight:500">${a.n}</span>
+        <span style="font-size:11px;color:var(--text-3);margin-left:6px">${a.ta.split('/')[0]}</span>
+      </div>
+      ${stageBadge(a.s)}
+    </div>`).join('');
+
+  document.getElementById('dash-deadlines').innerHTML = [
+    {date:"24 Jun",label:"AbbVie — Prof. Magnolo / MA Derm",acc:"AbbVie",col:"var(--red)"},
+    {date:"24 Jun",label:"Janssen — jessica.h.rubens@jnj.com",acc:"Janssen",col:"var(--red)"},
+    {date:"24 Jun",label:"Boehringer — MA Respiratory DACH",acc:"Boehringer",col:"var(--red)"},
+    {date:"6 Jul", label:"UCB Scoping Call — Evelina van Ree",acc:"UCB",col:"var(--amber)"},
+  ].map(d => `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px">
+      <div style="font-size:11px;font-weight:600;color:${d.col};font-family:var(--mono)">${d.date}</div>
+      <div style="font-size:12px;font-weight:500;margin-top:3px">${d.label}</div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:1px">${d.acc}</div>
+    </div>`).join('');
+}
+
+// ── RENDER ACCOUNTS ───────────────────────────────────────────────────────────
+function renderAccounts() {
+  const q = (document.getElementById('fq').value||'').toLowerCase();
+  const ti = document.getElementById('ftier').value;
+  const st = document.getElementById('fstage').value;
+  const ta = document.getElementById('fta').value;
+  const f = ACCOUNTS.filter(a =>
+    (!q || a.n.toLowerCase().includes(q) || a.drug.toLowerCase().includes(q) || a.note.toLowerCase().includes(q) || a.ta.toLowerCase().includes(q)) &&
+    (!ti || a.t === parseInt(ti)) && (!st || a.s === st) && (!ta || a.ta.includes(ta))
+  );
+  document.getElementById('acc-count').textContent = `${f.length} von ${ACCOUNTS.length} Accounts`;
+  document.getElementById('acc-tbody').innerHTML = f.map(a => `
+    <tr>
+      <td style="font-weight:600">${a.n}</td>
+      <td class="${tierClass(a.t)} nw">T${a.t}</td>
+      <td class="nw">${stageBadge(a.s)}</td>
+      <td style="font-size:11px;color:var(--text-2)">${a.ta}</td>
+      <td style="font-size:11.5px">${a.drug}</td>
+      <td style="font-size:11px;color:var(--text-2);max-width:240px">${a.note}</td>
+    </tr>`).join('');
+}
+
+// ── RENDER CONTACTS ───────────────────────────────────────────────────────────
 function renderContacts() {
-  const q = (document.getElementById('srch')||{value:''}).value.toLowerCase();
-  let contacts = CONTACTS;
-  if (contactFirmaFilter) contacts = contacts.filter(c => c.firma.toLowerCase().includes(contactFirmaFilter.toLowerCase()) || contactFirmaFilter.toLowerCase().includes(c.firma.toLowerCase().split(' ')[0]));
-  if (q) contacts = contacts.filter(c => [c.name,c.rolle,c.ta,c.email,c.firma,c.note].some(f=>(f||'').toLowerCase().includes(q)));
-
-  // Group by firma
-  const firmas = [...new Set(contacts.map(c=>c.firma))];
-
-  const groups = firmas.map(firma => {
-    const cs = contacts.filter(c=>c.firma===firma);
-    return `<div style="margin-bottom:20px">
-      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:#64748b;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid #e2e8f0">
-        ${esc(firma)} · ${cs.length} Kontakt${cs.length!==1?'e':''}
+  const q = (document.getElementById('fcq').value||'').toLowerCase();
+  const ac = document.getElementById('fcacc').value;
+  const st = document.getElementById('fcst').value;
+  const f = CONTACTS.filter(c =>
+    (!q || c.name.toLowerCase().includes(q) || c.acc.toLowerCase().includes(q) || c.note.toLowerCase().includes(q)) &&
+    (!ac || c.acc===ac || c.acc.includes(ac)) && (!st || c.status===st)
+  );
+  document.getElementById('con-count').textContent = `${f.length} von ${CONTACTS.length} Kontakten`;
+  document.getElementById('contact-grid').innerHTML = f.map(c => {
+    const ini = c.name.split(' ').map(n=>n[0]).slice(0,2).join('');
+    return `<div class="contact-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="contact-avatar">${ini}</div>
+        <div>
+          <div style="font-size:13px;font-weight:600"><span class="status-dot ${stDot(c.status)}"></span>${c.name}</div>
+          <div style="font-size:11px;color:var(--text-3)">${c.role}</div>
+        </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px">
-        ${cs.map(c => `<div style="background:#fff;border:0.5px solid #e2e8f0;border-radius:10px;padding:14px;box-shadow:0 1px 2px #0000000a">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-            <div>
-              <div style="font-size:13px;font-weight:700;color:#0f172a">${esc(c.name)}</div>
-              <div style="font-size:11px;color:#64748b;margin-top:1px">${esc(c.rolle)}</div>
-              ${c.ta ? `<div style="font-size:10px;color:#94a3b8">${esc(c.ta)}</div>` : ''}
-            </div>
-            <span style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap;${STATUS_CSS[c.status]||'background:#f8f9fb;color:#64748b'}">${esc(c.status)}</span>
-          </div>
-          ${c.signals.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${c.signals.map(s=>`<span style="font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;${SIGNAL_CSS[s]||'background:#f1f5f9;color:#64748b'}">${esc(s)}</span>`).join('')}</div>` : ''}
-          ${c.email ? `<div style="font-size:11px;margin-bottom:4px">✉ <a href="mailto:${esc(c.email)}" style="color:#2563eb;text-decoration:none">${esc(c.email)}</a></div>` : ''}
-          ${c.note ? `<div style="font-size:10px;color:#64748b;margin-top:6px;line-height:1.55;padding-top:6px;border-top:0.5px solid #f1f5f9">${esc(c.note)}</div>` : ''}
-        </div>`).join('')}
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px">
+        <span class="badge b-blue">${c.acc}</span>
+        <span class="badge b-gray">${c.ta}</span>
+        <span class="badge b-gray">${c.status}</span>
       </div>
+      <div class="sig-row">${c.signals.map(s=>`<span class="badge b-purple">${s}</span>`).join('')}</div>
+      <div style="font-size:11.5px;color:var(--text-2);margin-top:7px;line-height:1.55">${c.note}</div>
     </div>`;
   }).join('');
-
-  return `<div style="max-width:880px">
-    <div style="font-family:Georgia,serif;font-size:18px;color:#0f172a;margin-bottom:4px;font-weight:700">Kontakte</div>
-    <div style="font-size:11px;color:#94a3b8;margin-bottom:14px">${contacts.length} von ${CONTACTS.length} Kontakten · Director-level + · Stand Jun 2026</div>
-    ${contactFirmaFilter ? `<button class="btn btnsm" onclick="contactFirmaFilter='';draw()" style="margin-bottom:12px">← Alle Kontakte</button>` : ''}
-    <div style="background:#fffbeb;border:0.5px solid #fde68a;border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:11px;color:#92400e">
-      <strong>⚠ Constraints:</strong> Josefin Snellman (Novartis) — nicht erneut kontaktieren (5x keine Antwort). 
-      Medscape-Signal: Kontakte mit Felix David / Caroline Phillips als Mutual → Differenzierung über Journal-Credibility, EACCME, Editorial Independence.
-    </div>
-    ${groups || '<div class="es">Keine Kontakte gefunden.</div>'}
-  </div>`;
 }
 
-function renderScan() {
-  const logHtml = scanLog.slice(0,12).map(e => {
-    const isHot = (e.status||'').toLowerCase().includes('hot') || (e.status||'').toLowerCase().includes('act');
-    return `<div class="le" style="background:${isHot?'#fef2f2':'#f0fdf4'};border-left-color:${isHot?'#ef4444':'#22c55e'};color:${isHot?'#dc2626':'#15803d'}">
-      <strong>${esc(e.title)}</strong>${e.datum?' · '+esc(e.datum):''}${e.trigger?'<br>'+esc(e.trigger.slice(0,120)):''}
+// ── RENDER ACTIONS ────────────────────────────────────────────────────────────
+function renderActions() {
+  document.getElementById('action-list').innerHTML = ACTIONS.map(a => `
+    <div class="action-item ${a.p}">
+      <div style="min-width:62px">
+        <div class="action-date">${a.date}</div>
+        ${stageBadge(a.p==='high'?'Act Now':'Warm')}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${a.contact} <span style="font-weight:400;color:var(--text-3)">· ${a.acc}</span></div>
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">${a.ta}</div>
+        <div style="font-size:12.5px;color:var(--text-2);line-height:1.55">${a.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── RENDER PIPELINE ───────────────────────────────────────────────────────────
+function renderPipeline() {
+  const STAGES = ["Act Now","Hot","Warm","Active","Watch"];
+  document.getElementById('pipe-board').innerHTML = STAGES.map(s => {
+    const items = ACCOUNTS.filter(a => a.s===s);
+    return `<div class="pipe-col">
+      <div class="pipe-col-hd">${s} <span style="opacity:.6">(${items.length})</span></div>
+      ${items.map(a=>`<div class="pipe-card"><span class="${tierClass(a.t)}">${a.n}</span><div class="pc-sub">${a.ta.split('/')[0]}</div></div>`).join('')}
     </div>`;
-  }).join('') || `<div class="es">Noch keine Aktivitäten.</div>`;
-
-  return `<div class="ai-view">
-    <div class="ai-title">Daily Scan</div>
-    <div class="ai-desc">Feed einfügen. <span class="badge sonnet">Sonnet 4.6</span> lädt Live-Daten aus Airtable und matcht gegen dein Portfolio.</div>
-    <textarea class="ai-input" id="scan-input" placeholder="Pharmawand / Regulatory / M&A Feed hier einfügen…" oninput="scanInput=this.value">${esc(scanInput)}</textarea>
-    <div class="ai-actions">
-      <button class="btn btnp" onclick="runScan()" ${scanLoad?'disabled':''}>
-        ${scanLoad?`<span class="spin"></span>Sonnet 4.6 läuft…`:'⚡ Scan starten (Sonnet 4.6)'}
-      </button>
-      ${scanResult?`<button class="btn btnd btnsm" onclick="scanResult='';drawMain()">Clear</button>`:''}
-    </div>
-    ${scanLoad?`<div class="ai-load">⟳ Lade Airtable-Daten, dann Sonnet 4.6…</div>`:''}
-    ${scanResult?`<div class="ai-out">${esc(scanResult)}</div>`:''}
-    <div style="margin-top:16px;font-weight:700;font-family:Georgia,serif;font-size:15px;margin-bottom:8px">Aktivitäten-Log</div>
-    <div class="slog">${logHtml}</div>
-  </div>`;
+  }).join('');
 }
 
-async function runScan() {
-  if (!scanInput.trim()) return;
-  scanLoad = true; drawMain();
+// ── RENDER EVIDENCE ───────────────────────────────────────────────────────────
+function renderEvidence() {
+  const q = (document.getElementById('evq').value||'').toLowerCase();
+  const sig = document.getElementById('evsig').value;
+  const typ = document.getElementById('evtyp').value;
+  const so = {"Act Now":0,"Hot":1,"Warm":2,"Watch":3};
+  const f = EVIDENCE.filter(e =>
+    (!q || e.firm.toLowerCase().includes(q) || e.drug.toLowerCase().includes(q) || e.titel.toLowerCase().includes(q)) &&
+    (!sig || e.sig===sig) && (!typ || e.typ===typ)
+  ).sort((a,b)=>(so[a.sig]??4)-(so[b.sig]??4));
+  document.getElementById('ev-count').textContent = `${f.length} von ${EVIDENCE.length} Evidence-Items`;
+  document.getElementById('ev-tbody').innerHTML = f.map(e => `
+    <tr>
+      <td><div style="font-weight:600">${e.firm}</div><div style="font-size:10px;color:var(--text-3)">${e.drug}</div></td>
+      <td>${evTypeBadge(e.typ)}</td>
+      <td>
+        <div style="font-weight:500;font-size:12px;margin-bottom:2px">${e.titel}</div>
+        ${e.nct?`<div style="font-size:10px;color:var(--text-3);font-family:var(--mono)">${e.nct}</div>`:''}
+        ${e.doi?`<div style="font-size:10px;color:var(--green)">📄 ${e.doi}</div>`:''}
+      </td>
+      <td>
+        <div style="font-size:11.5px">${e.status}</div>
+        ${e.congress?`<div style="font-size:10px;color:var(--text-3)">📅 ${e.congress}</div>`:''}
+      </td>
+      <td style="font-size:11.5px">${e.pi||'—'}</td>
+      <td>${stageBadge(e.sig)}</td>
+    </tr>`).join('');
+}
+
+// ── SCAN ──────────────────────────────────────────────────────────────────────
+const scanLog = [];
+
+async function runScan(type) {
+  const outEl = document.getElementById('scan-output');
+  const spEl = document.getElementById('sp-'+type);
+  const btnEl = document.getElementById('btn-'+type);
+  spEl.innerHTML = '<span class="spinner"></span> ';
+  btnEl.classList.add('running');
+  outEl.classList.remove('idle');
+  outEl.textContent = 'Verbinde mit Anthropic API…';
   try {
-    const portfolio = accs.map(a=>`${a.name} (${a.ta}${a.drug?' · '+a.drug.slice(0,30):''})`).join('\n');
-    const sys = `Du bist IME-Intelligence-Analyst für Osman Bal, Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
-Portfolio (${accs.length} Firmen aus Airtable OB_IME):
-${portfolio}
-Extrahiere IME-relevante Signale aus dem Feed. Klassifiziere: ACT NOW / HOT / WARM / WATCH / SKIP. Für jeden Treffer: Firma, Drug, Signalstufe, IME-Winkel, nächste Aktion. Klar und direkt, kein Fülltext.`;
-    scanResult = await callClaude(SONNET, sys, `Feed (${TODAY()}):\n\n${scanInput}`, 1000);
-  } catch(e) { scanResult = 'Fehler: ' + e.message; }
-  scanLoad = false; drawMain();
-}
-
-// ═══ BRIEFING ═══
-function renderBriefing() {
-  return `<div class="ai-view">
-    <div class="ai-title">Daily Briefing</div>
-    <div class="ai-desc">Strategische Analyse deines Portfolios. <span class="badge opus">Opus 4.8</span> liest Live-Daten aus Airtable und generiert Prioritäten für heute.</div>
-    <div class="ai-actions">
-      <button class="btn btnv" onclick="genBriefing()" ${briefLoad?'disabled':''}>
-        ${briefLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ Briefing generieren (Opus 4.8)'}
-      </button>
-      ${briefTxt?`<button class="btn btnd btnsm" onclick="briefTxt='';drawMain()">Clear</button>`:''}
-    </div>
-    ${briefLoad?`<div class="ai-load">⟳ Opus 4.8 analysiert dein komplettes Portfolio…</div>`:`<div class="ai-out">${briefTxt||'Klick zum Generieren. Opus 4.8 lädt automatisch die aktuellen Daten aus Airtable.'}</div>`}
-  </div>`;
-}
-
-async function genBriefing() {
-  briefLoad = true; briefTxt = ''; drawMain();
-  try {
-    const an   = accs.filter(a=>a.stage==='act_now');
-    const hot  = accs.filter(a=>a.stage==='hot');
-    const warm = accs.filter(a=>a.stage==='warm');
-    const sys = `Du bist der strategische IME-Berater von Osman Bal, Senior Account Manager bei Wiley-VCH GmbH, DACH+Frankreich. Zeitschriften: JEADV, JDDG, JCC, AP&T, ESC Heart Failure. Heute: ${TODAY()}.
-Constraints:
-- Grants NGC54513/NGC54512 (Novartis) ABGELEHNT — nie erwähnen
-- Josefin Snellman (Novartis) — nicht erneut kontaktieren (5 unbeantwortete Kontakte)
-- Gilead/Roche Onkologie → Kurt (nicht Osman)
-Gib ein präzises, actionable Briefing. Keine Füllsätze.`;
-    const user = `LIVE PIPELINE aus Airtable OB_IME — ${TODAY()}
-
-ACT NOW (${an.length}): ${an.map(a=>`${a.name} | ${a.drug||a.ta} | IME-Fit: ${a.imeFit} | ${a.notes.slice(0,120)}`).join('\n')||'Keine'}
-
-HOT (${hot.length}): ${hot.map(a=>`${a.name} | ${a.imeFit||a.status}`).join(', ')||'Keine'}
-
-WARM (${warm.length}): ${warm.map(a=>a.name).join(', ')||'Keine'}
-
-Letzte Aktivitäten: ${scanLog.slice(0,5).map(e=>e.title+' ('+e.datum+')').join('; ')||'Keine'}
-
-Liefere:
-1. PIPELINE STATUS (2-3 Sätze)
-2. TOP 3 AKTIONEN HEUTE (konkrete Person, Hook, was senden)
-3. KURT FLAG (was geht zu Kurt heute)
-4. STRATEGISCHER INSIGHT (1 Absatz)
-5. NÄCHSTE 4 WOCHEN (bevorstehende Trigger)`;
-    briefTxt = await callClaude(OPUS, sys, user, 1000);
-  } catch(e) { briefTxt = 'Fehler: ' + e.message; }
-  briefLoad = false; drawMain();
-}
-
-// ═══ ADP / COI ═══
-function renderADP() {
-  return `<div class="ai-view">
-    <div class="ai-title">ADP / COI Analyse</div>
-    <div class="ai-desc">Artikel-Metadaten einfügen. <span class="badge opus">Opus 4.8</span> führt vollständige COI-Analyse durch.</div>
-    <textarea class="ai-input" id="adp-input" placeholder="Title: ...&#10;Journal: ...&#10;Category: Full Length / Case Report&#10;Drug: ...&#10;Account: ...&#10;Corresponding author: ...&#10;Email: ..." style="min-height:140px" oninput="adpInput=this.value">${esc(adpInput)}</textarea>
-    <div class="ai-actions">
-      <button class="btn btnv" onclick="runADP()" ${adpLoad?'disabled':''}>
-        ${adpLoad?`<span class="spin"></span>Opus 4.8 analysiert…`:'✦ ADP/COI Analyse (Opus 4.8)'}
-      </button>
-      ${adpResult?`<button class="btn btnd btnsm" onclick="adpResult=null;drawMain()">Clear</button>`:''}
-    </div>
-    ${adpLoad?`<div class="ai-load">Opus 4.8: COI-Analyse, ORCID-Verifikation, IME-Positionierung…</div>`:''}
-    ${adpResult?renderADPResult(adpResult):''}
-  </div>`;
-}
-
-function renderADPResult(r) {
-  const isADP = r.coiResult==='ADP';
-  const fields = [
-    ['Account / Tier', r.tier],
-    ['Hook Drug', r.hookDrug],
-    ['Klinisches Problem', r.hookProblem],
-    ['Study Type', r.hookStudyType],
-    ['IME Angle', r.adpAngle],
-    ['Positioning', r.positioning],
-    ['Knowledge Gap', r.gap],
-    ['COI Begründung', r.coiReason],
-  ];
-  return `<div style="margin-top:14px">
-    <div class="adp-verdict ${isADP?'adp-ok':'adp-skip'}">${isADP?'✓ ADP — Weiterverfolgen':'✕ SKIP'}</div>
-    ${fields.map(([l,v])=>v?`<div class="adp-section"><div class="adp-label">${l}</div><div class="adp-val">${esc(String(v))}</div></div>`:'').join('')}
-    ${r.outreachTargets?.length?`<div class="adp-section"><div class="adp-label">Outreach Targets</div><div class="adp-val">${r.outreachTargets.map(t=>`• ${esc(t)}`).join('\n')}</div></div>`:''}
-    ${r.pharmaAuthors?.length?`<div class="adp-section"><div class="adp-label">Pharma Authors</div><div class="adp-val">${r.pharmaAuthors.map(a=>`• ${esc(a.name)} — ${esc(a.affiliation)}`).join('\n')}</div></div>`:''}
-  </div>`;
-}
-
-async function runADP() {
-  if (!adpInput.trim()) return;
-  adpLoad = true; adpResult = null; drawMain();
-  const sys = `Wiley IME COI-Experte. Heute: ${TODAY()}. Antworte NUR mit einem gültigen JSON-Objekt — kein Markdown, keine Backticks.
-Keys: tier, coiResult (ADP/SKIP), coiReason, hookDrug, hookProblem, hookStudyType, hookRareDisease (bool), adpAngle, positioning, outreachTargets (array), gap, pharmaAuthors (array {name,affiliation,email}), kolAuthors (array {name,affiliation,ambassadorPotential}), hcpVerification (array {name,orcidFound,orcidId,verificationStatus,verificationNote})`;
-  try {
-    const raw = await callClaude(OPUS, sys, `Analysiere diesen Artikel:\n\n${adpInput}`, 1500);
-    adpResult = JSON.parse(raw.replace(/```json|```/g,'').trim());
-  } catch(e) {
-    adpResult = {coiResult:'ERROR',coiReason:'Parse-Fehler: '+e.message,tier:'—',hookDrug:'—',hookProblem:'—',hookStudyType:'—',hookRareDisease:false,adpAngle:'—',positioning:'—',outreachTargets:[],gap:'—',pharmaAuthors:[],kolAuthors:[]};
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, messages: [{ role: 'user', content: SCAN_PROMPTS[type] }] })
+    });
+    const data = await res.json();
+    const text = data.content?.filter(b=>b.type==='text').map(b=>b.text).join('\n') || 'Keine Antwort erhalten.';
+    outEl.textContent = text;
+    scanLog.unshift({ ts: new Date().toLocaleString('de-DE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}), type: {actnow:'Act Now Briefing',t2:'T2 Upgrade-Check',contacts:'Kontakt-Check',pipeline:'Pipeline Update'}[type], preview: text.substring(0,130)+'…' });
+    renderScanLog();
+    try { localStorage.setItem('ime_scan_log_v2', JSON.stringify(scanLog.slice(0,20))); } catch(e) {}
+  } catch(err) {
+    outEl.textContent = 'Fehler: ' + err.message + '\n\nHinweis: Anthropic API-Calls im Browser erfordern einen API Key. Nutze den Claude Chat für manuelle Scan-Analyse.';
   }
-  adpLoad = false; drawMain();
+  spEl.innerHTML = '';
+  btnEl.classList.remove('running');
 }
 
-// ═══ DIAGNOSE ═══
-async function diagnose() {
-  const m = document.getElementById('main');
-  m.innerHTML = `<div style="max-width:700px"><div class="ai-title">🔍 Diagnose</div><div id="diag-out" class="diag">Teste Verbindung…</div></div>`;
-  const out = document.getElementById('diag-out');
-  const token = getToken();
-
-  let log = '';
-  log += `Token: ${token ? token.slice(0,20)+'…' : 'KEIN TOKEN'}\n`;
-  log += `Base: ${BASE}\n`;
-  log += `Tabelle: ${T_FIRMA}\n\n`;
-
-  if (!token) { out.textContent = log + 'FEHLER: Kein Token gespeichert.'; return; }
-
-  try {
-    log += `Sende Request zu Airtable…\n`;
-    out.textContent = log;
-    const url = `https://api.airtable.com/v0/${BASE}/${T_FIRMA}?pageSize=3&fields[]=Firma&fields[]=IME-Fit`;
-    const r = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
-    log += `HTTP Status: ${r.status}\n`;
-
-    if (r.status === 403) {
-      log += '\n⚠ 403 FORBIDDEN\nDein Token hat KEINEN Zugriff auf die Base OB_IME.\n\nFix:\n1. Gehe zu airtable.com/create/tokens\n2. Bearbeite deinen Token\n3. Unter "Access" → füge "OB_IME" hinzu\n4. Speichere → lade Tracker neu';
-      out.textContent = log; return;
-    }
-    if (r.status === 401) {
-      log += '\n⚠ 401 UNAUTHORIZED\nToken ungültig oder abgelaufen.\nKlicke auf den Token-Text oben rechts zum Zurücksetzen.';
-      out.textContent = log; return;
-    }
-
-    const d = await r.json();
-    log += `Records erhalten: ${(d.records||[]).length}\n\n`;
-
-    if ((d.records||[]).length === 0) {
-      log += '⚠ Keine Records — Tabelle ist leer oder Token hat keine Leserechte für Felder.\n';
-    } else {
-      log += 'Erste 3 Records:\n';
-      d.records.slice(0,3).forEach((rec,i) => {
-        log += `\n[${i+1}] ID: ${rec.id}\n`;
-        log += `    Fields: ${JSON.stringify(rec.fields)}\n`;
-      });
-    }
-    out.textContent = log;
-    // Now try loading everything
-    log += '\n\nLade alle Firmen…\n';
-    out.textContent = log;
-    await loadFromAirtable();
-    log += `✓ Fertig — ${accs.length} Firmen geladen.`;
-    out.textContent = log;
-
-  } catch(e) {
-    log += `\nFEHLER: ${e.message}`;
-    out.textContent = log;
-  }
+function renderScanLog() {
+  const el = document.getElementById('scan-log');
+  if (!scanLog.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text-3)">Noch kein Scan durchgeführt.</div>'; return; }
+  el.innerHTML = scanLog.map(e => `<div class="log-item"><div class="li-meta">${e.ts} · ${e.type}</div><div class="li-preview">${e.preview}</div></div>`).join('');
 }
 
-// ═══ NAVIGATION ═══
-function sv(v) {
-  view = v; selId = null;
-  document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',['pipeline','evidence','contacts','scan','briefing','adp'][i]===v));
-  draw();
-}
-function sel(id) { selId=id; view='pipeline'; document.querySelectorAll('.nb').forEach((b,i)=>b.classList.toggle('on',i===0)); draw(); }
+// ── NAV ───────────────────────────────────────────────────────────────────────
+const PANE_LABELS = {
+  dashboard: {title:'Dashboard', sub:'Überblick · Stand 24. Juni 2026'},
+  accounts:  {title:'Alle Accounts', sub:'59 Accounts — Tier 1, 2 & 3'},
+  contacts:  {title:'Kontakte', sub:'49 Medical Affairs Kontakte · Director-level+'},
+  actions:   {title:'Follow-ups', sub:'Priorisierte Aktionen — Stand 24. Juni 2026'},
+  pipeline:  {title:'Pipeline Board', sub:'Alle Accounts nach Stage'},
+  evidence:  {title:'Evidence Generation', sub:'24 klinische Studien, Regulatory Events, Wiley Pubs'},
+  scan:      {title:'Scan / Briefing', sub:'Pharmawand-Analyse & AI Briefing'},
+};
 
-// ═══ INIT ═══
-loadFromAirtable();
+function showPane(id) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id==='pane-'+id));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[onclick="showPane('${id}')"]`)?.classList.add('active');
+  const lbl = PANE_LABELS[id];
+  document.getElementById('topbar-title').textContent = lbl.title;
+  document.getElementById('topbar-sub').textContent = lbl.sub;
+  if (id==='accounts')  renderAccounts();
+  if (id==='contacts')  renderContacts();
+  if (id==='actions')   renderActions();
+  if (id==='pipeline')  renderPipeline();
+  if (id==='evidence')  renderEvidence();
+}
+
+function init() {
+  try { const s = localStorage.getItem('ime_scan_log_v2'); if (s) JSON.parse(s).forEach(e => scanLog.push(e)); } catch(e) {}
+  renderDashboard();
+  renderScanLog();
+}
+init();
 </script>
 </body>
 </html>
