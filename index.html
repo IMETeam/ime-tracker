@@ -256,16 +256,17 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); c
     <div id="pane-scan" class="pane">
       <div class="scan-briefing-box">
         <div class="sb-header">
-          <span class="badge b-green">✓ Scan 24 Jun 2026</span>
+          <span class="badge b-green">✓ Scan 25 Jun 2026</span>
           <span class="sb-date">Pharmawand Feed analysiert · Opus 4.8</span>
         </div>
         <div style="font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:8px">Findings heute:</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-2)">
-          <div><span class="badge b-blue" style="margin-right:6px">Sanofi · Warm</span>Wayrilz (rilzabrutinib) MHLW Japan ITP-Zulassung — BTKi, globaler Rollout nach MHLW UK Jun 1. Sarclisa SC Japan + Redemplo FCS EC ebenfalls aktiv.</div>
-          <div><span class="badge b-blue" style="margin-right:6px">AbbVie · Warm</span>Maviret EC-Zulassung akute Hepatitis C (3+ Jahre) — erste EU-Therapie für akute + chronische HCV. AP&amp;T / Hepatologie-Angle.</div>
-          <div><span class="badge b-gray" style="margin-right:6px">Quoin · Skip</span>QYLEKI (QRX003) FDA Brand Name Conditional Acceptance, Netherton Syndrome Phase 3 H2 2026 — kein Portfolio-Match.</div>
+          <div><span class="badge b-amber" style="margin-right:6px">Sobi · HOT ↑</span>Tryngolza (olezarsen) FDA approved Jun 24 — erste und einzige sHTG-Therapie. CORE/CORE2 NEJM: 91% Pankreatitis-Reduktion, 72% TG-Reduktion. NNT=4 in Hochrisikogruppe. Upgrade Warm → Hot. Direct Account — Outreach jetzt.</div>
+          <div><span class="badge b-amber" style="margin-right:6px">Gilead · Hot → Kurt</span>Trodelvy EC approved Jun 23 als erstes ADC 1L mTNBC EU. ASCENT-03: 38% PFS-Reduktion. FLAG KURT: Gilead jetzt 3 concurrent EU-Approvals (Trodelvy + Hepcludex + Livdelzi).</div>
+          <div><span class="badge b-blue" style="margin-right:6px">Travere · Warm</span>Sparsentan Japan MHLW MAA eingereicht Jun 19. IgAN-Landscape nun 5 concurrent Assets. Cross-specialty IME-Angle Nephrologie.</div>
+          <div><span class="badge b-gray" style="margin-right:6px">Ionis · Skip</span>Zilganersen PDUFA Sep 22 (Alexander Disease) + Recordati EU-Lizenz — kein Portfolio-Match.</div>
         </div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:10px">⚠ Keine neuen Act Now / Hot Trigger im heutigen Feed. Nächster Major Trigger: Camizestrant EC Approval (imminent), Janssen Icotrokinra EU H2 2026.</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:10px">⚠ Nächster Major Trigger: Camizestrant EC Approval (imminent), Sobi Outreach jetzt, UCB Scoping Call 6 Jul.</div>
       </div>
 
       <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">Manueller Scan-Workflow: Pharmawand-Feed hier in Claude pasten → Opus 4.8 analysiert → Airtable-Update. API-Buttons sind ohne Anthropic API Key nicht funktional.</div>
@@ -303,7 +304,7 @@ const ACCOUNTS = [
   {n:"Sanofi",t:1,s:"Warm",ta:"Immunology / Haematology",drug:"Dupixent / Sarclisa / Wayrilz",note:"NEW 24 Jun: Wayrilz MHLW Japan ITP-Zulassung. Sarclisa SC Japan Jun 19. Tzield FDA akut. T1D Jun 15 Kinder 8-17. Libtayo NICE UK Jun 17 NSCLC."},
   {n:"Merck/MSD",t:2,s:"Warm",ta:"Gastroenterology / Immunology",drug:"Tulisokibart (MK-7240)",note:"ATLAS-UC Phase III positiv Jun 22 — erster Anti-TL1A Biologic. 7 Indikationen inkl. CD, HS, RA, PsA. JCC-Angle IBD. Upgrade Watch→Warm."},
   {n:"Roche/Genentech",t:2,s:"Warm",ta:"Oncology",drug:"Giredestrant / Tecentriq / Lunsumio+Polivy",note:"FLAG KURT: 3 concurrent PDUFA: Tecentriq ATOMIC Okt 9 (dMMR Stage III Colon); Giredestrant Nov 30; Lunsumio+Polivy sBLA Feb 9 2027."},
-  {n:"Sobi",t:3,s:"Warm",ta:"Cardiology / Rare Disease",drug:"Tryngolza (olezarsen)",note:"Phase 3 CORE/CORE2 EAS 2026: 85% Pankreatitis-Reduktion, 66% TG-Reduktion sHTG. Erste RNA-Therapie. Direct Account."},
+  {n:"Sobi",t:3,s:"Hot",ta:"Cardiology / Rare Disease",drug:"Tryngolza (olezarsen)",note:"🔥 FDA approved Jun 24 2026 — erste und einzige sHTG-Therapie. CORE/CORE2 NEJM: 91% Pankreatitis-Reduktion, 72% TG-Reduktion, NNT=4 in Hochrisikogruppe. Direct Account — Outreach Sobi Medical Affairs Cardiovascular JETZT."},
   {n:"Biogen",t:2,s:"Warm",ta:"Nephrology / Ophthalmology",drug:"Empaveli / Syfovre",note:"Apellis-Akquisition Mai 14 2026. Empaveli C3G/IC-MPGN/PNH. Syfovre GA AMD."},
   {n:"Cytokinetics",t:2,s:"Active",ta:"Cardiology",drug:"Myqorzo (aficamten)",note:"EU Launch Germany Jun 2026. Wiley ESC Heart Failure DOI:10.1093/eschf/xvag023. KOL: Prof. Düngen (Charité) + Prof. Olivotto (Florenz)."},
   {n:"BMS/Celgene",t:2,s:"Warm",ta:"Oncology / Cardiology",drug:"Camzyos / Opdivo",note:"Camzyos FDA Priority Review oHCM PDUFA Sep 30. Opdivo+AVD EC approved frontline cHL."},
@@ -314,7 +315,7 @@ const ACCOUNTS = [
   // WATCH
   {n:"Novo Nordisk",t:1,s:"Watch",ta:"Rare Disease / CV",drug:"—",note:"POSEIDON (CV Inflammation). CHMP+ Sogroya expansion Mai 21. anwc@novonordisk.com. sepf@novonordisk.com."},
   {n:"Nestlé",t:1,s:"Active",ta:"Oncology",drug:"—",note:"Head & Neck Cancer Knowledge Hub. EBAC Accreditation pending. Kontakt: Suchi/Wendy."},
-  {n:"Gilead",t:1,s:"Warm",ta:"Hepatology",drug:"Hepcludex / Livdelzi",note:"FLAG KURT: Hepcludex FDA Mai 22 (HDV). Livdelzi EASL 2026 PBC. Tubulis ADC Akquisition. KOL: Prof. Wedemeyer (MHH Hannover)."},
+  {n:"Gilead",t:1,s:"Warm",ta:"Hepatology / Oncology",drug:"Hepcludex / Livdelzi / Trodelvy",note:"FLAG KURT: 3 concurrent EU-Approvals — Trodelvy EC Jun 23 (1L mTNBC, erstes ADC in 1L TNBC EU), Hepcludex FDA Mai 22 (HDV), Livdelzi PBC EASL 2026. Größtes Gilead IME-Fenster. KOL: Prof. Wedemeyer (MHH Hannover)."},
   {n:"Idorsia",t:3,s:"Watch",ta:"Dermatology",drug:"CSU / C.diff vaccine",note:"C. diff vaccine Phase 1 high-dose positiv Jun 2026. Partnership sought."},
   {n:"BridgeBio",t:3,s:"Watch",ta:"Rare Disease",drug:"BBP-418 (LGMD2I)",note:"FDA Priority Review Mai 28 2026. PDUFA Nov 27 2026."},
   {n:"LEO Pharma",t:2,s:"Watch",ta:"Dermatology",drug:"Tralokinumab",note:"AD. Ramy Elbana — Congress contact."},
@@ -343,7 +344,7 @@ const ACCOUNTS = [
   {n:"Merz",t:3,s:"Watch",ta:"Dermatology",drug:"—",note:"Aesthetics."},
   {n:"Virbac",t:3,s:"Watch",ta:"Other",drug:"—",note:"Vet/Derm crossover. Laure Poincelot — Next Conference."},
   {n:"Idorsia",t:3,s:"Watch",ta:"Dermatology",drug:"—",note:"CSU."},
-  {n:"Sobi",t:3,s:"Warm",ta:"Rare Disease / Cardiology",drug:"Tryngolza (olezarsen)",note:"CORE/CORE2 EAS 2026: 85% pancreatitis reduction, 66% TG sHTG. Direct Account."},
+
 ];
 
 // ── CONTACTS ──────────────────────────────────────────────────────────────────
@@ -459,6 +460,8 @@ const EVIDENCE = [
   {firm:"Roche/Genentech",drug:"Lunsumio VELO + Polivy",typ:"Regulatory",sig:"Hot",titel:"sBLA FDA akzeptiert — R/R LBCL (SUNMO Phase III)",status:"sBLA FDA akzeptiert Jun 18 2026 — PDUFA Feb 9 2027",congress:"ASCO / EHA 2026",pi:"",doi:"",nct:"NCT05171647"},
   {firm:"Merck/MSD",drug:"Tulisokibart (MK-7240)",typ:"Phase 3",sig:"Warm",titel:"ATLAS-UC Phase III positiv — erster Anti-TL1A Biologic",status:"Phase III ATLAS-UC positiv Jun 22 2026",congress:"Upcoming congress 2026",pi:"",doi:"",nct:"NCT06052059"},
   {firm:"Sanofi",drug:"Wayrilz (rilzabrutinib)",typ:"Regulatory",sig:"Warm",titel:"MHLW Japan ITP-Zulassung — BTKi, Multi-Immune Modulation",status:"MHLW Japan approved Jun 24 2026",congress:"",pi:"Hisashi Kato (Univ. Osaka Hospital)",doi:"",nct:"NCT04562766"},
+  {firm:"Sobi",drug:"Tryngolza (olezarsen)",typ:"Regulatory",sig:"Hot",titel:"FDA approved — erste sHTG-Therapie (CORE/CORE2 NEJM)",status:"FDA approved Jun 24 2026",congress:"EAS 2026",pi:"",doi:"NEJM (CORE/CORE2)",nct:"NCT04568434"},
+  {firm:"Gilead",drug:"Trodelvy (sacituzumab govitecan)",typ:"Regulatory",sig:"Hot",titel:"EC approved — 1L metastatic TNBC (ASCENT-03)",status:"EC approved Jun 23 2026 — FLAG KURT",congress:"ESMO 2025",pi:"Javier Cortes (Barcelona)",doi:"",nct:"ASCENT-03"},
   {firm:"Amgen",drug:"Apremilast (PPP)",typ:"Wiley Pub",sig:"Hot",titel:"PPP Phase 3 results — JEADV published",status:"Published JEADV",congress:"AAD 2026",pi:"Tadashi Terui / Melinda Gooderham",doi:"JEADV DOI:10.1111/jdv.70166",nct:""},
   {firm:"Cytokinetics",drug:"Myqorzo (aficamten)",typ:"Wiley Pub",sig:"Warm",titel:"SEQUOIA-HCM sub-analysis — ESC Heart Failure (Wiley)",status:"Published + EU commercial launch Germany Jun 2026",congress:"ACC 2026",pi:"Prof. Iacopo Olivotto / Prof. Hans-Dirk Düngen",doi:"ESC Heart Failure DOI:10.1093/eschf/xvag023",nct:"NCT05186818"},
   {firm:"Sobi",drug:"Tryngolza (olezarsen)",typ:"Phase 3",sig:"Warm",titel:"CORE/CORE2 — severe hypertriglyceridaemia (sHTG)",status:"Results EAS Congress Jun 2026",congress:"EAS 2026",pi:"",doi:"",nct:"NCT04568434"},
