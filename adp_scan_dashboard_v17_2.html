@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADP Scan Dashboard v17.2 — Wiley IME</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#fff;--bg2:#f8f8f7;--bg3:#f1efea;--t1:#1a1a19;--t2:#5f5e5a;--t3:#888780;--ti:#185fa5;--b1:rgba(0,0,0,.35);--b2:rgba(0,0,0,.22);--b3:rgba(0,0,0,.12);--bi:#e6f1fb;--bib:#85b7eb;--r:8px;--rl:12px}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;--t1:#f0ede8;--t2:#a8a69f;--t3:#6e6c67;--ti:#85b7eb;--b1:rgba(255,255,255,.28);--b2:rgba(255,255,255,.18);--b3:rgba(255,255,255,.10);--bi:#0c447c;--bib:#378add}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:var(--bg3);color:var(--t1);min-height:100vh}
+.hdr{background:var(--bg);border-bottom:.5px solid var(--b3);padding:.75rem 1.5rem;display:flex;align-items:center;gap:10px}
+.hdr h1{font-size:15px;font-weight:600}
+.hdr-sub{font-size:12px;color:var(--t3);margin-left:auto}
+.body{max-width:960px;margin:0 auto;padding:1.5rem}
+.tabs{display:flex;border-bottom:.5px solid var(--b3);background:var(--bg);border-radius:var(--rl) var(--rl) 0 0;padding:0 .75rem;flex-wrap:wrap}
+.tab{padding:10px 13px;font-size:12px;cursor:pointer;border:none;border-bottom:2px solid transparent;color:var(--t2);background:none;white-space:nowrap}
+.tab.active{color:var(--t1);border-bottom-color:var(--t1);font-weight:500}
+.tc{display:none}.tc.active{display:block}
+.panel{background:var(--bg);border-radius:0 0 var(--rl) var(--rl);padding:1.25rem;border:.5px solid var(--b3);border-top:none;margin-bottom:1rem}
+.badge{border-radius:99px;padding:1px 7px;font-size:11px;margin-left:3px;display:inline-block}
+.badge-strong{background:#e1f5ee;color:#085041}
+.badge-medium{background:#faeeda;color:#633806}
+.badge-skip{background:var(--bg2);color:var(--t3)}
+.badge-watch{background:#fdf6ec;color:#633806;border:.5px solid #ef9f27}
+.badge-kol{background:#eeedfe;color:#3c3489}
+.itabs{display:flex;margin-bottom:1rem;border:.5px solid var(--b3);border-radius:var(--r);overflow:hidden;width:fit-content}
+.itab{padding:6px 16px;font-size:12px;cursor:pointer;border:none;color:var(--t2);background:var(--bg2)}
+.itab.active{background:var(--bg);color:var(--t1);font-weight:500}
+#drop{border:1.5px dashed var(--b2);border-radius:var(--rl);padding:1.75rem;text-align:center;cursor:pointer;background:var(--bg2);margin-bottom:1rem;transition:background .15s}
+#drop.over{background:var(--bi);border-color:var(--bib)}
+#drop i{font-size:28px;color:var(--t3);display:block;margin-bottom:.4rem}
+#drop p{font-size:12px;color:var(--t2);margin-top:.25rem}
+.hint{font-size:12px;color:var(--t2);background:var(--bg2);border-radius:var(--r);padding:.6rem .75rem;margin-bottom:.5rem;line-height:1.55;border:.5px solid var(--b3)}
+textarea{width:100%;min-height:120px;font-size:12px;padding:.6rem .75rem;border:.5px solid var(--b2);border-radius:var(--r);background:var(--bg2);color:var(--t1);font-family:inherit;resize:vertical;line-height:1.5;margin-bottom:.5rem}
+textarea:focus{outline:none;border-color:var(--b1)}
+textarea::placeholder{color:var(--t3)}
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;flex-wrap:wrap}
+.toolbar span{font-size:12px;color:var(--t2);flex:1}
+.btn{padding:5px 12px;border-radius:var(--r);font-size:12px;cursor:pointer;background:var(--bg);border:.5px solid var(--b2);color:var(--t1);transition:all .1s}
+.btn:hover{background:var(--bg2)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.primary{font-weight:500}
+.btn.sm{padding:3px 9px;font-size:11px}
+.btn.red{border-color:#f09595;color:#a32d2d}.btn.red:hover{background:#fcebeb}
+.btn.copy{background:#e6f1fb;border-color:#85b7eb;color:#0c447c;font-weight:500}.btn.copy:hover{background:#b5d4f4}
+.btn.copy.copied{background:#e1f5ee;border-color:#5dcaa5;color:#085041}
+.btn.watch-btn{background:#fdf6ec;border-color:#ef9f27;color:#633806;font-weight:500}.btn.watch-btn:hover{background:#faeeda}
+.btn.airtable{background:#e1f5ee;border-color:#5dcaa5;color:#085041;font-weight:500}.btn.airtable:hover{background:#c8eddf}
+#st{font-size:12px;color:var(--t2);margin-bottom:.5rem;min-height:16px}
+#at-leads-status,#at-kol-status{font-size:12px;margin-bottom:.5rem;min-height:16px}
+.prog{height:3px;background:var(--b3);border-radius:2px;margin-bottom:.75rem;display:none;overflow:hidden}
+.pb{height:100%;background:#1d9e75;width:0%;transition:width .3s}
+.smry{display:grid;grid-template-columns:repeat(auto-fit,minmax(75px,1fr));gap:6px;margin-bottom:1.25rem}
+.sv{background:var(--bg2);border-radius:var(--r);padding:.5rem .6rem;text-align:center;border:.5px solid var(--b3);cursor:default}
+.sn{font-size:18px;font-weight:600;color:var(--t1)}
+.sl{font-size:10px;color:var(--t2);margin-top:1px}
+.sh{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:7px;margin:1.25rem 0 .4rem}
+.sh:first-child{margin-top:0}
+.sh.t1{color:#085041}.sh.t2c{color:#633806}.sh.ts{color:var(--t3)}.sh.tw{color:#855200}
+.cnt{background:var(--bg2);border:.5px solid var(--b3);border-radius:99px;padding:1px 7px;font-size:11px;color:var(--t2)}
+/* PIPELINE STATUS BADGE — new in v17 */
+.pipe-badge{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:500;letter-spacing:.03em;border:.5px solid}
+.pipe-inbox{background:var(--bg2);border-color:var(--b3);color:var(--t3)}
+.pipe-adp{background:#e1f5ee;border-color:#5dcaa5;color:#085041}
+.pipe-skip{background:#f5f5f3;border-color:var(--b3);color:var(--t3)}
+.pipe-watch{background:#fdf6ec;border-color:#ef9f27;color:#633806}
+/* CARDS */
+.card{background:var(--bg);border:.5px solid var(--b3);border-radius:var(--rl);margin-bottom:.4rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card.is-skipped{opacity:.45;border-style:dashed}
+.card.is-inbox{border-left:3px solid var(--b3)}
+.card.is-strong{border-left:3px solid #1d9e75}
+.card.is-medium{border-left:3px solid #ef9f27}
+.card-header{display:flex;align-items:center;gap:8px;padding:.65rem 1rem;cursor:pointer;user-select:none;background:var(--bg)}
+.card-header:hover{background:var(--bg2)}
+.card-toggle{font-size:12px;color:var(--t3);flex-shrink:0;transition:transform .2s;width:16px;text-align:center}
+.card-toggle.open{transform:rotate(90deg)}
+.card-title{font-size:13px;font-weight:500;line-height:1.35;flex:1;color:var(--t1)}
+.card-title.done{color:var(--t2)}
+.card-title.striked{text-decoration:line-through;color:var(--t3)}
+.card-badges{display:flex;gap:4px;flex-shrink:0;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:220px}
+.card-body{display:none;border-top:.5px solid var(--b3);padding:.75rem 1rem}
+.card-body.open{display:block}
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.5rem}
+.pill{border:.5px solid;border-radius:99px;padding:1px 8px;font-size:11px;line-height:1.7}
+.pill.j{border-color:var(--b3);color:var(--t2)}.pill.d{background:#e1f5ee;border-color:#5dcaa5;color:#085041}
+.pill.c{border-color:var(--b3);color:var(--t3)}.pill.rare{background:#faeeda;border-color:#ef9f27;color:#633806}
+.pill.src{background:#eeedfe;border-color:#afa9ec;color:#3c3489}
+.pill.pharma{background:#e6f1fb;border-color:#85b7eb;color:#0c447c}
+.pill.dach{background:#fff3e0;border-color:#ffb74d;color:#7c4500}
+/* LINKS */
+.dl{font-size:11px;margin-bottom:.4rem}.dl a{color:var(--ti);text-decoration:none;word-break:break-all}.dl a:hover{text-decoration:underline}
+.url-row{display:flex;align-items:center;gap:5px;margin-bottom:.4rem}
+.url-row input{flex:1;font-size:11px;padding:3px 7px;border:.5px solid var(--b2);border-radius:var(--r);background:var(--bg2);color:var(--t1);font-family:inherit}
+.url-row input:focus{outline:none;border-color:var(--b1)}
+.url-row input::placeholder{color:var(--t3)}
+/* AUTHORS */
+.asec{border-top:.5px solid var(--b3);padding-top:.4rem;margin-top:.35rem}
+.ar{display:flex;align-items:flex-start;gap:5px;padding:3px 0;font-size:12px;flex-wrap:wrap}
+.an{font-weight:500;color:var(--t1);min-width:110px}.aa{color:var(--t2);flex:1;font-size:11px;line-height:1.4}.ae{color:var(--ti);font-size:11px}
+/* IME BOX — v17 improved structure */
+.imebox{margin-top:.5rem;border:.5px solid var(--b3);border-radius:var(--r);overflow:hidden}
+.imehdr{display:flex;align-items:center;justify-content:space-between;padding:.35rem .6rem;background:var(--bg2);border-bottom:.5px solid var(--b3);flex-wrap:wrap;gap:5px}
+.imehdr-label{font-size:11px;font-weight:500;color:var(--t2)}
+/* IME sections — v17 grouped layout */
+.ime-section{border-bottom:.5px solid var(--b3)}
+.ime-section:last-child{border-bottom:none}
+.ime-sec-hdr{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);padding:.3rem .6rem;background:var(--bg2)}
+.imerow{display:flex;align-items:flex-start;border-bottom:.5px solid var(--b3)}.imerow:last-child{border-bottom:none}
+.imelbl{font-size:11px;font-weight:500;color:var(--t2);padding:.4rem .6rem;min-width:130px;background:var(--bg2);border-right:.5px solid var(--b3);line-height:1.4;flex-shrink:0}
+.imeval{font-size:12px;color:var(--t1);padding:.4rem .6rem;line-height:1.5;flex:1}.imeval.it{font-style:italic;color:var(--t2)}
+.otpills{display:flex;flex-wrap:wrap;gap:3px;padding:.4rem .6rem}
+.op{background:#e6f1fb;border:.5px solid #85b7eb;color:#0c447c;border-radius:99px;padding:1px 7px;font-size:11px}
+.hcprow{padding:.4rem .6rem}
+.hcptag{font-size:11px;color:var(--t2);margin-bottom:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.hcptag a{color:var(--ti)}
+.coi-ph{padding:.6rem;font-size:12px;color:var(--t2);line-height:1.5}
+/* PROMPT PASTE */
+.prompt-panel{border-top:.5px solid var(--b3);background:var(--bg2);padding:.6rem}
+.prompt-preview{font-size:10px;font-family:monospace;color:var(--t2);background:var(--bg);border:.5px solid var(--b3);border-radius:var(--r);padding:.4rem .5rem;max-height:80px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-bottom:.4rem}
+.paste-area{border-top:.5px solid var(--b3);padding:.5rem .6rem;background:var(--bg2)}
+.paste-area p{font-size:11px;color:var(--t2);margin-bottom:.3rem;line-height:1.5}
+.paste-area textarea{min-height:55px;font-size:11px;font-family:monospace;margin-bottom:.35rem}
+/* SKIP / WATCH PANELS */
+.skip-panel,.watch-panel{margin-top:.5rem;background:var(--bg2);border:.5px solid var(--b3);border-radius:var(--r);padding:.65rem}
+.watch-panel{border-color:#ef9f27;background:#fdf6ec}
+.panel-title{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:.4rem}
+/* v17: panel description line */
+.panel-desc{font-size:11px;color:var(--t2);margin-bottom:.5rem;line-height:1.5;padding:.3rem .5rem;background:var(--bg);border-radius:var(--r);border:.5px solid var(--b3)}
+.presets{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.4rem}
+.preset{padding:3px 9px;border-radius:99px;font-size:11px;cursor:pointer;border:.5px solid var(--b2);color:var(--t2);background:var(--bg)}
+.preset:hover{border-color:var(--b1);color:var(--t1)}.preset.sel{color:var(--t1);border-color:var(--b1);font-weight:500}
+.panel-inp{width:100%;font-size:12px;padding:5px 8px;border:.5px solid var(--b2);border-radius:var(--r);background:var(--bg);color:var(--t1);font-family:inherit;margin-bottom:.4rem}
+.panel-inp:focus{outline:none;border-color:var(--b1)}
+.panel-inp::placeholder{color:var(--t3)}
+.panel-actions{display:flex;gap:5px;justify-content:flex-end}
+/* REASON BOXES */
+.reason-box{background:#f1efe8;border:.5px solid var(--b3);border-radius:var(--r);padding:.35rem .6rem;margin-top:.35rem;display:flex;align-items:flex-start;gap:6px}
+.watch-reason-box{background:#fdf6ec;border-color:#ef9f27}
+.reason-box .txt{font-size:12px;color:var(--t2);flex:1;line-height:1.4}
+/* v17: pipeline reason tag (auto-skip reason in inbox) */
+.auto-reason{font-size:11px;color:var(--t3);background:var(--bg2);border:.5px solid var(--b3);border-radius:var(--r);padding:2px 7px;display:inline-block;margin-top:4px}
+/* KOL / SKIP / WATCH items */
+.kc{background:var(--bg);border:.5px solid var(--b3);border-radius:var(--r);padding:.65rem 1rem;margin-bottom:.4rem}
+.kn{font-size:13px;font-weight:500;color:var(--t1)}.km{font-size:12px;color:var(--t2);margin-top:2px}.ke{font-size:12px;color:var(--ti);margin-top:2px}
+.kdrug{font-size:11px;background:#eeedfe;border:.5px solid #afa9ec;color:#3c3489;border-radius:99px;padding:1px 7px;display:inline-block;margin-top:4px}
+.kp{font-size:12px;color:var(--t2);margin-top:5px;padding:5px 8px;background:var(--bg2);border-radius:var(--r);line-height:1.4}
+.ka{font-size:11px;color:var(--t3);margin-top:4px;font-style:italic}
+/* v17: KOL verification tag */
+.kv{font-size:10px;border-radius:99px;padding:1px 6px;border:.5px solid;display:inline-block;margin-top:3px;margin-right:3px}
+.kv-a{background:#e1f5ee;border-color:#5dcaa5;color:#085041}
+.kv-c{background:#e8f4fd;border-color:#7ec8e3;color:#0c3547}
+.kv-u{background:var(--bg2);border-color:var(--b3);color:var(--t3)}
+.skiplog-item{background:var(--bg);border:.5px solid var(--b3);border-left:3px solid #d3d1c7;border-radius:var(--r);padding:.65rem 1rem;margin-bottom:.4rem}
+.watch-item{background:var(--bg);border:.5px solid var(--b3);border-left:3px solid #ef9f27;border-radius:var(--r);padding:.65rem 1rem;margin-bottom:.4rem}
+/* v17: watch trigger tag */
+.watch-trigger{font-size:11px;background:#fff3e0;border:.5px solid #ffb74d;color:#7c4500;border-radius:var(--r);padding:3px 8px;margin-top:4px;line-height:1.4}
+.preview-box{background:var(--bg2);border:.5px solid var(--b3);border-radius:var(--r);padding:.6rem .75rem;margin-bottom:.75rem;font-size:12px}
+.preview-item{padding:2px 0;border-bottom:.5px solid var(--b3);font-size:11px;color:var(--t2)}.preview-item:last-child{border-bottom:none}
+.empty{text-align:center;padding:2.5rem;color:var(--t3);font-size:13px}
+.inbox-note{background:#e6f1fb;border:.5px solid #85b7eb;border-radius:var(--r);padding:.5rem .75rem;font-size:12px;color:#0c447c;margin-bottom:.75rem;line-height:1.5}
+/* v17: pipeline legend */
+.pipeline-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--t2);margin-bottom:.75rem;padding:.5rem .75rem;background:var(--bg2);border-radius:var(--r);border:.5px solid var(--b3)}
+.pl-item{display:flex;align-items:center;gap:4px}
+.pl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <i class="ti ti-flask" style="font-size:18px;color:#1d9e75"></i>
+  <h1>ADP Scan Dashboard</h1>
+  <span style="font-size:11px;color:var(--t3);background:var(--bg2);border:.5px solid var(--b3);border-radius:99px;padding:1px 8px;margin-left:4px">v17.2</span>
+  <span class="hdr-sub">Wiley IME — Article-Driven Pipeline</span>
+</div>
+<div class="body">
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('scan')"><i class="ti ti-inbox" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>Inbox <span class="badge badge-skip" id="inboxbadge">0</span></button>
+  <button class="tab" onclick="switchTab('leads')"><i class="ti ti-target" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>ADP Leads <span class="badge badge-strong" id="strongbadge">0</span><span class="badge badge-medium" id="mediumbadge">0</span></button>
+  <button class="tab" onclick="switchTab('kols')"><i class="ti ti-star" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>KOL Ambassadors <span class="badge badge-kol" id="kbadge">0</span></button>
+  <button class="tab" onclick="switchTab('skiplog')"><i class="ti ti-ban" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>Skip Log <span class="badge badge-skip" id="skipbadge">0</span></button>
+  <button class="tab" onclick="switchTab('watch')"><i class="ti ti-eye" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>Watch <span class="badge badge-watch" id="watchbadge">0</span></button>
+</div>
+<div class="panel">
+
+<!-- ═══ INBOX TAB ═══ -->
+<div id="tab-scan" class="tc active">
+  <div class="itabs">
+    <button class="itab active" onclick="switchInput('xlsx',this)"><i class="ti ti-file-spreadsheet" style="font-size:12px;margin-right:3px;vertical-align:-1px"></i>Excel Upload</button>
+    <button class="itab" onclick="switchInput('paste',this)"><i class="ti ti-clipboard-text" style="font-size:12px;margin-right:3px;vertical-align:-1px"></i>Paste Email / TOC</button>
+  </div>
+  <div id="input-xlsx">
+    <div id="drop" onclick="document.getElementById('fi').click()" ondragover="dv(event,1)" ondragleave="dv(event,0)" ondrop="dd(event)">
+      <i class="ti ti-upload"></i>
+      <p style="font-weight:500">Drop Author Details Excel or click to browse</p>
+      <p>Wiley JPCMS Author Details export (.xlsx)</p>
+      <input type="file" id="fi" accept=".xlsx,.xls" style="display:none" onchange="hf(this.files[0])">
+    </div>
+  </div>
+  <div id="input-paste" style="display:none">
+    <div class="hint"><strong>Copy from Outlook/Gmail</strong> (Ctrl+A → Ctrl+C) and paste below.</div>
+    <textarea id="pasteInput" placeholder="Paste TOC alert or email body here..."></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:.75rem">
+      <button class="btn primary" onclick="parsePaste()"><i class="ti ti-scan" style="font-size:12px;margin-right:3px;vertical-align:-1px"></i>Parse locally</button>
+      <button class="btn" onclick="document.getElementById('pasteInput').value='';document.getElementById('parsePreview').innerHTML=''">Clear</button>
+      <span id="parse-st" style="font-size:12px;color:var(--t3)"></span>
+    </div>
+    <div id="parsePreview"></div>
+  </div>
+  <div class="toolbar">
+    <span id="flabel" style="color:var(--t2)">No articles loaded</span>
+    <button class="btn primary" id="abtn" onclick="runAll()" disabled>Score articles ↗</button>
+    <button class="btn" onclick="exportAll()"><i class="ti ti-download"></i></button>
+    <button class="btn" onclick="resetAll()"><i class="ti ti-refresh"></i></button>
+  </div>
+  <div id="st"></div>
+  <div class="prog" id="prog"><div class="pb" id="pb"></div></div>
+  <div id="smry"></div>
+  <div id="inbox-note" style="display:none" class="inbox-note">
+    <strong>Pipeline Inbox</strong> — articles awaiting COI + IME check.
+    After applying a COI result, cards auto-route: <strong>ADP</strong> → Leads tab · <strong>SKIP</strong> → Skip Log · <strong>Watch</strong> button → Watch tab.
+  </div>
+  <div id="pipeline-legend" style="display:none" class="pipeline-legend">
+    <span class="pl-item"><span class="pl-dot" style="background:#1d9e75"></span> ADP confirmed (pharma co-author or strong DACH/France hook)</span>
+    <span class="pl-item"><span class="pl-dot" style="background:#ef9f27"></span> Medium (bridging angle, weaker hook)</span>
+    <span class="pl-item"><span class="pl-dot" style="background:#d3d1c7"></span> Inbox (COI pending)</span>
+    <span class="pl-item"><span class="pl-dot" style="background:#aaa"></span> Skip (no pharma relevance)</span>
+    <span class="pl-item"><span class="pl-dot" style="background:#ef9f27;border:2px dashed #ef9f27;background:none"></span> Watch (strategic, not ready)</span>
+  </div>
+  <div id="results"><div class="empty"><i class="ti ti-inbox" style="font-size:28px;display:block;margin-bottom:.5rem"></i>Load articles via Excel or paste email text</div></div>
+</div>
+
+<!-- ═══ LEADS TAB ═══ -->
+<div id="tab-leads" class="tc">
+  <div class="toolbar">
+    <span style="font-weight:500;color:var(--t1)">ADP Leads — COI confirmed</span>
+    <button class="btn airtable" onclick="saveLeadsToAirtable()"><i class="ti ti-brand-airtable" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>Save all to Airtable</button>
+    <button class="btn" onclick="exportLeads()"><i class="ti ti-download"></i></button>
+  </div>
+  <div id="at-leads-status"></div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:.75rem">Cards move here automatically after COI check. Click any card to expand full IME analysis.</p>
+  <div id="leads-list"><div class="empty">No confirmed leads yet — complete COI checks in the Inbox.</div></div>
+</div>
+
+<!-- ═══ KOLS TAB ═══ -->
+<div id="tab-kols" class="tc">
+  <div class="toolbar">
+    <span style="font-weight:500;color:var(--t1)">Ambassador KOL Pipeline</span>
+    <button class="btn airtable" onclick="saveKOLsToAirtable()"><i class="ti ti-brand-airtable" style="font-size:13px;margin-right:3px;vertical-align:-1px"></i>Save all to Airtable</button>
+    <button class="btn" onclick="exportKOLs()"><i class="ti ti-download"></i></button>
+  </div>
+  <div id="at-kol-status"></div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:.75rem">Senior academics (Prof/MD level) with documented pharma publication track record. ORCID-verified where possible.</p>
+  <div id="klist"><div class="empty">No KOLs yet.</div></div>
+</div>
+
+<!-- ═══ SKIP LOG TAB ═══ -->
+<div id="tab-skiplog" class="tc">
+  <div class="toolbar">
+    <span style="font-weight:500;color:var(--t1)">Skip Log</span>
+    <button class="btn" onclick="exportSkipped()"><i class="ti ti-download"></i></button>
+  </div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:.75rem"><strong>Skip</strong> = not relevant: purely academic, wrong population, wrong format, or no pharma angle. Permanently out of pipeline unless manually undone.</p>
+  <div id="skiplog-list"><div class="empty">No articles skipped yet.</div></div>
+</div>
+
+<!-- ═══ WATCH TAB ═══ -->
+<div id="tab-watch" class="tc">
+  <div class="toolbar">
+    <span style="font-weight:500;color:var(--t1)">Watch List</span>
+    <button class="btn" onclick="exportWatch()"><i class="ti ti-download"></i></button>
+    <button class="btn" onclick="clearWatch()" style="color:var(--t3)">Clear all</button>
+  </div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:.75rem"><strong>Watch</strong> = strategically interesting but condition not yet met (e.g. pending indexing, EU study planned, approval awaited). Revisit on trigger event.</p>
+  <div id="watch-list"><div class="empty">No articles on Watch list yet.</div></div>
+</div>
+
+</div><!-- panel -->
+</div><!-- body -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONSTANTS — v17: expanded drug lists, stronger DACH/France logic
+// ═══════════════════════════════════════════════════════
+const SKIPCAT=['letter to the editor','letter','case report','editorial','commentary','reply','correspondence','erratum','quiz','translation','protocol','plain language','reader\'s forum','technical note','images in','obituary','perspective','in focus','brief communication','research note','research in brief','photoquiz','concise communication','clinical correspondence','one-page report','supplement article','viewpoint','short communication','clinical image'];
+const SKIPJ=['ARS2','ATN2','WJS','ANS','LARY','HED','JPC','APA','AOGS','JDD','JOOR','JSO','AGS3','KSA','ARJ','ANAE','JSAP','VDE','VSU','BIRT','AOR','CCD','PACE','JMRI','DC','CYT','ANDR','AEJ','EJE','EDT','JPHD','NAU','DMCN','ASH','GER','ODI','CDOE','JAN','JOCN','TMI','MRM','SLP2','MDS','MEDU','IBRA','TID','CGE','CNS3'];
+
+// Drug→Account map with canonical drug names (v17: more precise matching)
+const ACCTS={
+  'AbbVie':['adalimumab','upadacitinib','risankizumab','skyrizi','rinvoq','humira'],
+  'AstraZeneca':['anifrolumab','saphnelo','osimertinib','tagrisso','durvalumab','imfinzi','camizestrant','datroway','benralizumab','fasenra','tezepelumab','tezspire'],
+  'Amgen':['apremilast','otezla','denosumab','prolia','xgeva','evolocumab','repatha','romosozumab'],
+  'Boehringer Ingelheim':['spesolimab','spevigo','nintedanib','ofev','empagliflozin','jardiance'],
+  'Eli Lilly':['tirzepatide','mounjaro','zepbound','ixekizumab','taltz','baricitinib','olumiant','lebrikizumab','ebglyss','mirikizumab','omvoh','donanemab','kisunla'],
+  'Novartis':['secukinumab','cosentyx','canakinumab','ilaris','iptacopan','fabhalta','inclisiran','leqvio'],
+  'Pfizer':['abrocitinib','cibinqo','tofacitinib','xeljanz','lorlatinib','lorbrena','atogepant','qulipta','marstacimab'],
+  'Roche/Genentech':['emicizumab','hemlibra','atezolizumab','tecentriq','crovalimab','inavolisib','itovebi','polatuzumab','mosunetuzumab','ocrelizumab','ocrevus','tocilizumab','actemra'],
+  'Sanofi/Regeneron':['dupilumab','dupixent','sarilumab','kevzara','isatuximab','sarclisa','cemiplimab','libtayo','itepekimab','astegolimab'],
+  'Takeda':['vedolizumab','entyvio','budesonide mmx','ustekinumab stelara takeda'],
+  'UCB':['bimekizumab','bimzelx','certolizumab','cimzia','zilucoplan','zilbrysq'],
+  'Janssen/J&J':['guselkumab','tremfya','daratumumab','darzalex','ustekinumab','stelara','icotrokinra','nipocalimab'],
+  'Novo Nordisk':['semaglutide','ozempic','wegovy','rybelsus','insulin degludec','tresiba','cagrilintide'],
+  'Merck/MSD':['pembrolizumab','keytruda','olaparib','lynparza','belzutifan','welireg'],
+  'BMS':['nivolumab','opdivo','deucravacitinib','sotyktu','relatlimab','opdualag'],
+  'Gilead':['filgotinib','jyseleca','remdesivir','veklury','biktarvy','lenacapavir'],
+  'Biogen':['tofersen','qalsody','natalizumab','tysabri','lecanemab','leqembi'],
+  'Leo Pharma':['tralokinumab','adbry','tapinarof','vtama'],
+  'Sobi':['efanesoctocog','alhemo','emapalumab','gamifant'],
+  'Vertex':['suzetrigine','journavx','ivacaftor','kalydeco','tezacaftor','symdeko','elexacaftor','kaftrio','trikafta'],
+  'Bayer':['finerenone','kerendia','asundexian','elinzanetant'],
+  'AstraZeneca/MSD':['olaparib','lynparza']
+};
+
+// Rare disease drugs (trigger hookRareDisease flag)
+const RARE=['emicizumab','efanesoctocog','emapalumab','crovalimab','spesolimab','canakinumab','iptacopan','suzetrigine','tofersen','mosunetuzumab','zilucoplan','nipocalimab'];
+
+// Study category types eligible for ADP
+const CATTYPES=['ORIGINAL ARTICLE','ORIGINAL RESEARCH','RESEARCH ARTICLE','FULL LENGTH','REVIEW ARTICLE','SYSTEMATIC REVIEW','META-ANALYSIS','SHORT REPORT','BRIEF REPORT'];
+
+// v17: DACH and France indicator terms (for pipeline logic)
+const DACH_TERMS=['germany','german','deutschland','austria','austrian','österreich','switzerland','swiss','schweiz','zürich','berlin','munich','münchen','frankfurt','hamburg','köln','cologne','heidelberg','mannheim','kiel','hannover','aachen','freiburg','bonn','tübingen','leipzig','essen','dortmund','düsseldorf','bochum','duisburg','lübeck','göttingen','erlangen','regensburg','ulm','giessen','jena','würzburg','wien','vienna','graz','linz','innsbruck','bern','basel','geneva','lausanne','zurich'];
+const FRANCE_TERMS=['france','french','paris','lyon','marseille','bordeaux','toulouse','lille','montpellier','strasbourg','nantes','rennes','grenoble','nice','toulon','reims','saint-étienne','rouen','amiens','inserm','aphp','chu','chru','hopital','hôpital'];
+
+// v17: Skip presets — clearer pipeline semantics
+const SKIP_PRESETS=[
+  'Purely academic — no pharma co-author confirmed',
+  'Non-EU population, no DACH/France angle',
+  'Case Report / Letter / Editorial / Viewpoint',
+  '<20 patients — insufficient for IME',
+  'Drug match false positive — no actual product relevance',
+  'Wrong account — Bio-Rad/diagnostics, not pharma MA',
+  'Japan/Asia-only, no EU transfer angle',
+  'COI check: all authors academic, no pharma employment',
+  'Already covered by existing ADP lead this cycle',
+  'Study too early/preliminary for IME'
+];
+
+// v17: Watch presets — strategic staging, not permanent skip
+const WATCH_PRESETS=[
+  'Strong hook but pharma co-author pending PubMed indexing',
+  'Non-EU population — EU equivalent study planned or expected',
+  'Excellent KOL hook — no pharma author but high DACH relevance',
+  'Re-check after congress (EADV/ECCO/EULAR/DDG/ESC)',
+  'New approval/label extension pending — revisit on EMA decision',
+  'EU partnering deal expected — revisit when announced',
+  'Phase 3 trial running — revisit on data readout',
+  'Article not yet indexed — re-check PubMed in 4 weeks'
+];
+
+// Airtable config
+const AT_BASE='appACnCQAtFmXXSzn';
+const AT_LEADS_TBL='tbljU3lzcWqlCWtbg';
+const AT_KOL_TBL='tblxd0NuIglt5uQzW';
+const AT_F={title:'fldxo6X7DLz5RBURT',trigger:'fldn16MsXRf99vCdm',notes:'fldK2ao5zukTLErhw',status:'fldQHNn27SubQ4FJO',date:'fldac9pKqsWpWw8TR'};
+const AT_KF={name:'fld1Nug0yMl3w3LAD',email:'fldDyRMrH9ltnikku',role:'fldYowNGwp3TSqZXT',ta:'flduonc5aFEI81VCb',notes:'fldJjRM3nWQj9Hul1'};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let rows=[],leads=[],kols=[],watchList=[],running=false;
+
+// ═══════════════════════════════════════════════════════
+// AIRTABLE — v17: structured trigger + notes format
+// ═══════════════════════════════════════════════════════
+function getATToken(){const s=sessionStorage.getItem('at_token');if(s&&s.startsWith('pat'))return s;const t=prompt('Airtable PAT (pat...):\nairtable.com/create/tokens → data.records:write → OB_IME');if(t&&t.startsWith('pat')){sessionStorage.setItem('at_token',t);return t;}alert('Invalid token — must start with "pat"');return null;}
+
+async function atCreate(tbl,fields,tok){
+  const today=new Date().toISOString().split('T')[0];
+  const r=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${tbl}`,{method:'POST',headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({fields:{...fields,[AT_F.date]:today},typecast:true})});
+  return r.ok;
+}
+
+// v17: Structured Airtable trigger + notes
+function buildLeadFields(a){
+  const doi=a.doi?a.doi.replace(/^https?:\/\/doi\.org\//,''):'';
+  const url=a.manualUrl||(doi?'https://doi.org/'+doi:'');
+  const pharmaLine=(a.pharmaAuthors||[]).length
+    ? '⭐ Pharma authors: '+(a.pharmaAuthors||[]).map(p=>p.name+' ('+p.affiliation.substring(0,40)+')').join('; ')
+    : '';
+  const kolLine=(a.kolAuthors||[]).length
+    ? '🎓 KOL authors: '+(a.kolAuthors||[]).map(k=>k.name+' — '+k.affiliation.substring(0,40)).join('; ')
+    : '';
+
+  // Structured TRIGGER field (Aktivität title + key facts)
+  const trigger=[
+    '💊 '+a.drug+' / '+a.account+' | '+(a.tier==='strong'?'🟢 Strong ADP':'🟡 Medium ADP'),
+    url?'🔗 '+url:'',
+    a.hookProblem?'🔥 '+a.hookProblem:'',
+    a.hookStudyType?'📊 '+a.hookStudyType:'',
+    pharmaLine,
+    kolLine,
+    'Source: ADP Scan Dashboard '+new Date().toLocaleDateString('de-DE')
+  ].filter(Boolean).join('\n');
+
+  // Structured NOTES field (IME + MA guidance)
+  const notes=[
+    a.adpAngle?'🎯 ADP Angle:\n'+a.adpAngle:'',
+    a.positioning?'\n🤝 Positioning:\n'+a.positioning:'',
+    a.gap?'\n📌 HCP Decision Gap:\n'+a.gap:'',
+    (a.outreachTargets||[]).length?'\n🚀 Outreach Targets:\n'+(a.outreachTargets||[]).map((t,i)=>(i+1)+'. '+t).join('\n'):''
+  ].filter(Boolean).join('\n');
+
+  return{
+    [AT_F.title]:a.title.substring(0,200),
+    [AT_F.trigger]:trigger,
+    [AT_F.notes]:notes,
+    [AT_F.status]:a.tier==='strong'?'🟢 ADP Strong':'🟡 ADP Medium'
+  };
+}
+
+async function saveLeadsToAirtable(){
+  const confirmed=leads.filter(a=>!a.skipped&&!a.onWatch&&a.coiDone&&a.coiResult==='ADP');
+  if(!confirmed.length){alert('No confirmed ADP leads to save.');return;}
+  const tok=getATToken();if(!tok)return;
+  const el=document.getElementById('at-leads-status');
+  el.textContent='Saving '+confirmed.length+' leads...';el.style.color='var(--t2)';
+  let s=0,f=0;
+  for(const a of confirmed){const ok=await atCreate(AT_LEADS_TBL,buildLeadFields(a),tok);ok?s++:f++;}
+  el.textContent='✅ '+s+' saved'+(f?' ('+f+' failed)':'');
+  el.style.color=f?'#a32d2d':'#085041';
+}
+
+async function saveOneLead(idx){
+  const a=leads[idx];if(!a)return;
+  const tok=getATToken();if(!tok)return;
+  const el=document.getElementById('at-leads-status');
+  el.textContent='Saving...';
+  const ok=await atCreate(AT_LEADS_TBL,buildLeadFields(a),tok);
+  el.textContent=ok?'✅ Saved: '+a.title.substring(0,60)+'...':'❌ Save failed';
+  el.style.color=ok?'#085041':'#a32d2d';
+}
+
+async function saveKOLsToAirtable(){
+  if(!kols.length){alert('No KOLs to save.');return;}
+  const tok=getATToken();if(!tok)return;
+  const el=document.getElementById('at-kol-status');
+  el.textContent='Saving...';
+  let s=0,f=0;
+  for(const k of kols){
+    const vStatus=k.verificationStatus==='verified_academic'?'✅ ORCID verified':k.verificationStatus==='verified_community'?'🏥 KBV verified':'⬜ Unverified';
+    const ok=await atCreate(AT_KOL_TBL,{
+      [AT_KF.name]:k.name||'',
+      [AT_KF.email]:k.email||'',
+      [AT_KF.role]:'KOL Ambassador',
+      [AT_KF.ta]:(k.pharmaLink||'').substring(0,100),
+      [AT_KF.notes]:[
+        vStatus+(k.orcidId?' — ORCID '+k.orcidId:''),
+        k.ambassadorPotential||'',
+        'Pharma links: '+(k.pharmaLink||''),
+        'Article: '+(k.article||'').substring(0,120),
+        'Drug/Account: '+(k.drug||'')+' / '+(k.account||'')
+      ].filter(Boolean).join('\n')
+    },tok);
+    ok?s++:f++;
+  }
+  el.textContent='✅ '+s+' KOLs saved'+(f?' ('+f+' failed)':'');
+  el.style.color=f?'#a32d2d':'#085041';
+}
+
+// ═══════════════════════════════════════════════════════
+// TABS / INPUT
+// ═══════════════════════════════════════════════════════
+function switchTab(t){document.querySelectorAll('.tab,.tc').forEach(e=>e.classList.remove('active'));document.querySelector('.tab[onclick*="\''+t+'\'"]').classList.add('active');document.getElementById('tab-'+t).classList.add('active');}
+function switchInput(m,btn){document.querySelectorAll('.itab').forEach(e=>e.classList.remove('active'));btn.classList.add('active');document.getElementById('input-xlsx').style.display=m==='xlsx'?'block':'none';document.getElementById('input-paste').style.display=m==='paste'?'block':'none';}
+function dv(e,on){e.preventDefault();document.getElementById('drop').classList.toggle('over',!!on);}
+function dd(e){e.preventDefault();document.getElementById('drop').classList.remove('over');if(e.dataTransfer.files[0])hf(e.dataTransfer.files[0]);}
+
+// ═══════════════════════════════════════════════════════
+// FILE LOAD
+// ═══════════════════════════════════════════════════════
+function hf(file){
+  if(!file)return;
+  setSt('Reading file...');
+  const r=new FileReader();
+  r.onload=function(ev){
+    try{
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
+      // v17: filter out skip categories AND skip journals
+      rows=data.filter(r=>{
+        const t=(r['Article Title']||r['Title']||'').trim();
+        const j=(r['JPCMS Journal']||r['Journal']||'').trim();
+        const c=(r['Category (Display Article Type)']||r['Category']||'').toLowerCase();
+        return t&&!SKIPJ.includes(j)&&!SKIPCAT.some(s=>c.includes(s));
+      });
+      setLoaded(file.name+' — '+rows.length+' articles',rows.length);
+      setSt(rows.length+' articles loaded ('+(data.length-rows.length)+' pre-filtered by category/journal).');
+    }catch(err){setSt('Error reading file: '+err.message);}
+  };
+  r.readAsArrayBuffer(file);
+}
+
+function parsePaste(){
+  const text=document.getElementById('pasteInput').value.trim();
+  if(!text){document.getElementById('parse-st').textContent='Paste text first.';return;}
+  document.getElementById('parse-st').textContent='Parsing...';
+  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>10);
+  const articles=[];let currentCat='Original Article';let i=0;
+  while(i<lines.length){
+    const line=lines[i];const upper=line.toUpperCase();
+    const det=CATTYPES.find(c=>upper.startsWith(c));
+    if(det){currentCat=line;i++;continue;}
+    const isSkipHdr=SKIPCAT.some(s=>upper.startsWith(s.toUpperCase()))&&line.length<60&&!line.includes(',');
+    if(isSkipHdr){i++;if(i<lines.length&&!lines[i].includes(',')&&lines[i].length<80)i++;continue;}
+    if(line.length>30&&!line.match(/^(Version of Record|First Published|Pages:|DOI:|https?:|www\.|©|e[0-9]+\s*\|)/i)&&!line.match(/^\d+$/)){
+      const nextLine=i+1<lines.length?lines[i+1]:'';
+      const doiMatch=(line+' '+nextLine).match(/10\.\d{4,}\/[^\s"]+/);
+      const authors=nextLine&&nextLine.includes(',')?nextLine:'';
+      articles.push({title:line,authors,category:currentCat,doi:doiMatch?doiMatch[0]:''});
+      if(authors)i++;
+    }
+    i++;
+  }
+  const filtered=articles.filter(a=>!SKIPCAT.some(s=>(a.category||'').toUpperCase().includes(s.toUpperCase())));
+  rows=filtered.map(a=>({'Article Title':a.title,'JPCMS Journal':'','Journal':'','Category (Display Article Type)':a.category||'Original Article','DOI':a.doi||'','_wileyUrl':a.doi?'https://onlinelibrary.wiley.com/doi/'+a.doi:'','Corresponding Author':a.authors?(a.authors.split(',')[0].trim()):'','Corresponding Author Country':'','Corresponding Author Email':'','Corresponding Author Address':'','_rawAuthors':a.authors||'','_source':'paste'}));
+  document.getElementById('parsePreview').innerHTML=rows.length?`<div class="preview-box"><strong style="color:var(--t1)">${rows.length} articles extracted</strong><div style="margin-top:.3rem;max-height:100px;overflow-y:auto">${rows.slice(0,8).map(r=>`<div class="preview-item">${r['DOI']?'✓ ':'○ '}${r['Article Title'].substring(0,80)}...</div>`).join('')}${rows.length>8?`<div class="preview-item" style="color:var(--t3)">...and ${rows.length-8} more</div>`:''}</div></div>`:'<div class="preview-box" style="color:var(--t2)">No articles found.</div>';
+  document.getElementById('parse-st').textContent=rows.length+' articles ready.';
+  setLoaded('Pasted text — '+rows.length+' articles',rows.length);
+}
+
+function setLoaded(label,count){document.getElementById('flabel').textContent=label;document.getElementById('flabel').style.color=count>0?'var(--t1)':'var(--t2)';document.getElementById('abtn').disabled=count===0;}
+
+// ═══════════════════════════════════════════════════════
+// v17: ACCOUNT MATCHING — more precise, avoid false positives
+// ═══════════════════════════════════════════════════════
+function matchAccount(title){
+  const t=' '+title.toLowerCase()+' ';
+  for(const[acc,kws]of Object.entries(ACCTS)){
+    for(const kw of kws){
+      // require word boundary check (space, comma, punctuation around drug name)
+      const re=new RegExp('(?:^|[\\s,;:\\(\\[])'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?:[\\s,;:\\)\\]\\.]|$)','i');
+      if(re.test(t))return{account:acc,drug:kw};
+    }
+  }
+  return null;
+}
+
+// v17: Geography check — returns {isDACH, isFrance, isEU}
+function geoCheck(country,address){
+  const hay=(country+' '+address).toLowerCase();
+  const isDACH=DACH_TERMS.some(t=>hay.includes(t));
+  const isFrance=FRANCE_TERMS.some(t=>hay.includes(t));
+  const isEU=isDACH||isFrance||hay.includes('netherlands')||hay.includes('spain')||hay.includes('italy')||hay.includes('sweden')||hay.includes('norway')||hay.includes('denmark')||hay.includes('belgium')||hay.includes('poland')||hay.includes('portugal')||hay.includes('finland')||hay.includes('ireland')||hay.includes('greece')||hay.includes('czech')||hay.includes('hungary')||hay.includes('romania')||hay.includes('uk')||hay.includes('united kingdom')||hay.includes('england')||hay.includes('scotland');
+  return{isDACH,isFrance,isEU};
+}
+
+// v17: Local pre-score (before COI — human-in-the-loop decides final)
+function localScore(row,drug,account){
+  const cat=(row['Category (Display Article Type)']||'').toLowerCase();
+  const title=(row['Article Title']||'').toLowerCase();
+  const country=row['Corresponding Author Country']||row[' Corresponding Author Country']||'';
+  const address=row['Corresponding Author Address']||'';
+  const geo=geoCheck(country,address);
+  const isRare=RARE.some(d=>drug.toLowerCase().includes(d.toLowerCase()));
+  // Strong indicators
+  const isStrongDesign=['phase 3','phase iii','phase 2','phase ii','real-world','randomized','randomised','rct','prospective','cohort','network meta','systematic review','meta-analysis'].some(s=>title.includes(s));
+  // Preliminary tier estimate (COI check will confirm/override)
+  let tier=isStrongDesign?'strong':'medium';
+  return{
+    tier,
+    hookDrug:drug,hookProblem:'',hookStudyType:'',hookRareDisease:isRare,
+    adpAngle:'',positioning:'',outreachTargets:[],gap:'',
+    coiResult:'',coiReason:'',
+    pharmaAuthors:[],kolAuthors:[],hcpVerification:[],
+    coiDone:false,promptPanelOpen:false,expanded:false,
+    skipped:false,skipReason:'',skipShowPanel:false,skippedAt:'',
+    onWatch:false,watchReason:'',watchTrigger:'',watchShowPanel:false,watchedAt:'',
+    manualUrl:'',
+    // v17: geo flags for prompt building
+    _isDACH:geo.isDACH,_isFrance:geo.isFrance,_isEU:geo.isEU
+  };
+}
+
+function runAll(){
+  if(!rows.length||running)return;
+  running=true;
+  document.getElementById('abtn').disabled=true;
+  leads=[];kols=[];watchList=[];
+  showProg(0);setSt('Matching drug accounts...');
+  let matched=0,skipped_pre=0;
+  rows.forEach(r=>{
+    const title=r['Article Title']||r['Title']||'';
+    const m=matchAccount(title);
+    if(m){
+      matched++;
+      leads.push({
+        title,doi:r['DOI']||'',journal:r['JPCMS Journal']||r['Journal']||'',
+        category:r['Category (Display Article Type)']||'',
+        account:m.account,drug:m.drug,
+        corrAuthor:r['Corresponding Author']||'',
+        corrCountry:r['Corresponding Author Country']||r[' Corresponding Author Country']||'',
+        corrEmail:r['Corresponding Author Email']||'',
+        corrAddress:r['Corresponding Author Address']||'',
+        rawAuthors:r['_rawAuthors']||'',source:r['_source']||'xlsx',
+        manualUrl:r['_wileyUrl']||'',
+        ...localScore(r,m.drug,m.account)
+      });
+    }else{skipped_pre++;}
+  });
+  showProg(100);
+  setTimeout(()=>document.getElementById('prog').style.display='none',600);
+  document.getElementById('inbox-note').style.display='block';
+  document.getElementById('pipeline-legend').style.display='flex';
+  setSt(matched+' matched articles in Inbox'+(skipped_pre?' ('+skipped_pre+' unmatched)':'')+'. Click Copy prompt for Claude per card to run COI check.');
+  running=false;
+  document.getElementById('abtn').disabled=false;
+  updateStats();renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// v17: IMPROVED COI PROMPT — strict JSON, specific fields
+// ═══════════════════════════════════════════════════════
+function buildCOIPrompt(a){
+  const isDE=a._isDACH;
+  const isFR=a._isFrance;
+  const kbvNote=isDE
+    ? '2. KBV Arztsuche (https://arztsuche.kbv.de) — for Germany-based authors: check if they appear as a registered community specialist (niedergelassener Facharzt). Flag as verified_community if found.'
+    : '2. KBV check: not applicable (non-DE country).';
+  const geoNote=(a._isDACH?' (DACH territory — KBV check applicable for DE)'
+    :a._isFrance?' (France — primary ADP territory)'
+    :a._isEU?' (EU territory)'
+    :'');
+
+  return `ADP_COI — Wiley IME Analysis
+Please respond with ONLY a JSON object (no markdown) with these exact keys:
+tier, coiResult (ADP or SKIP), coiReason, hookDrug, hookProblem, hookStudyType, hookRareDisease, adpAngle, positioning, outreachTargets (array), gap, pharmaAuthors (array of {name,affiliation,email}), kolAuthors (array of {name,affiliation,email,pharmaLink,ambassadorPotential}), hcpVerification (array — see format below)
+
+SKIP rules (hard exclusions — apply first):
+- All authors are academic with no pharma employment
+- Case Report / Letter / Editorial / Viewpoint / Brief Communication format
+- <20 patients
+- Non-EU population with no DACH/France angle
+- Preclinical / animal / in-vitro study
+- Biosimilar or generic compound (not the originator brand)
+- Duplicate of a previously scanned article
+
+TIER SCORING — assess all 4 criteria independently, then assign tier:
+tier=strong ONLY if ALL 4 criteria are met:
+  [COI] Confirmed pharma company co-author (@company.com email or stated affiliation) — OR — EU/DACH/France exception with named EU author AND high clinical relevance
+  [PRODUCT] Drug is strategically active: launch phase, label expansion, lifecycle priority, or high-profile indication (not generic, not niche Phase 1, not already market-saturated)
+  [EDUCATION GAP] Clear unresolved HCP decision gap — a decision clinicians face regularly that this article directly enables or improves
+  [BUDGET SIGNAL] Medical Affairs team in EU actively investing in education for this indication — evidence: recent congresses, guidelines updates, competing IME programs, or active EU launch activity
+
+tier=medium if 2–3 criteria are met:
+  - Pharma co-author present but data is incremental / subgroup post-hoc / limited novelty
+  - EU exception applied (no pharma author) but strong clinical hook
+  - Strategic product but study design is too early or too narrow for immediate IME
+  - Good educational upside but unclear EU MA budget signal
+
+tier=watch if <2 criteria or condition not yet met:
+  - Interesting topic but no pharma author and no EU exception
+  - COI pending verification
+  - Non-EU population but EU equivalent study expected
+  - Pipeline drug not yet approved in EU
+
+- pharmaAuthors: ONLY authors with confirmed pharma company affiliation AND a @pharma.com institutional email or explicitly stated company employment. NEVER include:
+  · CRO employees (IQVIA, Covance, PPD, ICON, Parexel etc.)
+  · Academic spin-offs or biotech (e.g. AMPEL BioSolutions, Cardior, BioAtla) even if they analysed pharma-sponsored data
+  · Consultants or advisors without stated company employment
+  · Authors where "pharma connection" is only a data source, grant, or research collaboration
+  If no @pharma.com email is present, affiliation must explicitly state "Company Name, City, Country" as employer — not just "funded by" or "data provided by"
+- kolAuthors: senior academics (Prof/MD level) with documented pharma publication history — must include ambassadorPotential
+PRE-PUBLICATION QC — verify before assigning tier=strong or tier=medium:
+□ pharmaAuthors: is @company.com email confirmed OR affiliation explicitly states company as employer?
+□ Is the journal a Wiley journal? (Non-Wiley = SKIP regardless of clinical relevance)
+□ Is the drug currently approved and commercially active in EU? (Pipeline/failed trials = lower tier)
+□ Is the study population EU/DACH/France? (Non-EU without exception = SKIP)
+□ Study format: is it a primary data study with ≥20 patients? (Review/Editorial/Case Report = SKIP)
+If any box fails → downgrade tier or SKIP. Do not compensate with strong clinical hook alone.
+- hookStudyType: WHY this study design matters for IME — evidence level, novelty, clinical applicability
+- adpAngle: concrete IME format and target audience (e.g. "Expert consensus eLearning for haematologists: monitoring emicizumab prophylaxis in AHA using FXIa-TGA")
+- positioning: education partner filling a clinical gap — NOT a product pitch
+- outreachTargets: 3 SPECIFIC Medical Affairs roles with company names
+- gap: PRECISE HCP decision that cannot be made well without this evidence
+
+HCP Verification — check for each author listed:
+1. ORCID (https://orcid.org/search?searchQuery=FIRSTNAME+LASTNAME) — search by name and note ORCID iD if found. Flag as verified_academic if ORCID found with publications.
+${kbvNote}
+3. hcpVerification format per author: {name, orcidFound (bool), orcidId (string or null), orcidUrl (string or null), kbvFound (bool), verificationStatus: "verified_academic"|"verified_community"|"unverified", verificationNote (1 sentence)}
+
+Article:
+Title: ${a.title}
+Journal: ${a.journal||'unknown'}
+Category: ${a.category||'unknown'}
+Drug: ${a.drug}
+Account: ${a.account}
+Corresponding author: ${a.corrAuthor||a.rawAuthors||'unknown'}
+Country: ${a.corrCountry||'unknown'}${geoNote}
+Email: ${a.corrEmail||'unknown'}`;
+}
+
+// ═══════════════════════════════════════════════════════
+// COI COPY / APPLY
+// ═══════════════════════════════════════════════════════
+function copyPrompt(idx){
+  const a=leads[idx];
+  const prompt=buildCOIPrompt(a);
+  navigator.clipboard.writeText(prompt).then(()=>{
+    const btn=document.getElementById('copybtn-'+idx);
+    if(btn){btn.innerHTML='<i class="ti ti-check" style="font-size:11px;margin-right:2px;vertical-align:-1px"></i>Copied!';btn.classList.add('copied');setTimeout(()=>{btn.innerHTML='<i class="ti ti-copy" style="font-size:11px;margin-right:2px;vertical-align:-1px"></i>Copy prompt';btn.classList.remove('copied');},2500);}
+    leads[idx].promptPanelOpen=true;renderAll();
+  }).catch(()=>{leads[idx].promptPanelOpen=true;renderAll();});
+}
+
+function applyResult(idx){
+  const ta=document.getElementById('coi-paste-'+idx);
+  if(!ta)return;
+  let raw=ta.value.trim().replace(/```json\s*/gi,'').replace(/```\s*/gi,'').trim();
+  const fb=raw.indexOf('{'),lb=raw.lastIndexOf('}');
+  if(fb<0||lb<fb){alert('No valid JSON found. Copy the complete JSON block (from { to }).');return;}
+  raw=raw.substring(fb,lb+1);
+  try{
+    const item=JSON.parse(raw);
+    const a=leads[idx];
+    // Apply all returned fields
+    ['tier','coiResult','coiReason','hookDrug','hookProblem','hookStudyType','hookRareDisease',
+     'adpAngle','positioning','outreachTargets','gap','pharmaAuthors','kolAuthors','hcpVerification'
+    ].forEach(k=>{if(item[k]!==undefined&&item[k]!==null&&String(item[k]).length>0)a[k]=item[k];});
+    a.coiDone=true;a.promptPanelOpen=false;a.expanded=true;
+
+    // v17: pipeline auto-routing
+    if(item.coiResult==='SKIP'){
+      a.skipped=true;
+      a.skipReason=item.coiReason||'Auto-skipped via COI check — no pharma co-author or EU/DACH/France relevance';
+      a.skippedAt=fmtDate();
+    }
+    // Add confirmed KOLs (v17: only if ambassadorPotential present)
+    (a.kolAuthors||[]).forEach(k=>{
+      if(k.ambassadorPotential&&!kols.find(x=>x.name===k.name)){
+        kols.push({
+          ...k,article:a.title,journal:a.journal,drug:a.drug,account:a.account,
+          verificationStatus:(a.hcpVerification||[]).find(h=>h.name===k.name)?.verificationStatus||'unverified',
+          orcidId:(a.hcpVerification||[]).find(h=>h.name===k.name)?.orcidId||null
+        });
+      }
+    });
+    renderKOLs();updateStats();renderAll();
+  }catch(e){alert('JSON parse error: '+e.message+'\n\nMake sure you pasted the complete JSON block.');}
+}
+
+// ═══════════════════════════════════════════════════════
+// SKIP / WATCH
+// ═══════════════════════════════════════════════════════
+function toggleSkipPanel(idx){leads[idx].skipShowPanel=!leads[idx].skipShowPanel;if(leads[idx].watchShowPanel)leads[idx].watchShowPanel=false;renderAll();if(leads[idx].skipShowPanel)setTimeout(()=>{const el=document.getElementById('skip-inp-'+idx);if(el)el.focus();},30);}
+function selectPreset(idx,txt,type){document.querySelectorAll(`.preset[data-idx="${idx}"][data-type="${type}"]`).forEach(p=>p.classList.toggle('sel',p.dataset.txt===txt));const el=document.getElementById(type+'-inp-'+idx);if(el)el.value=txt;}
+function confirmSkip(idx){const el=document.getElementById('skip-inp-'+idx);const reason=(el?el.value:'').trim();if(!reason){if(el){el.style.borderColor='#e24b4a';el.placeholder='Reason required...';}return;}leads[idx].skipped=true;leads[idx].skipReason=reason;leads[idx].skipShowPanel=false;leads[idx].skippedAt=fmtDate();updateStats();renderAll();}
+function cancelSkip(idx){leads[idx].skipShowPanel=false;renderAll();}
+function unskip(idx){leads[idx].skipped=false;leads[idx].skipReason='';leads[idx].skippedAt='';updateStats();renderAll();}
+function toggleWatchPanel(idx){leads[idx].watchShowPanel=!leads[idx].watchShowPanel;if(leads[idx].skipShowPanel)leads[idx].skipShowPanel=false;renderAll();if(leads[idx].watchShowPanel)setTimeout(()=>{const el=document.getElementById('watch-inp-'+idx);if(el)el.focus();},30);}
+function confirmWatch(idx){const el=document.getElementById('watch-inp-'+idx);const reason=(el?el.value:'').trim();if(!reason){if(el){el.style.borderColor='#e24b4a';}return;}leads[idx].onWatch=true;leads[idx].watchReason=reason;leads[idx].watchShowPanel=false;leads[idx].watchedAt=fmtDate();if(!watchList.find(x=>x.idx===idx))watchList.push({idx,title:leads[idx].title,journal:leads[idx].journal,drug:leads[idx].drug,account:leads[idx].account,reason,watchedAt:leads[idx].watchedAt});updateStats();renderAll();}
+function cancelWatch(idx){leads[idx].watchShowPanel=false;renderAll();}
+function removeWatch(idx){leads[idx].onWatch=false;leads[idx].watchReason='';leads[idx].watchedAt='';watchList=watchList.filter(x=>x.idx!==idx);updateStats();renderAll();}
+function clearWatch(){watchList.forEach(w=>{leads[w.idx].onWatch=false;leads[w.idx].watchReason='';leads[w.idx].watchedAt='';});watchList=[];updateStats();renderAll();}
+function saveUrl(idx,iid){const url=document.getElementById(iid).value.trim();if(!url)return;leads[idx].manualUrl=url;const dm=url.match(/10\.\d{4,}\/[^\s?"]+/);if(dm&&!leads[idx].doi)leads[idx].doi=dm[0];renderAll();}
+function toggleCard(idx){leads[idx].expanded=!leads[idx].expanded;renderAll();}
+function fmtDate(){return new Date().toLocaleString('en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}
+
+// ═══════════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════════
+function updateStats(){
+  const inbox=leads.filter(a=>!a.skipped&&!a.onWatch&&!a.coiDone);
+  const confirmed=leads.filter(a=>!a.skipped&&!a.onWatch&&a.coiDone&&a.coiResult==='ADP');
+  const strong=confirmed.filter(a=>a.tier==='strong');
+  const medium=confirmed.filter(a=>a.tier==='medium');
+  const skipped=leads.filter(a=>a.skipped);
+  document.getElementById('inboxbadge').textContent=inbox.length;
+  document.getElementById('strongbadge').textContent=strong.length;
+  document.getElementById('mediumbadge').textContent=medium.length;
+  document.getElementById('skipbadge').textContent=skipped.length;
+  document.getElementById('watchbadge').textContent=watchList.length;
+  document.getElementById('kbadge').textContent=kols.length;
+  if(leads.length){
+    document.getElementById('smry').innerHTML=`<div class="smry">
+      <div class="sv"><div class="sn">${inbox.length}</div><div class="sl">📥 Inbox</div></div>
+      <div class="sv"><div class="sn" style="color:#085041">${strong.length}</div><div class="sl">🟢 Strong</div></div>
+      <div class="sv"><div class="sn" style="color:#633806">${medium.length}</div><div class="sl">🟡 Medium</div></div>
+      <div class="sv"><div class="sn" style="color:#3c3489">${kols.length}</div><div class="sl">🎓 KOLs</div></div>
+      <div class="sv"><div class="sn" style="color:var(--t3)">${skipped.length}</div><div class="sl">⬛ Skip</div></div>
+      <div class="sv"><div class="sn" style="color:#855200">${watchList.length}</div><div class="sl">👁 Watch</div></div>
+    </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// v17: CARD BUILDER — structured IME sections
+// ═══════════════════════════════════════════════════════
+function buildCardHTML(a,idx,context){
+  const doiClean=a.doi?a.doi.replace(/^https?:\/\/doi\.org\//,''):'';
+  const url=a.manualUrl||(doiClean?'https://onlinelibrary.wiley.com/doi/'+doiClean:'');
+  const tierCls=a.tier==='strong'?'is-strong':'is-medium';
+  const tierBadge=a.tier==='strong'
+    ?`<span class="badge badge-strong">🟢 Strong</span>`
+    :`<span class="badge badge-medium">🟡 Medium</span>`;
+  const coiBadge=a.coiDone
+    ?(a.coiResult==='ADP'?`<span class="badge badge-strong" style="font-size:10px">✓ ADP</span>`:`<span class="badge badge-skip" style="font-size:10px">✓ Skip</span>`)
+    :'';
+  const rareBadge=a.hookRareDisease?`<span class="badge" style="background:#faeeda;color:#633806;font-size:10px">🔬 RD</span>`:'';
+  const dachBadge=(a._isDACH||a._isFrance)?`<span class="badge" style="background:#fff3e0;border:.5px solid #ffb74d;color:#7c4500;font-size:10px">${a._isDACH?'🇩🇪 DACH':'🇫🇷 France'}</span>`:'';
+
+  // Header action buttons per context
+  const headerBtns=context==='inbox'
+    ?`<div style="display:flex;gap:4px;align-items:center">${dachBadge}${rareBadge}${tierBadge}${coiBadge}<button class="btn sm" onclick="event.stopPropagation();toggleSkipPanel(${idx})" title="Skip this article" style="font-size:11px;color:var(--t3)">${a.skipShowPanel?'✕':'⬛'}</button><button class="btn sm watch-btn" onclick="event.stopPropagation();toggleWatchPanel(${idx})" title="Add to Watch">${a.watchShowPanel?'✕':'👁'}</button></div>`
+    :context==='leads'
+    ?`<div style="display:flex;gap:4px;align-items:center">${dachBadge}${rareBadge}${tierBadge}<button class="btn sm airtable" onclick="event.stopPropagation();saveOneLead(${idx})" title="Save to Airtable" style="font-size:10px"><i class="ti ti-brand-airtable" style="font-size:11px;vertical-align:-1px"></i></button></div>`
+    :context==='skiplog'
+    ?`<div style="display:flex;gap:4px"><span class="badge badge-skip">⬛ Skip</span><button class="btn sm" onclick="event.stopPropagation();unskip(${idx})">Undo</button></div>`
+    :`<div style="display:flex;gap:4px"><span class="badge badge-watch">👁 Watch</span><button class="btn sm" onclick="event.stopPropagation();removeWatch(${idx})">Remove</button></div>`;
+
+  const cardCls=context==='skiplog'?'card is-skipped':context==='watchlist'?'card':`card ${tierCls}`;
+  const titleCls=context==='skiplog'?'card-title striked':a.coiDone?'card-title done':'card-title';
+
+  let bodyHTML='';
+  if(a.expanded||context==='skiplog'||context==='watchlist'){
+    // DOI / URL line
+    const doiLine=url
+      ?`<div class="dl"><i class="ti ti-link" style="font-size:10px;margin-right:2px"></i><a href="${url}" target="_blank">${doiClean||url.substring(0,55)}</a></div>`
+      :`<div class="url-row"><input type="text" id="url-${idx}" placeholder="Paste Wiley URL or DOI..."><button class="btn sm" onclick="saveUrl(${idx},'url-${idx}')">Add</button></div>`;
+
+    // Context pills
+    const pills=`<div class="pills">
+      <span class="pill j">${a.journal||'Journal'}</span>
+      <span class="pill d">💊 ${a.drug}</span>
+      ${a.hookRareDisease?'<span class="pill rare">Rare Disease</span>':''}
+      ${a._isDACH?'<span class="pill dach">🇩🇪 DACH</span>':a._isFrance?'<span class="pill dach">🇫🇷 France</span>':a._isEU?'<span class="pill c">EU</span>':a.corrCountry?`<span class="pill c">${a.corrCountry}</span>`:''}
+      ${a.source==='paste'?'<span class="pill src">📋 Pasted</span>':''}
+      ${(a.pharmaAuthors||[]).length?`<span class="pill pharma">⭐ ${a.pharmaAuthors.length} pharma author${a.pharmaAuthors.length>1?'s':''}</span>`:''}
+    </div>`;
+
+    // Authors section
+    const pharmaRows=(a.pharmaAuthors||[]).map(p=>`<div class="ar"><span style="color:#085041;font-size:14px">⭐</span><span class="an">${p.name}</span><span class="aa">${p.affiliation||''}</span>${p.email?`<a class="ae" href="mailto:${p.email}">${p.email}</a>`:''}</div>`).join('');
+    const kolRows=(a.kolAuthors||[]).map(k=>`<div class="ar"><span style="color:#854f0b;font-size:14px">🎓</span><span class="an">${k.name}</span><span class="aa">${k.affiliation||''}</span>${k.email?`<a class="ae" href="mailto:${k.email}">${k.email}</a>`:''}</div>`).join('');
+    const corrRow=(a.corrAuthor||a.corrEmail)?`<div class="ar"><span style="color:var(--t3)">✉</span><span class="an">${a.corrAuthor||'Author'}</span><span class="aa">${a.corrAddress||a.corrCountry||a.rawAuthors||''}</span>${a.corrEmail?`<a class="ae" href="mailto:${a.corrEmail}">${a.corrEmail}</a>`:''}</div>`:'';
+    const authorSec=(pharmaRows||kolRows||corrRow)?`<div class="asec">${pharmaRows}${kolRows}${corrRow}</div>`:'';
+
+    // Skip / watch reasons
+    const reasonSec=a.skipped
+      ?`<div class="reason-box"><div class="txt"><strong>⬛ Skip reason:</strong> ${a.skipReason}${a.skippedAt?` <span style="color:var(--t3);font-size:11px">— ${a.skippedAt}</span>`:''}</div></div>`
+      :a.onWatch
+      ?`<div class="reason-box watch-reason-box"><div class="txt"><strong>👁 Watch reason:</strong> ${a.watchReason}${a.watchedAt?` <span style="color:var(--t3);font-size:11px">— ${a.watchedAt}</span>`:''}</div></div>`
+      :'';
+
+    // v17: Structured IME box with grouped sections
+    let imeBox='';
+    if(context==='inbox'||context==='leads'){
+      if(a.coiDone){
+        // Section 1: Clinical hook
+        const sec1=[
+          ['💊 Drug hook',a.hookDrug,false],
+          ['🔥 Clinical problem',a.hookProblem,false],
+          ['📊 Study value',a.hookStudyType,false],
+        ].filter(([,v])=>v&&v.length>3);
+        // Section 2: IME strategy
+        const sec2=[
+          ['🎯 ADP angle',a.adpAngle,false],
+          ['🤝 Positioning for MA',a.positioning,false],
+          ['📌 HCP decision gap',a.gap,true],
+        ].filter(([,v])=>v&&v.length>3);
+        // Outreach targets
+        const outRow=(a.outreachTargets||[]).length
+          ?`<div class="imerow"><div class="imelbl">🚀 Outreach targets</div><div class="otpills">${a.outreachTargets.map(t=>`<span class="op">${t}</span>`).join('')}</div></div>`
+          :'';
+        // HCP verification
+        const hcpRow=(a.hcpVerification||[]).length
+          ?`<div class="imerow"><div class="imelbl">🔍 HCP Verification</div><div class="hcprow">${(a.hcpVerification||[]).map(h=>`<div class="hcptag">${h.verificationStatus==='verified_academic'?'✅':h.verificationStatus==='verified_community'?'🏥':'⬜'} <strong>${h.name||''}</strong>${h.orcidFound&&h.orcidUrl?` — <a href="${h.orcidUrl}" target="_blank">ORCID ${h.orcidId||''}</a>`:''}${h.kbvFound?' — KBV ✓':''} <span style="color:var(--t3);font-size:10px">${h.verificationNote||''}</span></div>`).join('')}</div></div>`
+          :'';
+        const coiReason=a.coiReason?`<div class="imerow"><div class="imelbl">✓ COI rationale</div><div class="imeval it">${a.coiReason}</div></div>`:'';
+
+        imeBox=`<div class="imebox">
+          <div class="imehdr"><span class="imehdr-label">IME + COI Analysis</span><span style="font-size:11px;color:${a.coiResult==='ADP'?'#085041':'#633806'}">✓ ${a.coiResult==='ADP'?'ADP confirmed — '+a.tier:'Skipped'}</span></div>
+          ${coiReason}
+          ${sec1.length?`<div class="ime-section"><div class="ime-sec-hdr">Clinical Hook</div>${sec1.map(([l,v,it])=>`<div class="imerow"><div class="imelbl">${l}</div><div class="imeval${it?' it':''}">${v}</div></div>`).join('')}</div>`:''}
+          ${sec2.length?`<div class="ime-section"><div class="ime-sec-hdr">IME Strategy</div>${sec2.map(([l,v,it])=>`<div class="imerow"><div class="imelbl">${l}</div><div class="imeval${it?' it':''}">${v}</div></div>`).join('')}${outRow}</div>`:''}
+          ${hcpRow?`<div class="ime-section">${hcpRow}</div>`:''}
+        </div>`;
+      }else if(a.promptPanelOpen){
+        imeBox=`<div class="imebox">
+          <div class="imehdr"><span class="imehdr-label">COI + IME Prompt</span><div style="display:flex;gap:5px"><button class="btn sm copy" id="copybtn-${idx}" onclick="copyPrompt(${idx})"><i class="ti ti-copy" style="font-size:11px;margin-right:2px;vertical-align:-1px"></i>Copy prompt</button><button class="btn sm" onclick="leads[${idx}].promptPanelOpen=false;renderAll()">✕</button></div></div>
+          <div class="prompt-preview">${buildCOIPrompt(a).substring(0,400)}...</div>
+          <div class="paste-area">
+            <p><strong>Steps:</strong> 1. Copy prompt above → 2. Paste in claude.ai → 3. Get JSON response → 4. Paste below → 5. Apply</p>
+            <textarea id="coi-paste-${idx}" placeholder='{"tier":"strong","coiResult":"ADP","coiReason":"...","hookDrug":"...","hookProblem":"...","hookStudyType":"...","hookRareDisease":false,"adpAngle":"...","positioning":"...","outreachTargets":[],"gap":"...","pharmaAuthors":[],"kolAuthors":[],"hcpVerification":[]}'></textarea>
+            <div style="display:flex;gap:5px;justify-content:flex-end"><button class="btn sm" onclick="leads[${idx}].promptPanelOpen=false;renderAll()">Cancel</button><button class="btn sm primary" onclick="applyResult(${idx})">Apply result ↗</button></div>
+          </div>
+        </div>`;
+      }else{
+        imeBox=`<div class="imebox">
+          <div class="imehdr"><span class="imehdr-label">IME + COI Analysis</span><button class="btn sm copy" onclick="copyPrompt(${idx})"><i class="ti ti-copy" style="font-size:11px;margin-right:2px;vertical-align:-1px"></i>Copy prompt for Claude</button></div>
+          <div class="coi-ph">Click <strong>Copy prompt for Claude</strong> → paste into claude.ai → copy the JSON response → paste back here and click <strong>Apply result</strong>.</div>
+        </div>`;
+      }
+    }
+
+    // Skip / Watch panels
+    const skipPanel=a.skipShowPanel?`<div class="skip-panel">
+      <div class="panel-title">⬛ Skip this article</div>
+      <div class="panel-desc">Skip = permanently out of pipeline. Use when: purely academic, wrong format, wrong population, no pharma relevance. Use Watch instead if strategically interesting but not ready.</div>
+      <div class="presets">${SKIP_PRESETS.map(p=>`<span class="preset" data-idx="${idx}" data-type="skip" data-txt="${p}" onclick="selectPreset(${idx},'${p.replace(/'/g,"\\'")}','skip')">${p}</span>`).join('')}</div>
+      <input class="panel-inp" type="text" id="skip-inp-${idx}" placeholder="Or type your own reason...">
+      <div class="panel-actions"><button class="btn sm" onclick="cancelSkip(${idx})">Cancel</button><button class="btn sm red" onclick="confirmSkip(${idx})">⬛ Confirm Skip</button></div>
+    </div>`:'';
+
+    const watchPanel=a.watchShowPanel?`<div class="watch-panel">
+      <div class="panel-title">👁 Add to Watch</div>
+      <div class="panel-desc" style="border-color:#ef9f27">Watch = strategic hold. Use when: strong hook but pharma co-author not yet confirmed, EU equivalent study expected, or approval pending. Not a skip — revisit on trigger event.</div>
+      <div class="presets">${WATCH_PRESETS.map(p=>`<span class="preset" data-idx="${idx}" data-type="watch" data-txt="${p}" onclick="selectPreset(${idx},'${p.replace(/'/g,"\\'")}','watch')">${p}</span>`).join('')}</div>
+      <input class="panel-inp" type="text" id="watch-inp-${idx}" placeholder="Describe the trigger to revisit..." style="border-color:#ef9f27">
+      <div class="panel-actions"><button class="btn sm" onclick="cancelWatch(${idx})">Cancel</button><button class="btn sm watch-btn" onclick="confirmWatch(${idx})">👁 Add to Watch</button></div>
+    </div>`:'';
+
+    bodyHTML=`<div class="card-body open">${doiLine}${pills}${authorSec}${reasonSec}${skipPanel}${watchPanel}${imeBox}</div>`;
+  }
+
+  return`<div class="${cardCls}" id="card-${idx}">
+    <div class="card-header" onclick="toggleCard(${idx})">
+      <span class="card-toggle ${a.expanded?'open':''}">▶</span>
+      <div class="${titleCls}">${a.title}</div>
+      <div class="card-badges">${headerBtns}</div>
+    </div>${bodyHTML}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════════
+function renderInbox(){
+  const inbox=leads.filter(a=>!a.skipped&&!a.onWatch&&!a.coiDone);
+  const el=document.getElementById('results');
+  if(!inbox.length&&leads.length){el.innerHTML='<div class="empty"><i class="ti ti-check" style="font-size:28px;display:block;margin-bottom:.5rem;color:#1d9e75"></i>All articles processed — check ADP Leads, Skip Log and Watch tabs.</div>';return;}
+  if(!inbox.length){el.innerHTML='<div class="empty"><i class="ti ti-inbox" style="font-size:28px;display:block;margin-bottom:.5rem"></i>Load articles to start.</div>';return;}
+  const byAcc={};
+  inbox.forEach(a=>{if(!byAcc[a.account])byAcc[a.account]=[];byAcc[a.account].push(a);});
+  el.innerHTML=Object.entries(byAcc).sort((a,b)=>b[1].length-a[1].length).map(([acc,arts])=>`
+    <div style="margin-bottom:1rem">
+      <div class="sh"><i class="ti ti-building" style="font-size:12px"></i>${acc} <span class="cnt">${arts.length}</span></div>
+      ${arts.map(a=>buildCardHTML(a,leads.indexOf(a),'inbox')).join('')}
+    </div>`).join('');
+}
+
+function renderLeads(){
+  const confirmed=leads.filter(a=>!a.skipped&&!a.onWatch&&a.coiDone&&a.coiResult==='ADP');
+  const el=document.getElementById('leads-list');
+  if(!confirmed.length){el.innerHTML='<div class="empty">No confirmed ADP leads yet.</div>';return;}
+  const strong=confirmed.filter(a=>a.tier==='strong');
+  const medium=confirmed.filter(a=>a.tier==='medium');
+  const byAcc=arr=>{
+    const g={};arr.forEach(a=>{if(!g[a.account])g[a.account]=[];g[a.account].push(a);});
+    return Object.entries(g).sort((a,b)=>b[1].length-a[1].length).map(([acc,arts])=>`
+      <div style="margin-bottom:.75rem">
+        <div class="sh ${arr===strong?'t1':'t2c'}"><i class="ti ti-building" style="font-size:12px"></i>${acc} <span class="cnt">${arts.length}</span></div>
+        ${arts.map(a=>buildCardHTML(a,leads.indexOf(a),'leads')).join('')}
+      </div>`).join('');
+  };
+  el.innerHTML=(strong.length?`<div class="sh t1"><i class="ti ti-flame"></i>Tier 1 — Strong <span class="cnt">${strong.length}</span></div>${byAcc(strong)}`:'')+(medium.length?`<div class="sh t2c"><i class="ti ti-star"></i>Tier 2 — Medium <span class="cnt">${medium.length}</span></div>${byAcc(medium)}`:'');
+}
+
+function renderSkipLog(){
+  const skipped=leads.filter(a=>a.skipped);
+  const el=document.getElementById('skiplog-list');
+  el.innerHTML=skipped.length?skipped.map(a=>`
+    <div class="skiplog-item">
+      <div style="font-size:13px;font-weight:500;color:var(--t3);text-decoration:line-through;margin-bottom:.25rem">${a.title.substring(0,110)}${a.title.length>110?'...':''}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.3rem">
+        <span class="pill j">${a.journal||'—'}</span>
+        <span class="pill d">💊 ${a.drug}</span>
+        <span class="pill c">${a.account}</span>
+        ${a.skippedAt?`<span style="font-size:11px;color:var(--t3)">${a.skippedAt}</span>`:''}
+      </div>
+      <div class="reason-box">
+        <div class="txt"><strong>Reason:</strong> ${a.skipReason}</div>
+        <button class="btn sm" onclick="unskip(${leads.indexOf(a)})" style="flex-shrink:0;margin-left:8px">Undo</button>
+      </div>
+    </div>`).join(''):'<div class="empty">No articles skipped yet.</div>';
+}
+
+function renderWatchList(){
+  const el=document.getElementById('watch-list');
+  el.innerHTML=watchList.length?watchList.map(w=>`
+    <div class="watch-item">
+      <div style="font-size:13px;font-weight:500;color:var(--t1);margin-bottom:.25rem">${w.title.substring(0,110)}${w.title.length>110?'...':''}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.3rem">
+        <span class="pill j">${w.journal||'—'}</span>
+        <span class="pill d">💊 ${w.drug}</span>
+        <span class="pill c">${w.account}</span>
+        ${w.watchedAt?`<span style="font-size:11px;color:var(--t3)">${w.watchedAt}</span>`:''}
+      </div>
+      <div class="reason-box watch-reason-box">
+        <div class="txt"><strong>👁 Watch reason / trigger:</strong><br>${w.reason}</div>
+        <button class="btn sm" onclick="removeWatch(${w.idx})" style="flex-shrink:0;margin-left:8px">Remove</button>
+      </div>
+    </div>`).join(''):'<div class="empty">No articles on Watch list yet.</div>';
+}
+
+function renderKOLs(){
+  document.getElementById('kbadge').textContent=kols.length;
+  document.getElementById('klist').innerHTML=kols.length?kols.map(k=>{
+    const vCls=k.verificationStatus==='verified_academic'?'kv-a':k.verificationStatus==='verified_community'?'kv-c':'kv-u';
+    const vLabel=k.verificationStatus==='verified_academic'?'✅ ORCID verified':k.verificationStatus==='verified_community'?'🏥 KBV verified':'⬜ Unverified';
+    return`<div class="kc">
+      <div class="kn">${k.name}</div>
+      <div class="km"><i class="ti ti-building" style="font-size:12px;margin-right:2px"></i>${k.affiliation||'—'}</div>
+      ${k.email?`<div class="ke"><a href="mailto:${k.email}" style="color:inherit">${k.email}</a></div>`:''}
+      <span class="kv ${vCls}">${vLabel}${k.orcidId?' — ORCID '+k.orcidId:''}</span>
+      <span class="kdrug">${k.drug} / ${k.account}</span>
+      <div class="ka">${(k.article||'').substring(0,90)}... (${k.journal})</div>
+      ${k.ambassadorPotential?`<div class="kp">🎯 ${k.ambassadorPotential}</div>`:''}
+      ${k.pharmaLink?`<div class="ka">Pharma links: ${k.pharmaLink}</div>`:''}
+    </div>`;
+  }).join(''):'<div class="empty">No KOLs yet. They appear here after COI check identifies senior academics with pharma track record.</div>';
+}
+
+function renderAll(){renderInbox();renderLeads();renderSkipLog();renderWatchList();}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT — v17: richer columns
+// ═══════════════════════════════════════════════════════
+function exportAll(){
+  const r=[['Pipeline Status','Title','DOI','Journal','Drug','Account','Tier','COI Result','COI Reason','Country','DACH','France','Author','Email','Drug Hook','Clinical Problem','Study Type','ADP Angle','Positioning','Gap','Outreach Targets','Skip Reason','Watch Reason','Pharma Authors','KOL Authors']];
+  leads.forEach(a=>r.push([
+    a.skipped?'SKIP':a.onWatch?'WATCH':a.coiDone?'ADP':'INBOX',
+    a.title,a.doi,a.journal,a.drug,a.account,a.tier,a.coiResult||'',a.coiReason||'',
+    a.corrCountry,a._isDACH?'Yes':'',a._isFrance?'Yes':'',
+    a.corrAuthor,a.corrEmail,
+    a.hookDrug,a.hookProblem,a.hookStudyType,a.adpAngle,a.positioning,a.gap,
+    (a.outreachTargets||[]).join(' | '),
+    a.skipReason||'',a.watchReason||'',
+    (a.pharmaAuthors||[]).map(p=>p.name+'|'+p.email).join('; '),
+    (a.kolAuthors||[]).map(k=>k.name+'|'+k.email).join('; ')
+  ]));
+  const ws=XLSX.utils.aoa_to_sheet(r);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ADP Scan');XLSX.writeFile(wb,'adp_scan_full.xlsx');
+}
+
+function exportLeads(){
+  const confirmed=leads.filter(a=>!a.skipped&&!a.onWatch&&a.coiDone&&a.coiResult==='ADP');
+  if(!confirmed.length)return;
+  const r=[['Title','DOI','Journal','Drug','Account','Tier','Country','DACH','France','Author','Email','Drug Hook','Clinical Problem','Study Type','ADP Angle','Positioning','Gap','Outreach Targets','Pharma Authors','KOL Ambassadors']];
+  confirmed.forEach(a=>r.push([
+    a.title,a.doi,a.journal,a.drug,a.account,a.tier,a.corrCountry,
+    a._isDACH?'Yes':'',a._isFrance?'Yes':'',
+    a.corrAuthor,a.corrEmail,
+    a.hookDrug,a.hookProblem,a.hookStudyType,a.adpAngle,a.positioning,a.gap,
+    (a.outreachTargets||[]).join(' | '),
+    (a.pharmaAuthors||[]).map(p=>p.name+' | '+p.affiliation+' | '+p.email).join('; '),
+    (a.kolAuthors||[]).map(k=>k.name+' | '+k.affiliation+' | '+k.ambassadorPotential).join('; ')
+  ]));
+  const ws=XLSX.utils.aoa_to_sheet(r);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ADP Leads');XLSX.writeFile(wb,'adp_leads.xlsx');
+}
+
+function exportKOLs(){
+  if(!kols.length)return;
+  const r=[['Name','Affiliation','Email','Verification Status','ORCID','KBV','Drug','Account','Pharma Links','Ambassador Potential','Article','Journal']];
+  kols.forEach(k=>r.push([k.name,k.affiliation||'',k.email||'',k.verificationStatus||'',k.orcidId||'',k.kbvFound?'Yes':'',k.drug,k.account,k.pharmaLink||'',k.ambassadorPotential||'',k.article,k.journal]));
+  const ws=XLSX.utils.aoa_to_sheet(r);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'KOL Ambassadors');XLSX.writeFile(wb,'ambassador_kols.xlsx');
+}
+
+function exportSkipped(){
+  const sk=leads.filter(a=>a.skipped);if(!sk.length)return;
+  const r=[['Title','Journal','Drug','Account','Skip Reason','Skipped At','COI Reason']];
+  sk.forEach(a=>r.push([a.title,a.journal,a.drug,a.account,a.skipReason,a.skippedAt||'',a.coiReason||'']));
+  const ws=XLSX.utils.aoa_to_sheet(r);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Skip Log');XLSX.writeFile(wb,'skip_log.xlsx');
+}
+
+function exportWatch(){
+  if(!watchList.length)return;
+  const r=[['Title','Journal','Drug','Account','Watch Reason / Trigger','Added At']];
+  watchList.forEach(w=>r.push([w.title,w.journal,w.drug,w.account,w.reason,w.watchedAt||'']));
+  const ws=XLSX.utils.aoa_to_sheet(r);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Watch List');XLSX.writeFile(wb,'watch_list.xlsx');
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function showProg(p){document.getElementById('prog').style.display='block';document.getElementById('pb').style.width=p+'%';}
+function setSt(m){document.getElementById('st').textContent=m;}
+function resetAll(){
+  rows=[];leads=[];kols=[];watchList=[];running=false;
+  document.getElementById('fi').value='';
+  try{document.getElementById('pasteInput').value='';}catch(e){}
+  try{document.getElementById('parsePreview').innerHTML='';}catch(e){}
+  try{document.getElementById('parse-st').textContent='';}catch(e){}
+  document.getElementById('flabel').textContent='No articles loaded';
+  document.getElementById('flabel').style.color='var(--t2)';
+  document.getElementById('abtn').disabled=true;
+  document.getElementById('inbox-note').style.display='none';
+  document.getElementById('pipeline-legend').style.display='none';
+  setSt('');document.getElementById('prog').style.display='none';
+  document.getElementById('smry').innerHTML='';
+  document.getElementById('results').innerHTML='<div class="empty"><i class="ti ti-inbox" style="font-size:28px;display:block;margin-bottom:.5rem"></i>Load articles via Excel or paste email text</div>';
+  document.getElementById('leads-list').innerHTML='<div class="empty">No confirmed leads yet.</div>';
+  document.getElementById('klist').innerHTML='<div class="empty">No KOLs yet.</div>';
+  document.getElementById('skiplog-list').innerHTML='<div class="empty">No articles skipped yet.</div>';
+  document.getElementById('watch-list').innerHTML='<div class="empty">No articles on Watch list yet.</div>';
+  ['inboxbadge','strongbadge','mediumbadge','kbadge','skipbadge','watchbadge'].forEach(id=>document.getElementById(id).textContent='0');
+}
+</script>
+</body>
+</html>
